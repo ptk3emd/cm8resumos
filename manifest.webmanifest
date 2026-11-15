@@ -1,0 +1,25 @@
+{
+  "name": "CM8 Resumos · Flashcards de Clínica Médica",
+  "short_name": "CM8 Resumos",
+  "description": "970 flashcards de Clínica Médica — estudo local, com backup XML e uso offline.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#102B3A",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

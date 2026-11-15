@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- Equivalent structural/semantic rules are enforced in assets/progress-io.js.
+       Browsers do not provide native XSD validation through DOMParser. -->
+  <xs:simpleType name="Status"><xs:restriction base="xs:string">
+    <xs:enumeration value="done"/><xs:enumeration value="review"/>
+  </xs:restriction></xs:simpleType>
+  <xs:simpleType name="BooleanText"><xs:restriction base="xs:string">
+    <xs:enumeration value="true"/><xs:enumeration value="false"/>
+  </xs:restriction></xs:simpleType>
+  <xs:simpleType name="CardID"><xs:restriction base="xs:string">
+    <xs:pattern value="[0-9A-Z.]+"/>
+  </xs:restriction></xs:simpleType>
+  <xs:element name="cmn-progress">
+    <xs:complexType>
+      <xs:sequence><xs:element name="card" minOccurs="0" maxOccurs="10000">
+        <xs:complexType>
+          <xs:attribute name="id" type="CardID" use="required"/>
+          <xs:attribute name="status" type="Status" use="optional"/>
+          <xs:attribute name="star" type="BooleanText" use="optional"/>
+          <xs:attribute name="hidden" type="BooleanText" use="optional"/>
+        </xs:complexType>
+      </xs:element></xs:sequence>
+      <xs:attribute name="format" type="xs:string" fixed="cmn-flashcards-progresso" use="required"/>
+      <xs:attribute name="schema-version" type="xs:string" fixed="1" use="required"/>
+      <xs:attribute name="exported-at" type="xs:dateTime" use="required"/>
+      <xs:attribute name="card-count" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+    <xs:unique name="unique-card-id"><xs:selector xpath="card"/><xs:field xpath="@id"/></xs:unique>
+  </xs:element>
+</xs:schema>
