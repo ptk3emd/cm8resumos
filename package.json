@@ -1,0 +1,13 @@
+{
+  "name": "cm8resumos-static-checks",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:mobile": "playwright test --project=android-chromium --project=ios-webkit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
