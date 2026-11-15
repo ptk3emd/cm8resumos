@@ -25,7 +25,7 @@
   --subtle-hover:#eeecea;
   --ink:#242321;
   --muted:#615d59;
-  --quiet:#797570;
+  --quiet:#6c6863;
   --stroke:rgba(0,0,0,.10);
   --stroke-strong:rgba(0,0,0,.16);
   --blue:#0075de;
@@ -263,7 +263,7 @@ a:hover { text-decoration:underline; }
   .brand { gap:9px; }
   .brand-mark { width:36px;height:36px;font-size:14px; }
   .brand-title { font-size:14px; }
-  .brand-sub { font-size:9px; }
+  .brand-sub { font-size:11px; }
   .top-actions { gap:5px; }
   .topbtn { padding:8px 10px;font-size:12px; }
   .topbtn .optional { display:none; }
@@ -669,6 +669,32 @@ body {font-kerning:normal}
  .hero {padding-block:16px;margin-bottom:16px}
  .hero h1 {font-size:26px}
  .filters {margin-bottom:16px}
+}
+/* Final shared refinements: reading rhythm, feedback and keyboard states. */
+.chip,.audit-status {font-size:12px;line-height:1.4}
+.answer-title,.answer-outline-title,.case-vignette-label,.case-prompt-label {
+ letter-spacing:.035em;
+}
+.fsrs-grading {margin-inline:30px}
+.fsrs-grading p {line-height:1.6;max-width:70ch}
+.fsrs-grade-row button {padding:10px 8px;line-height:1.4}
+.fsrs-grade-row small {margin-top:4px;font-size:12px;line-height:1.4}
+.fsrs-empty {
+ padding:32px 24px;border:1px dashed var(--stroke-strong);
+ border-radius:var(--radius);background:var(--subtle);color:var(--muted);
+}
+.fsrs-empty h3 {margin:0 0 8px;color:var(--ink);font-size:21px;line-height:1.3}
+.fsrs-empty p {margin:0 auto 16px;max-width:55ch;font-size:15px;line-height:1.6}
+.fsrs-empty p:last-child {margin-bottom:0}
+.answer-outline-links a {text-decoration-color:currentColor}
+input,select {accent-color:var(--blue);caret-color:var(--ink)}
+:root .subtle-btn:disabled,:root .fsrs-grade-row button:disabled {cursor:wait}
+@media(hover:hover){
+ .fsrs-backup summary:hover,.more-actions summary:hover {background:var(--subtle-hover)}
+}
+@media(max-width:850px){.fsrs-grading {margin-inline:18px}}
+@media(prefers-reduced-motion:reduce){
+ html {scroll-behavior:auto}
 }
 </style>
 </head>
@@ -1212,6 +1238,9 @@ document.addEventListener('visibilitychange',()=>{
 async function gradeFSRS(id,grade){
  if(fsrsBusy||ui.mode!=='fsrs'||id!==ui.focusId||!openAnswers.has(id)||![1,2,3,4].includes(grade)||!fsrsReady)return;
  fsrsBusy=true;
+ const grading=$('cardsContainer').querySelector('.fsrs-grade-row');
+ grading?.setAttribute('aria-busy','true');
+ grading?.querySelectorAll('button').forEach(button=>{button.disabled=true;});
  try{
   const now=new Date(),result=fsrsScheduler.review({card:fsrsCard(id),grade,now});
   const previous=fsrsRecords.get(id);
@@ -1237,7 +1266,13 @@ async function gradeFSRS(id,grade){
   fsrsRecords.set(id,record);openAnswers.delete(id);ui.focusId=null;fsrsBusy=false;render();
   if(ui.mode==='fsrs')focusFSRSQuestion();
  }catch{notify('Não foi possível salvar a revisão. Tente novamente.',5500);}
- finally{fsrsBusy=false;}
+ finally{
+  fsrsBusy=false;
+  if(grading?.isConnected){
+   grading.removeAttribute('aria-busy');
+   grading.querySelectorAll('button').forEach(button=>{button.disabled=false;});
+  }
+ }
 }
 function exportFSRS(){
  const payload={format:'cm8-fsrs',version:1,model:'FSRS-7',desiredRetention:FSRS_RETENTION,exportedAt:new Date().toISOString(),records:[...fsrsRecords.values()]};
