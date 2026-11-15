@@ -859,6 +859,14 @@ function answerBlocks(answer){
  return blocks;
 }
 
+function answerRole(label){
+ const s=String(label).replace(/:$/,'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ if(/^(?:armadilha\b|alerta\b|atencao\b|cautela\b|contraindicac|farmacos a evitar\b|evitar\b|nao usar\b|precaucao\b)/.test(s))return 'caution';
+ if(/^(?:tratamento\b|conduta\b|manejo\b|terapia\b|terapeutica\b|profilaxia\b|prevencao\b|intervencao\b|vacinacao\b|monitorizacao\b|acompanhamento\b|seguimento\b)/.test(s))return 'action';
+ if(/^(?:diagnostico\b|investigacao\b|criterios?\b|avaliacao\b|exames?\b|sinais?\b|sintomas?\b|clinica\b|quadro\b|diferenciais?\b|classificacao\b|rastreio\b|rastreamento\b|confirmacao\b)/.test(s))return 'assessment';
+ if(/^(?:fisiopatologia\b|causas?\b|etiologia\b|mecanismo\b|fatores de risco\b|definicao\b|conceito\b|principio\b)/.test(s))return 'mechanism';
+ return 'neutral';
+}
 function answerHtml(answer,cardId){
  const raw=String(answer??""),key=String(cardId)+"\u0000"+raw;
  if(structuredAnswerCache.has(key))return structuredAnswerCache.get(key);
@@ -867,12 +875,12 @@ function answerHtml(answer,cardId){
  const body=blocks.map(block=>{
   if(block.kind==="list")return answerListMarkup(block);
   if(block.kind==="paragraph")return answerTextMarkup(block.text);
-  const id=`answer-${stem}-${++chapter}`;
-  sections.push({id,label:block.label.slice(0,-1).trim()});
-  return `<section class="answer-section" id="${safe(id)}"><h4 class="answer-subheading">${answerFormulaHtml(block.label)}</h4>${block.lines.map(answerTextMarkup).join("")}</section>`;
+  const id=`answer-${stem}-${++chapter}`,role=answerRole(block.label);
+  sections.push({id,label:block.label.slice(0,-1).trim(),role});
+  return `<section class="answer-section answer-section--${role}" data-role="${role}" id="${safe(id)}"><h4 class="answer-subheading"><span class="answer-section-number" aria-hidden="true">${String(chapter).padStart(2,'0')}</span><span class="answer-subheading-text">${answerFormulaHtml(block.label)}</span></h4>${block.lines.map(answerTextMarkup).join("")}</section>`;
  }).join("");
- const outline=sections.length>=3&&raw.length>=550?
-  `<nav class="answer-outline" aria-label="Navegação pelas seções do cartão"><span class="answer-outline-title">Nesta resposta</span><ol class="answer-outline-links">${sections.slice(0,6).map(item=>`<li><a href="#${safe(item.id)}">${answerFormulaHtml(item.label)}</a></li>`).join("")}</ol></nav>`:"";
+ const outline=sections.length>=2&&raw.length>=450?
+  `<nav class="answer-outline" aria-label="Tópicos desta resposta"><span class="answer-outline-title">Mapa da resposta</span><ol class="answer-outline-links">${sections.map((item,i)=>`<li class="answer-outline-item answer-outline--${item.role}"><a href="#${safe(item.id)}"><span class="answer-outline-node" aria-hidden="true">${String(i+1).padStart(2,"0")}</span><span class="answer-outline-label">${answerFormulaHtml(item.label)}</span></a></li>`).join("")}</ol></nav>`:"";
  const markup=`<div class="answer-title">Resposta</div><div class="answer-copy">${outline}${body}</div>`;
  structuredAnswerCache.set(key,markup);
  return markup;
