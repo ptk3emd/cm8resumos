@@ -760,31 +760,59 @@ input,select {accent-color:var(--blue);caret-color:var(--ink)}
  html {scroll-behavior:auto}
 }
 #textEditor {
- width:min(860px,calc(100vw - 24px));max-height:90dvh;padding:0;
+ width:min(860px,calc(100vw - 24px));max-height:90dvh;padding:0;overflow:hidden;
  border:1px solid var(--stroke-strong);border-radius:12px;background:var(--panel);color:var(--ink);
 }
+#textEditor[open] {display:flex;flex-direction:column}
 #textEditor::backdrop {background:rgba(0,0,0,.45)}
-.editor-heading {display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--stroke)}
+.editor-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px}
 .editor-heading h2 {font-size:21px;margin:0}
-#textEditor button {min-height:44px;padding:8px 12px;border:1px solid var(--stroke);border-radius:6px;background:var(--panel);color:var(--ink)}
-#textEditor button:hover {background:var(--subtle)}
-#textEditor #saveText {background:var(--action-fill);color:var(--action-ink)}
-.editor-note {margin:16px 24px;font-size:14px;color:var(--muted)}
-#editorToolbar {display:flex;flex-wrap:wrap;gap:4px;padding:8px 20px;background:var(--subtle);position:sticky;top:0;z-index:2;border-block:1px solid var(--stroke)}
-.editor-fields {padding:0 24px}
-.editor-fields h3 {font-size:14px;margin:20px 0 8px;color:var(--muted)}
-[data-edit-field] {min-height:80px;padding:12px;border:1px solid var(--stroke-strong);border-radius:6px;font-size:16px;line-height:1.65;overflow-wrap:anywhere}
+#textEditor button {min-width:44px;min-height:44px;padding:8px 12px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--ink);font-size:14px;white-space:nowrap}
+#textEditor button:hover:not(:disabled):not([aria-pressed="true"]) {background:var(--subtle)}
+#textEditor button:focus-visible {outline:2px solid var(--focus-ring);outline-offset:-2px}
+#textEditor button:disabled {opacity:.45;cursor:not-allowed}
+#textEditor button[aria-pressed="true"] {background:var(--action-fill);color:var(--action-ink)}
+#textEditor #saveText {background:var(--action-fill);color:var(--action-ink);font-weight:600}
+#textEditor #saveText:hover:not(:disabled) {filter:brightness(.92)}
+#textEditor #cancelEditor {border-color:var(--stroke-strong)}
+#closeEditor {flex:none;width:44px;display:grid;place-items:center}
+.editor-note {margin:0 24px 16px;font-size:14px;line-height:1.5;color:var(--muted)}
+#editorToolbar {display:flex;flex-wrap:wrap;gap:4px 12px;padding:6px 16px;background:var(--subtle);border-block:1px solid var(--stroke);flex-shrink:0}
+.editor-toolset {display:flex;gap:2px;align-items:center}
+.editor-toolset + .editor-toolset {border-inline-start:1px solid var(--stroke-strong);padding-inline-start:10px}
+.editor-context {display:flex;justify-content:space-between;gap:12px;padding:10px 24px 0;font-size:12px;color:var(--muted);flex-shrink:0}
+.editor-fields {padding:0 24px 24px;overflow:auto;overscroll-behavior:contain;min-height:0;scrollbar-color:var(--stroke-strong) var(--panel)}
+.editor-fields h3 {font-size:14px;margin:20px 0 8px;color:var(--muted);font-weight:600}
+[data-edit-field] {min-height:80px;padding:14px 16px;border:1px solid var(--stroke-strong);border-radius:6px;font-size:16px;line-height:1.7;overflow-wrap:anywhere;caret-color:var(--ink)}
 #edit-answer {min-height:180px}
-[data-edit-field]:focus-visible {outline:2px dashed var(--focus-ring);outline-offset:2px}
+[data-edit-field]:focus {border-color:var(--focus-ring);outline:1px solid var(--focus-ring);outline-offset:0}
+[data-edit-field][aria-invalid="true"] {border-color:var(--warning)}
+[data-edit-field]::selection,[data-edit-field] *::selection {background:var(--action-fill);color:var(--action-ink)}
 .rich-content p,[data-edit-field] p {margin:0 0 .7em}
 .rich-content p:last-child,[data-edit-field] p:last-child {margin-bottom:0}
 .rich-content ul,.rich-content ol,[data-edit-field] ul,[data-edit-field] ol {padding-inline-start:1.6em;margin:.7em 0}
 .rich-content h4,[data-edit-field] h4 {font-size:1em;margin:1em 0 .5em;font-weight:700}
-.rich-content blockquote,[data-edit-field] blockquote {margin:12px 0;padding:8px 16px;border-inline-start:2px solid var(--stroke-strong);background:var(--subtle)}
-.editor-actions {display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;padding:16px 24px;position:sticky;bottom:0;background:var(--panel);border-top:1px solid var(--stroke)}
+.rich-content blockquote,[data-edit-field] blockquote {margin:12px 0;padding:8px 16px;border-inline-start:1px solid var(--stroke-strong);background:var(--subtle)}
+.editor-actions {display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 24px;background:var(--panel);border-top:1px solid var(--stroke);flex-shrink:0}
 #restoreText {margin-inline-end:auto}
-#editorError {padding-inline:24px;color:var(--warning)}
-@media(max-width:640px){.editor-heading,.editor-fields {padding-inline:16px}#editorToolbar {padding-inline:12px}.editor-actions {padding:12px 16px}.editor-heading h2 {font-size:18px}}
+#editorError {margin:0;padding:0 24px 12px;color:var(--warning);font-size:14px}
+#editorError:empty {display:none}
+@media(max-width:640px){
+ #textEditor {max-height:calc(100dvh - 16px);width:calc(100vw - 16px)}
+ .editor-heading {padding:12px 16px 8px}.editor-heading h2 {font-size:18px}
+ .editor-note {margin:0 16px 12px;font-size:13px}
+ #editorToolbar {flex-wrap:nowrap;overflow-x:auto;padding:4px 8px;scrollbar-width:thin;scrollbar-color:var(--stroke-strong) var(--subtle)}
+ .editor-toolset {flex-shrink:0}.editor-context {padding:10px 16px 0}#editorShortcut {display:none}
+ .editor-fields {padding:0 16px 16px}.editor-fields h3 {margin-top:16px}
+ .editor-actions {display:grid;grid-template-columns:1fr 1fr;padding:8px 16px;gap:4px 8px}
+ #restoreText {grid-column:1/-1;justify-self:start;margin:0}#textEditor #restoreText {min-height:44px;padding-inline:0}
+ #editorError {padding-inline:16px}
+}
+@media(max-height:520px){
+ #textEditor[open] {display:block;overflow:auto;max-height:calc(100dvh - 16px)}
+ .editor-fields {overflow:visible}
+ .editor-actions {position:static}
+}
 </style>
 </head>
 <body>
@@ -825,22 +853,23 @@ input,select {accent-color:var(--blue);caret-color:var(--ink)}
  <footer class="footer">Adaptado do PDF <strong>“Flashcards — 8º Período · CMN”</strong>. 92 cartões receberam revisão médica e reescrita direcionada; os demais passaram por triagem estrutural/pedagógica e ainda requerem validação clínica individual. O arquivo contém etiquetas de auditoria por cartão e mantém os IDs originais. Os 250 cartões adicionais são vinhetas didáticas sem referência de página no PDF. Os cartões originais mantêm suas marcações e avisos de auditoria.<div class="utility-row"><span>Offline depois da primeira visita online · sem cadastro</span><span id="offlineStatus" class="offline-status" role="status" aria-live="polite">Preparando uso offline…</span><span aria-hidden="true">·</span><button id="exportEdits">Exportar edições de texto</button><button id="importEditsButton">Importar edições de texto</button><input type="file" id="importEditsFile" accept=".json,application/json" hidden><button id="resetBtn">Apagar progresso salvo</button><button id="unhideBtn">Reexibir todos os cartões ocultos</button></div><div class="focus-tip">Atalhos no modo Foco (fora dos controles): <strong>←</strong> / <strong>→</strong> navegar, <strong>Espaço</strong> revelar, <strong>1</strong> estudar, <strong>2</strong> revisar, <strong>3</strong> favoritar.</div></footer>
 </main></div>
 <dialog id="textEditor" aria-labelledby="editorTitle">
- <div class="editor-heading"><h2 id="editorTitle">Editar cartão</h2><button type="button" id="closeEditor" aria-label="Fechar editor">×</button></div>
+ <div class="editor-heading"><h2 id="editorTitle">Editar cartão</h2><button type="button" id="closeEditor" aria-label="Fechar editor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
  <p class="editor-note">Suas edições ficam neste navegador. O selo de revisão clínica se refere ao texto original.</p>
- <div id="editorToolbar" role="group" aria-label="Formatação do texto">
+ <div id="editorToolbar" role="group" aria-label="Formatação do texto"><div class="editor-toolset" role="group" aria-label="Ênfase">
  <button type="button" data-command="bold" aria-label="Negrito"><strong>B</strong></button>
  <button type="button" data-command="italic" aria-label="Itálico"><em>I</em></button>
  <button type="button" data-command="underline" aria-label="Sublinhado"><u>U</u></button>
  <button type="button" data-command="strikeThrough" aria-label="Tachado"><s>S</s></button>
- <button type="button" data-command="insertUnorderedList">• Lista</button>
- <button type="button" data-command="insertOrderedList">1. Lista</button>
+ </div><div class="editor-toolset" role="group" aria-label="Estrutura"><button type="button" data-command="insertUnorderedList" aria-label="Lista com marcadores">• Lista</button>
+ <button type="button" data-command="insertOrderedList" aria-label="Lista numerada">1. Lista</button>
  <button type="button" data-command="formatBlock" data-value="h4">Título</button>
  <button type="button" data-command="formatBlock" data-value="p">Parágrafo</button>
  <button type="button" data-command="formatBlock" data-value="blockquote">Citação</button>
- <button type="button" data-command="removeFormat">Limpar formato</button>
+ </div><div class="editor-toolset" role="group" aria-label="Revisão"><button type="button" data-command="removeFormat">Limpar formato</button>
  <button type="button" data-command="undo">Desfazer</button>
- <button type="button" data-command="redo">Refazer</button>
+ <button type="button" data-command="redo">Refazer</button></div>
  </div>
+ <div class="editor-context"><span id="editorSaveState" role="status">Sem alterações</span><span id="editorShortcut">Ctrl / ⌘ + S para salvar</span></div>
  <div class="editor-fields">
  <section id="editorScenario"><h3 id="editScenarioLabel">Caso clínico</h3><div id="edit-scenario" data-edit-field contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="editScenarioLabel" spellcheck="true"></div></section>
  <section><h3 id="editQuestionLabel">Pergunta</h3><div id="edit-question" data-edit-field contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="editQuestionLabel" spellcheck="true"></div></section>
@@ -1520,12 +1549,27 @@ function openTextEditor(id){
  $('editorError').textContent='';
  $('editorScenario').hidden=!c.scenario;
  for(const field of ['question','scenario','answer']){
+  $('edit-'+field).removeAttribute('aria-invalid');$('edit-'+field).removeAttribute('aria-describedby');
   $('edit-'+field).innerHTML=edit?.[field]??('<p>'+safe(c[field]||'').replaceAll('\n','<br>')+'</p>');
  }
  editorSnapshot=JSON.stringify(editorValues());$('restoreText').disabled=!edit;
  editorRange=null;editorField=$('edit-question');$('textEditor').showModal();editorField.focus();
+ const range=document.createRange();range.selectNodeContents(editorField);range.collapse(false);
+ const selection=getSelection();selection.removeAllRanges();selection.addRange(range);editorRange=range.cloneRange();updateEditorState();
+}
+function updateEditorState(){
+ if(!$('textEditor').open)return;
+ const dirty=editorChanged();
+ $('editorSaveState').textContent=dirty?'Alterações não salvas':'Sem alterações';
+ $('saveText').disabled=!dirty;
+ const toggles=['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList'];
+ for(const button of $('editorToolbar').querySelectorAll('[data-command]')){
+  if(toggles.includes(button.dataset.command))button.setAttribute('aria-pressed',String(document.queryCommandState(button.dataset.command)));
+ }
 }
 async function saveTextEdit(restore=false){
+ if($('textEditor').getAttribute('aria-busy')==='true')return;
+ $('textEditor').setAttribute('aria-busy','true');$('saveText').disabled=true;
  try{
   const id=editingId,values=editorValues();
   if(!restore)validateEdits({[id]:values});
@@ -1538,7 +1582,11 @@ async function saveTextEdit(restore=false){
   if(navigator.locks)await navigator.locks.request(EDIT_KEY,commit);else commit();
   $('textEditor').close();editingId=null;render();restoreEditorFocus(id);
   notify(restore?'Texto original restaurado.':'Edição salva neste navegador.');
- }catch(error){$('editorError').textContent=error.message||'Não foi possível salvar a edição.';}
+ }catch(error){
+ $('editorError').textContent=error.message||'Não foi possível salvar a edição.';
+ const empty=['question','answer',...(byId.get(editingId)?.scenario?['scenario']:[])].map(f=>$('edit-'+f)).find(el=>!richText(cleanRich(el.innerHTML)));
+ if(empty){empty.setAttribute('aria-invalid','true');empty.setAttribute('aria-describedby','editorError');empty.focus();}
+ }finally{$('textEditor').removeAttribute('aria-busy');updateEditorState();}
 }
 $('closeEditor').addEventListener('click',closeTextEditor);
 $('cancelEditor').addEventListener('click',closeTextEditor);
@@ -1552,7 +1600,7 @@ document.addEventListener('selectionchange',()=>{
  const ancestor=range.commonAncestorContainer;
  const field=(ancestor.nodeType===Node.ELEMENT_NODE?ancestor:ancestor.parentElement)?.closest('[data-edit-field]');
  if(field&&field.contains(range.startContainer)&&field.contains(range.endContainer)){
-  editorField=field;editorRange=range.cloneRange();
+  editorField=field;editorRange=range.cloneRange();updateEditorState();
  }
 });
 $('editorToolbar').addEventListener('pointerdown',event=>{if(event.target.closest('button'))event.preventDefault();});
@@ -1562,10 +1610,11 @@ $('editorToolbar').addEventListener('click',event=>{
  if(editorRange&&editorField?.contains(editorRange.commonAncestorContainer)){
   const selection=getSelection();selection.removeAllRanges();selection.addRange(editorRange);
  }
- document.execCommand(button.dataset.command,false,button.dataset.value||null);
+ document.execCommand(button.dataset.command,false,button.dataset.value||null);updateEditorState();
 });
 for(const field of $('textEditor').querySelectorAll('[data-edit-field]')){
  field.addEventListener('focus',()=>{editorField=field;});
+ field.addEventListener('input',()=>{field.removeAttribute('aria-invalid');field.removeAttribute('aria-describedby');$('editorError').textContent='';updateEditorState();});
  field.addEventListener('paste',event=>{
   event.preventDefault();const html=event.clipboardData.getData('text/html');
   document.execCommand('insertHTML',false,html?cleanRich(html):safe(event.clipboardData.getData('text/plain')).replaceAll('\n','<br>'));
