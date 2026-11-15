@@ -1,12 +1,12 @@
 import {test,expect} from '@playwright/test';
 
-test('reanálise 970: cardinalidade e IDs únicos',async({page})=>{
+test('cardinalidade do baralho expandido e IDs únicos',async({page})=>{
  await page.goto('./');
  const x=await page.evaluate(()=>{
   const d=JSON.parse(document.querySelector('#sourceData').textContent);
   return {n:d.cards.length,unique:new Set(d.cards.map(c=>c.id)).size,themes:d.themes.length,cases:d.cards.filter(c=>c.kind==='case').length};
  });
- expect(x).toEqual({n:970,unique:970,themes:25,cases:250});
+ expect(x).toEqual({n:1013,unique:1013,themes:25,cases:250});
 });
 test('reanálise clínica: ressalva full-house preservada em questão e resposta',async({page})=>{
  await page.goto('./');
