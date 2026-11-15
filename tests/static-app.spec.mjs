@@ -67,7 +67,7 @@ test('XML export/import and legacy JSON import preserve state',async({page})=>{
  await page.locator('#exportBtn').click();
  const download=await downloadPromise;
  expect(download.suggestedFilename()).toMatch(/\.xml$/);
- const xml=await import('node:fs/promises').then(fs=>fs.readFile(download.path(),'utf8'));
+ const xml=await import('node:fs/promises').then(fs=>fs.readFile(await download.path(),'utf8'));
  expect(xml).toContain('<cmn-progress');
  expect(xml).toContain('schema-version="1"');
  await page.locator('#importFile').setInputFiles({name:'progresso.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
