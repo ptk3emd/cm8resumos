@@ -594,6 +594,19 @@ a:hover { text-decoration:underline; }
 .fsrs-grading p {margin:0;font-size:14px;color:var(--muted)}
 .fsrs-grade-row {margin-top:10px}
 #cardsContainer .question, #cardsContainer .case-question, #cardsContainer .answer-box, #listTitle {scroll-margin-top:90px}
+/* Shared reading treatment for Lista, Foco and Revisão FSRS. */
+.study-card {min-width:0;overflow-wrap:anywhere}
+.study-card .question,.study-card .case-vignette,.study-card .answer-copy {max-inline-size:72ch}
+.study-card .case-vignette {padding:12px 16px;border-inline-start:1px solid var(--line,#a39e98);background:var(--panel);border-radius:0 8px 8px 0}
+.study-card .answer-section {scroll-margin-block-start:90px}
+.study-card .answer-outline-links a {text-underline-offset:.2em}
+.study-card :is(.question,.answer-box):focus-visible {outline:2px solid currentColor;outline-offset:4px}
+.fsrs-grade-row button:disabled {cursor:wait;opacity:.65}
+.fsrs-grade-row small {font-variant-numeric:tabular-nums}
+@media print {
+ .study-card {break-inside:avoid}
+ .fsrs-grading,.fsrs-settings,.action-row,.answer-hidden {display:none!important}
+}
 </style>
 </head>
 <body>
@@ -1000,9 +1013,17 @@ $('importFile').addEventListener('change',async e=>{
   showImportReview('Não foi possível importar',err instanceof Error?err.message:'O arquivo não pôde ser lido. O progresso anterior permanece intacto.',true);
  }finally{e.target.value='';}
 });
-$('resetBtn').addEventListener('click',()=>{const count=Object.keys(marks).length+fsrsRecords.size;if(!count){notify('Não há marcações de progresso para apagar.');return;}
+$('resetBtn').addEventListener('click',async()=>{const count=Object.keys(marks).length+fsrsRecords.size;if(!count){notify('Não há marcações de progresso para apagar.');return;}
  if(!confirm(`Apagar as marcações e o histórico FSRS neste navegador? Exporte seus backups antes se quiser recuperá-los.`))return;
- marks=Object.create(null);fsrsRecords.clear();fsrsDB?.transaction('cards','readwrite').objectStore('cards').clear();const saved=save();render();if(saved)notify('Marcações apagadas neste navegador.');});
+ if(fsrsBusy){notify('Aguarde a operação de revisão terminar.');return;}
+ fsrsBusy=true;
+ try{
+  if(fsrsDB)await fsrsTransaction('readwrite',store=>store.clear());
+  fsrsRecords.clear();openAnswers.clear();
+  marks=Object.create(null);
+  if(save())notify('Progresso apagado neste navegador.');
+ }catch{notify('Não foi possível apagar o histórico. Tente novamente.',5500);}
+ finally{fsrsBusy=false;render();}});
 $('unhideBtn').addEventListener('click',()=>{let count=0;for(const id of Object.keys(marks))if(marks[id].hidden){delete marks[id].hidden;count++;if(!Object.keys(marks[id]).length)delete marks[id];}if(count){const saved=save();render();if(saved)notify(`${count} cartões reexibidos.`);}else notify('Não há cartões ocultos.');});
 function setTheme(dark){document.documentElement.dataset.theme=dark?'dark':'light';$('themeBtn').textContent=dark?'☀':'◐';$('themeBtn').setAttribute('aria-label',dark?'Usar tema claro':'Usar tema escuro');try{localStorage.setItem(THEME_KEY,dark?'dark':'light');}catch{}}
 $('themeBtn').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme!=='dark'));
@@ -1034,7 +1055,7 @@ if('serviceWorker' in navigator){
 pwaStatus();
 /* Revisão espaçada: estado independente das marcações anteriores. */
 const fsrsRecords=new Map();
-let fsrsDB=null,fsrsReady=false,fsrsBusy=false,fsrsScheduler=null;
+let fsrsDB=null,fsrsReady=false,fsrsUnavailable=false,fsrsBusy=false,fsrsScheduler=null;
 const FSRS_RETENTION=0.90;
 const FSRS_DEFAULT_DAILY=20;
 let fsrsRefreshTimer;
@@ -1083,7 +1104,13 @@ function fsrsInterval(due){const ms=new Date(due)-Date.now();if(ms<3600000)retur
 function renderFSRS({keepCard=false}={}){
  $('fsrsSettings').hidden=false;$('shuffleBtn').hidden=true;$('revealAllBtn').hidden=true;$('focusNav').hidden=true;$('moreWrap').hidden=true;
  $('listTitle').textContent='Revisão espaçada';const container=$('cardsContainer');
- if(!fsrsReady){$('listSub').textContent='Carregando histórico';container.innerHTML='<div class="fsrs-empty">Preparando revisões…</div>';return;}
+ if(!fsrsReady){
+  $('listSub').textContent=fsrsUnavailable?'Histórico indisponível':'Carregando histórico';
+  container.innerHTML=fsrsUnavailable
+   ?'<div class="fsrs-empty" role="alert">O navegador não abriu o histórico FSRS. Recarregue para tentar novamente.</div>'
+   :'<div class="fsrs-empty">Preparando revisões…</div>';
+  return;
+ }
  const {due,newCards,refreshAt}=fsrsQueue(),queue=[...due,...newCards];
  clearTimeout(fsrsRefreshTimer);
  fsrsRefreshTimer=setTimeout(refreshFSRS,Math.max(1,refreshAt-Date.now()));
@@ -1111,7 +1138,24 @@ async function gradeFSRS(id,grade){
   const now=new Date(),result=fsrsScheduler.review({card:fsrsCard(id),grade,now});
   const previous=fsrsRecords.get(id);
   const record={id,card:result.card,logs:[...(previous?.logs||[]),result.revlog]};
-  await fsrsTransaction('readwrite',store=>store.put(record));
+  let conflict=false;
+  await fsrsTransaction('readwrite',store=>{
+   const request=store.get(id);
+   request.onsuccess=()=>{
+    const latest=request.result;
+    conflict=latest?.card.reps!==previous?.card.reps ||
+      new Date(latest?.card.lastReviewAt||0).getTime()!==new Date(previous?.card.lastReviewAt||0).getTime();
+    if(!conflict){store.put(record);return;}
+    if(latest)fsrsRecords.set(id,latest);
+    else fsrsRecords.delete(id);
+   };
+  });
+  if(conflict){
+   openAnswers.delete(id);ui.focusId=null;fsrsBusy=false;render();
+   notify('Este cartão mudou em outra aba. A fila foi atualizada.');
+   if(ui.mode==='fsrs')focusFSRSQuestion();
+   return;
+  }
   fsrsRecords.set(id,record);openAnswers.delete(id);ui.focusId=null;fsrsBusy=false;render();
   if(ui.mode==='fsrs')focusFSRSQuestion();
  }catch{notify('Não foi possível salvar a revisão. Tente novamente.',5500);}
@@ -1133,27 +1177,30 @@ $('fsrsDaily').addEventListener('change',()=>{
 try{$('fsrsDaily').value=String(fsrsDailyLimit(localStorage.getItem('cm8-fsrs-daily')));}catch{}
 $('fsrsImport').addEventListener('change',async event=>{
  const file=event.target.files?.[0];event.target.value='';if(!file)return;
+ if(!fsrsReady||fsrsBusy){notify('Aguarde o histórico ficar disponível para importar.');return;}
+ fsrsBusy=true;
  try{
   if(file.size>15*1024*1024)throw Error('Arquivo acima de 15 MB.');
   const data=JSON.parse(await fileAsText(file));
   if(data.format!=='cm8-fsrs'||data.version!==1||data.model!=='FSRS-7'||!Array.isArray(data.records))throw Error('Backup FSRS incompatível.');
   const records=new Map();
   for(const entry of data.records){
-   if(!ALL_IDS.has(entry.id)||records.has(entry.id)||entry.card?.cardId!==entry.id||!Array.isArray(entry.logs)||
+   if(!entry||!ALL_IDS.has(entry.id)||records.has(entry.id)||entry.card?.cardId!==entry.id||!Array.isArray(entry.logs)||
       !Number.isFinite(Date.parse(entry.card.dueAt))||
       (entry.card.lastReviewAt!==null&&!Number.isFinite(Date.parse(entry.card.lastReviewAt)))||
       ![0,1,2,3].includes(entry.card.state)||!Number.isFinite(entry.card.stability)||
       !Number.isFinite(entry.card.stabilityFast)||!Number.isFinite(entry.card.difficulty)||
       !Number.isInteger(entry.card.reps)||entry.card.reps<0||
-      entry.logs.some(log=>log.cardId!==entry.id||![1,2,3,4].includes(log.rating)||!Number.isFinite(Date.parse(log.reviewTime))))
+      entry.logs.some(log=>!log||log.cardId!==entry.id||![1,2,3,4].includes(log.rating)||!Number.isFinite(Date.parse(log.reviewTime))))
     throw Error('Histórico FSRS inválido.');
    records.set(entry.id,entry);
   }
   if(!confirm(`Substituir o histórico FSRS de ${fsrsRecords.size} cartões pelo histórico de ${records.size} cartões deste arquivo?`))return;
   await fsrsTransaction('readwrite',store=>{store.clear();for(const record of records.values())store.put(record);});
   fsrsRecords.clear();for(const [id,record] of records)fsrsRecords.set(id,record);
-  openAnswers.clear();ui.focusId=null;render();notify('Histórico FSRS importado.');
+  openAnswers.clear();ui.focusId=null;fsrsBusy=false;render();notify('Histórico FSRS importado.');
  }catch(error){notify(error.message||'Não foi possível importar o histórico FSRS.',5500);}
+ finally{fsrsBusy=false;if(ui.mode==='fsrs')refreshFSRS();}
 });
 async function initFSRS(){
  try{
@@ -1161,7 +1208,13 @@ async function initFSRS(){
   fsrsDB=await openFSRSDB();
   await new Promise((resolve,reject)=>{const request=fsrsDB.transaction('cards').objectStore('cards').getAll();request.onsuccess=()=>{for(const record of request.result)if(ALL_IDS.has(record.id))fsrsRecords.set(record.id,record);resolve();};request.onerror=()=>reject(request.error);});
   fsrsReady=true;if(ui.mode==='fsrs'){render();if(document.activeElement===$('listTitle'))focusFSRSQuestion();}
- }catch{notify('Revisão FSRS indisponível neste navegador.',5500);$('fsrsSummary').textContent='Armazenamento indisponível';}
+ }catch{
+  fsrsUnavailable=true;
+  $('fsrsSummary').textContent='Armazenamento indisponível';
+  $('fsrsExport').disabled=true;
+  $('fsrsImportButton').disabled=true;
+  if(ui.mode==='fsrs')render();
+ }
 }
 render();storageNotice();
 initFSRS();
