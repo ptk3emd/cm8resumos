@@ -526,6 +526,61 @@ a:hover { text-decoration:underline; }
  .more-actions summary {width:100%;}
 }
 
+
+/* Impeccable Overdrive — semantic HTML reading, editorial rather than decorative.
+   No framework, markdown, canvas or generated clinical assertions. */
+.answer-box .answer-copy {
+  max-width:70ch;
+  font-size:clamp(16px,1.25vw + 11px,18px);
+  line-height:1.76;
+  letter-spacing:-.004em;
+  overflow-wrap:anywhere;
+}
+.answer-copy .answer-paragraph { margin:0 0 1.05em; text-wrap:pretty; }
+.answer-copy .answer-paragraph:last-child { margin-bottom:0; }
+.answer-copy .answer-section { margin:1.55em 0; padding:1.05em 0 0; border-top:1px solid var(--stroke); scroll-margin-top:115px; }
+.answer-copy .answer-section:first-child { margin-top:0;padding-top:0;border-top:0; }
+.answer-copy .answer-section:last-child { margin-bottom:0; }
+.answer-copy .answer-section:target { outline:2px dashed var(--blue);outline-offset:5px;border-radius:2px; }
+.answer-copy .answer-subheading { display:block;margin:0 0 .63em;font-size:16px;line-height:1.48;letter-spacing:-.012em;font-weight:720;color:var(--ink);text-transform:none; }
+.answer-copy .answer-lead { font-weight:700;color:var(--ink); }
+.answer-copy .answer-points { display:grid;gap:1.05em;list-style:none;margin:1.25em 0 1.5em;padding:0; }
+.answer-copy .answer-points:first-child { margin-top:0; }
+.answer-copy .answer-points:last-child { margin-bottom:0; }
+.answer-copy .answer-point { display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;align-items:start;list-style:none;min-width:0; }
+.answer-copy .answer-point-index { display:flex;align-items:center;justify-content:center;min-width:36px;min-height:34px;margin-top:.04em;padding:4px 3px;border:1px solid var(--stroke);border-radius:7px;background:var(--subtle);color:var(--muted);font:650 12px/1 var(--font);letter-spacing:0;font-variant-numeric:tabular-nums; }
+.answer-copy .answer-point-body {min-width:0;}
+.answer-copy .answer-point-body .answer-paragraph { margin-bottom:.62em; }
+.answer-copy .answer-point-body .answer-paragraph:last-child { margin-bottom:0; }
+.answer-outline { margin:0 0 1.6em;padding:0 0 1.3em;border-bottom:1px solid var(--stroke); }
+.answer-outline-title { display:block;margin:0 0 .65em;color:var(--quiet);font-size:11px;line-height:1.4;font-weight:700;letter-spacing:.045em;text-transform:uppercase; }
+.answer-outline-links { display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;list-style:none;margin:0;padding:0; }
+.answer-outline-links li { margin:0; padding:0; }
+.answer-outline-links a { display:inline-block;padding:5px 0;font-size:13px;line-height:1.5;letter-spacing:0;font-weight:600;color:var(--blue-soft-ink);text-decoration:underline;text-decoration-color:var(--stroke-strong);text-underline-offset:4px; }
+.answer-outline-links a:hover { color:var(--blue);text-decoration-color:currentColor; }
+.answer-outline-links a:focus-visible { outline:2px dashed var(--blue);outline-offset:4px;border-radius:2px; }
+.answer-formula { display:inline-block;white-space:nowrap;font-variant-numeric:lining-nums; }
+.answer-formula sub,.answer-formula sup { font-size:.72em; }
+.case-question .case-vignette { margin:5px 0 0;max-width:70ch; }
+.case-question .case-prompt { margin:6px 0 0;max-width:68ch; }
+.case-question .case-prompt-label { margin-top:16px; }
+::selection {background:var(--blue-soft);color:var(--ink);}
+@media(max-width:640px){
+ .answer-box .answer-copy { font-size:16px;line-height:1.7; }
+ .answer-copy .answer-section {margin:1.4em 0;padding-top:.95em;}
+ .answer-copy .answer-subheading {font-size:15px;}
+ .answer-copy .answer-point {grid-template-columns:29px minmax(0,1fr);gap:10px;}
+ .answer-copy .answer-point-index {min-width:29px;min-height:29px;font-size:11px;}
+ .answer-copy .answer-points {gap:.93em;margin:1.1em 0 1.3em;}
+ .answer-outline-links {gap:4px 12px;}
+ .answer-outline-links a {font-size:12px;padding:6px 0;}
+}
+@media print {
+ .answer-outline { display:none; }
+ .answer-copy .answer-point { break-inside:avoid; }
+ .answer-copy .answer-section {break-before:auto;}
+}
+
 </style>
 </head>
 <body>
@@ -616,83 +671,122 @@ function renderTopics(){let contents=`<button class="topic-btn topic-all ${ui.to
   const rail=$('topicList'),previousScroll=rail.scrollLeft;rail.innerHTML=contents;if(previousScroll)rail.scrollLeft=previousScroll;}
 const structuredAnswerCache=new Map();
 function answerLabelIndex(line){
-  const raw=String(line);let depth=0;
-  for(let i=0;i<raw.length;i++){
-    const ch=raw[i];
-    if(ch==="("||ch==="["||ch==="{")depth++;
-    else if(ch===")"||ch==="]"||ch==="}")depth=Math.max(0,depth-1);
-    else if(ch===":"&&depth===0){
-      const label=raw.slice(0,i).trim();
-      if(label.length<2||label.length>86||/[.!?]$/.test(label)||/^https?$/i.test(label))return -1;
-      return i;
-    }
-  }
-  return -1;
+ const raw=String(line).trim();let depth=0;
+ for(let i=0;i<raw.length;i++){
+  const ch=raw[i];
+  if(ch==="("||ch==="["||ch==="{"){depth++;continue;}
+  if(ch===")"||ch==="]"||ch==="}"){depth=Math.max(0,depth-1);continue;}
+  if(ch!==":"||depth!==0)continue;
+  if(i+1<raw.length&&!/\s/.test(raw[i+1]))return -1;
+  const label=raw.slice(0,i).trim();
+  if(label.length<2||label.length>72||label.split(/\s+/).length>11)return -1;
+  if(!/^[A-ZÀ-Ý0-9]/.test(label)||/[!?]|\.(?:\s|$)/.test(label)||/^https?$/i.test(label))return -1;
+  if(!/[a-zA-ZÀ-ÿ]/.test(label))return -1;
+  return i;
+ }
+ return -1;
 }
+
+function answerFormulaHtml(text){
+ const formulae={
+  "$\\text{Na}^+/\\text{K}^+$":'<span class="answer-formula" role="math" aria-label="sódio positivo sobre potássio positivo">Na<sup>+</sup>/K<sup>+</sup></span>',
+  "$\\text{O}_2$":'<span class="answer-formula" role="math" aria-label="oxigênio O dois">O<sub>2</sub></span>',
+  "$\\alpha 4$":'<span class="answer-formula" role="math" aria-label="alfa quatro">α4</span>'
+ };
+ return String(text).split(/(\$[^$]+\$)/g).map(part=>formulae[part]||safe(part)).join("");
+}
+
 function answerReadUnits(line){
- const raw=String(line).trim();if(raw.length<=500)return[raw];
- const parts=[];let depth=0,start=0;
+ const raw=String(line).trim();if(raw.length<340)return [raw];
+ const pieces=[];let depth=0,start=0;
  for(let i=0;i<raw.length-2;i++){
   const ch=raw[i];
-  if(ch==='('||ch==='['||ch==='{'){depth++;continue;}
-  if(ch===')'||ch===']'||ch==='}'){depth=Math.max(0,depth-1);continue;}
-  if(depth||ch!=='.'||raw[i+1]!==' '||i-start<170||raw.length-(i+2)<110)continue;
+  if(ch==="("||ch==="["||ch==="{"){depth++;continue;}
+  if(ch===")"||ch==="]"||ch==="}"){depth=Math.max(0,depth-1);continue;}
+  if(depth||ch!=="."||raw[i+1]!==" "||i-start<145||raw.length-(i+2)<80)continue;
   if(!/[A-ZÀ-Ú]/.test(raw[i+2]))continue;
-  if(/(?:\b(?:ex|p\.ex|dr|dra|prof|sr|sra|fig|vs|etc)\.)$/i.test(raw.slice(Math.max(start,i-12),i+1)))continue;
-  parts.push(raw.slice(start,i+1).trim());start=i+2;i=start-1;
+  if(/(?:\b(?:ex|p\.ex|dr|dra|prof|sr|sra|fig|vs|etc|aprox)\.)$/i.test(raw.slice(Math.max(start,i-14),i+1)))continue;
+  pieces.push(raw.slice(start,i+1).trim());start=i+2;i=start-1;
  }
- if(start<raw.length)parts.push(raw.slice(start).trim());
- return parts.length?parts:[raw];
+ if(start<raw.length)pieces.push(raw.slice(start).trim());
+ return pieces.length?pieces:[raw];
 }
+
 function answerInline(line){
-  const raw=String(line).trim(),at=answerLabelIndex(raw);
-  if(at<0)return safe(raw);
-  const label=raw.slice(0,at),body=raw.slice(at+1).trimStart();
-  return `<strong class="answer-lead">${safe(label)}:</strong>${body?" "+safe(body):""}`;
+ const raw=String(line).trim(),idx=answerLabelIndex(raw);
+ if(idx<0)return answerFormulaHtml(raw);
+ const label=raw.slice(0,idx+1),rest=raw.slice(idx+1);
+ return `<strong class="answer-lead">${answerFormulaHtml(label)}</strong>${rest?answerFormulaHtml(rest):""}`;
 }
+
 function answerTextMarkup(line){
-  const raw=String(line).trim();
-  if(!raw)return "";
-  const label=answerLabelIndex(raw);
-  if(label===raw.length-1&&raw.length<=88)return `<h4 class="answer-subheading">${safe(raw)}</h4>`;
-  return answerReadUnits(raw).map(unit=>`<p class="answer-paragraph">${answerInline(unit)}</p>`).join("");
+ return answerReadUnits(line).map(text=>`<p class="answer-paragraph">${answerInline(text)}</p>`).join("");
 }
+
 function answerListMarkup(group){
-  const rows=group.items.map(item=>{
-    const index=item.number!==null?item.number:"•";
-    return `<div class="answer-point" role="listitem"><span class="answer-point-index" aria-hidden="true">${safe(index)}</span><div class="answer-point-body">${item.lines.map(answerTextMarkup).join("")}</div></div>`;
-  }).join("");
-  return `<div class="answer-points" role="list" aria-label="${group.kind==="number"?"Itens numerados da resposta":"Pontos da resposta"}">${rows}</div>`;
+ const ordered=group.type==="ordered",tag=ordered?"ol":"ul";
+ const first=group.items[0]?.marker||"1",attr=ordered?` start="${Number(first)}"`:"";
+ const elements=group.items.map(item=>{
+  const val=ordered?` value="${Number(item.marker)}"`:"";
+  const marker=item.marker+(ordered?")":"");
+  return `<li class="answer-point"${val}><span class="answer-point-index" aria-hidden="true">${safe(marker)}</span><div class="answer-point-body">${item.lines.map(answerTextMarkup).join("")}</div></li>`;
+ }).join("");
+ return `<${tag} class="answer-points ${ordered?"answer-points-numbered":"answer-points-bulleted"}"${attr} aria-label="${ordered?"Itens numerados da resposta":"Pontos da resposta"}">${elements}</${tag}>`;
 }
-function answerHtml(answer){
-  if(structuredAnswerCache.has(answer))return structuredAnswerCache.get(answer);
-  const raw=String(answer??"").replace(/\r\n?/g,"\n");
-  const fragments=[];
-  let group=null;
-  const flush=()=>{if(group){fragments.push(answerListMarkup(group));group=null;}};
-  const segments=raw.replace(/;\s+(?=\d{1,2}[.)]\s+)/g,";\n").split("\n").map(x=>x.trim()).filter(Boolean);
-  for(const segment of segments){
-    const numbered=segment.match(/^(\d{1,2})[.)]\s+(.+)$/);
-    const bulleted=segment.match(/^[•▪]\s+(.+)$/);
-    if(numbered||bulleted){
-      const kind=numbered?"number":"bullet";
-      if(!group||group.kind!==kind){flush();group={kind,items:[]};}
-      group.items.push({number:numbered?numbered[1]:null,lines:[numbered?numbered[2]:bulleted[1]]});
-      continue;
-    }
-    if(group&&group.items.length){
-      const item=group.items[group.items.length-1];
-      const previous=item.lines[item.lines.length-1];
-      const isNewSection=answerLabelIndex(segment)>=2&&/[.;]$/.test(previous)&&!/:$/.test(previous);
-      if(!isNewSection){item.lines.push(segment);continue;}
-    }
-    flush();
-    fragments.push(answerTextMarkup(segment));
+
+function answerBlocks(answer){
+ const lines=String(answer??"").replace(/\r\n?/g,"\n").replace(/;\s+(?=\d{1,2}[.)]\s+)/g,";\n").split("\n");
+ const blocks=[];let list=null,section=null;
+ for(const entry of lines){
+  const line=entry.trim();
+  if(!line){list=null;section=null;continue;}
+  const numbered=line.match(/^(\d{1,2})[.)]\s+(.+)$/),bulleted=line.match(/^([•▪-])\s+(.+)$/);
+  if(numbered||bulleted){
+   section=null;
+   const type=numbered?"ordered":"bulleted";
+   if(!list||list.type!==type){list={kind:"list",type,items:[]};blocks.push(list);}
+   list.items.push({marker:numbered?numbered[1]:bulleted[1],lines:[numbered?numbered[2]:bulleted[2]]});
+   continue;
   }
-  flush();
-  const markup=`<div class="answer-title">Resposta</div><div class="answer-copy">${fragments.join("")}</div>`;
-  structuredAnswerCache.set(answer,markup);
-  return markup;
+  const idx=answerLabelIndex(line);
+  if(list&&list.items.length){
+   const item=list.items[list.items.length-1],prev=item.lines[item.lines.length-1];
+   if(idx<0||!/[.;]$/.test(prev)||/:$/.test(prev)){item.lines.push(line);continue;}
+   list=null;
+  }
+  if(idx>=0){
+   const rest=line.slice(idx+1).trimStart();
+   section={kind:"section",label:line.slice(0,idx+1),lines:rest?[rest]:[]};
+   blocks.push(section);continue;
+  }
+  if(section){section.lines.push(line);continue;}
+  blocks.push({kind:"paragraph",text:line});
+ }
+ return blocks;
+}
+
+function answerHtml(answer,cardId){
+ const raw=String(answer??""),key=String(cardId)+"\u0000"+raw;
+ if(structuredAnswerCache.has(key))return structuredAnswerCache.get(key);
+ const blocks=answerBlocks(raw),sections=[];
+ const stem=String(cardId).replace(/[^a-zA-Z0-9-]/g,"-");let chapter=0;
+ const body=blocks.map(block=>{
+  if(block.kind==="list")return answerListMarkup(block);
+  if(block.kind==="paragraph")return answerTextMarkup(block.text);
+  const id=`answer-${stem}-${++chapter}`;
+  sections.push({id,label:block.label.slice(0,-1).trim()});
+  return `<section class="answer-section" id="${safe(id)}"><h4 class="answer-subheading">${answerFormulaHtml(block.label)}</h4>${block.lines.map(answerTextMarkup).join("")}</section>`;
+ }).join("");
+ const outline=sections.length>=3&&raw.length>=550?
+  `<nav class="answer-outline" aria-label="Navegação pelas seções do cartão"><span class="answer-outline-title">Nesta resposta</span><ol class="answer-outline-links">${sections.slice(0,6).map(item=>`<li><a href="#${safe(item.id)}">${answerFormulaHtml(item.label)}</a></li>`).join("")}</ol></nav>`:"";
+ const markup=`<div class="answer-title">Resposta</div><div class="answer-copy">${outline}${body}</div>`;
+ structuredAnswerCache.set(key,markup);
+ return markup;
+}
+
+function questionHtml(c){
+ if(c.kind!=="case")return `<h3 tabindex="-1" class="question">${safe(c.question)}</h3>`;
+ return `<div class="case-question"><span class="case-vignette-label">Caso clínico</span><p class="case-vignette">${safe(c.scenario)}</p><span class="case-prompt-label">Pergunta</span><h3 tabindex="-1" class="question case-prompt">${safe(c.question)}</h3></div>`;
 }
 function auditState(c){
  const status=c.audit?.status||'triado';
@@ -714,8 +808,8 @@ function auditInfoHtml(c){
   '<p>'+safe(notes[status]||'Consulte diretrizes clínicas atualizadas.')+'</p><p>'+sourceLink+'</p></div></details>';
 }
 function cardHtml(c){let m=mark(c.id),s=status(c.id),visible=ui.showAll||openAnswers.has(c.id),topic=topicsById.get(c.topic),ss=s==='done'?'✓ Estudado':s==='review'?'↻ Revisar':m.hidden?'◌ Oculto':'';
- return `<article class="study-card ${s==='done'?'is-done':s==='review'?'is-review':''}" id="card-${safe(c.id.replaceAll('.','-'))}" aria-label="Cartão de estudo ${safe(c.id)}"><div class="study-card-head"><div class="meta-line"><div class="meta-chips"><span class="meta-id">${safe(c.id)}</span><span class="chip">${c.new?'Complemento':'Nível '+c.level}</span>${c.new?'<span class="chip chip-new">NOVO</span>':''}${c.page!=null?`<span class="chip">p. ${safe(c.page)}</span>`:''}${auditState(c)}</div>${ss?`<span class="status-chip ${s==='done'?'done':s==='review'?'review':'hidden'}">${ss}</span>`:''}</div><h3 tabindex="-1" class="question${c.kind==='case'?' case-question':''}">${c.kind==='case'?`<span class="case-vignette-label">Caso clínico</span><span class="case-vignette">${safe(c.scenario)}</span><span class="case-prompt-label">Pergunta</span><span class="case-prompt">${safe(c.question)}</span>`:safe(c.question)}</h3><div class="theme-hint">${String(c.topic).padStart(2,'0')} · ${safe(topic.title)}</div></div>
- <div class="answer-region">${visible?`<div class="answer-box" tabindex="-1" role="region" aria-label="Resposta do flashcard ${safe(c.id)}">${answerHtml(c.answer)}</div>`:`<div class="answer-hidden"><span class="hidden-copy">Tente responder antes de revelar a resposta.</span><button type="button" class="action action-primary reveal-btn" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="false">Revelar resposta</button></div>`}</div>
+ return `<article class="study-card ${s==='done'?'is-done':s==='review'?'is-review':''}" id="card-${safe(c.id.replaceAll('.','-'))}" aria-label="Cartão de estudo ${safe(c.id)}"><div class="study-card-head"><div class="meta-line"><div class="meta-chips"><span class="meta-id">${safe(c.id)}</span><span class="chip">${c.new?'Complemento':'Nível '+c.level}</span>${c.new?'<span class="chip chip-new">NOVO</span>':''}${c.page!=null?`<span class="chip">p. ${safe(c.page)}</span>`:''}${auditState(c)}</div>${ss?`<span class="status-chip ${s==='done'?'done':s==='review'?'review':'hidden'}">${ss}</span>`:''}</div>${questionHtml(c)}<div class="theme-hint">${String(c.topic).padStart(2,'0')} · ${safe(topic.title)}</div></div>
+ <div class="answer-region">${visible?`<div class="answer-box" tabindex="-1" role="region" aria-label="Resposta do flashcard ${safe(c.id)}">${answerHtml(c.answer,c.id)}</div>`:`<div class="answer-hidden"><span class="hidden-copy">Tente responder antes de revelar a resposta.</span><button type="button" class="action action-primary reveal-btn" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="false">Revelar resposta</button></div>`}</div>
  ${auditInfoHtml(c)}
  <div class="action-row">${visible?`<button type="button" class="action" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="true">◉ Ocultar resposta</button>`:''}<button type="button" class="action primary-mark ${s==='done'?'done':''}" data-action="done" data-id="${safe(c.id)}" aria-label="${s==='done'?'Desmarcar como estudado':'Marcar como estudado'}" aria-pressed="${s==='done'}">✓ Estudado</button><button type="button" class="action primary-mark ${s==='review'?'review':''}" data-action="review" data-id="${safe(c.id)}" aria-label="${s==='review'?'Retirar da revisão':'Marcar para revisar depois'}" aria-pressed="${s==='review'}">↻ Revisar</button><details class="more-actions"><summary aria-label="Mais ações do cartão ${safe(c.id)}">Mais ações</summary><div class="more-actions-menu"><button type="button" class="action ${m.star?'starred':''}" data-action="star" data-id="${safe(c.id)}" aria-label="${m.star?'Remover dos favoritos':'Adicionar aos favoritos'}" aria-pressed="${!!m.star}">${m.star?'★':'☆'} Favorito</button><button type="button" class="action secondary spacer-left" data-action="hide" data-id="${safe(c.id)}" aria-label="${m.hidden?'Reexibir cartão oculto':'Ocultar cartão da lista'}">${m.hidden?'◉ Reexibir':'◌ Ocultar cartão'}</button><button type="button" class="action secondary" data-action="copy" data-id="${safe(c.id)}" title="Copiar pergunta e resposta">⧉ Copiar</button></div></details></div></article>`;}
 function emptyHtml(){const onlyHidden=ui.status==='hidden',searching=Boolean(ui.search);
