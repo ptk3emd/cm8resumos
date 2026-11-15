@@ -99,7 +99,8 @@ test('conservative content formatting and classifying numbered lists',async({pag
  const item=page.locator('#card-1-5-2');
  await expect(item).toBeVisible();
  await item.locator('[data-action="reveal"]').first().click();
- await expect(item.locator('.answer-points [role="listitem"]').first()).toBeVisible();
+ await expect(item.locator('.answer-points > li').first()).toBeVisible();
+ expect(await item.locator('.answer-points').first().evaluate(el=>el.tagName)).toBe('OL');
  expect(await item.locator('.answer-points').getAttribute('aria-label')).toBe('Itens numerados da resposta');
 });
 
@@ -119,4 +120,67 @@ test('PWA manifests correct relative scope and offline shell on Chromium',async(
   await expect(page.locator('#nTotal')).toHaveText('970');
   await expect(page.locator('#listSub')).toContainText('970 resultados');
  }finally{await context.setOffline(false);}
+});
+
+
+test('overdrive: a long clinical answer exposes semantic sections and a functional outline',async({page})=>{
+ await page.goto('./');
+ await page.locator('#searchBox').fill('4.2.5');
+ await expect(page.locator('#card-4-2-5')).toBeVisible();
+ await page.locator('#card-4-2-5 [data-action="reveal"]').first().click();
+ const card=page.locator('#card-4-2-5');
+ await expect(card.locator('section.answer-section')).toHaveCount(4);
+ const nav=card.locator('nav.answer-outline');
+ await expect(nav).toBeVisible();
+ await expect(nav.locator('a')).toHaveCount(4);
+ await nav.locator('a').nth(2).click();
+ await expect(page).toHaveURL(/#answer-4-2-5-3$/);
+ await expect(card.locator('#answer-4-2-5-3 h4')).toContainText('GESTAÇÃO');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);
+});
+
+test('overdrive: numbered medical classifications use native HTML ol/li',async({page})=>{
+ await page.goto('./');
+ await page.locator('#searchBox').fill('2.5.3');
+ await expect(page.locator('#card-2-5-3')).toBeVisible();
+ await page.locator('#card-2-5-3 [data-action="reveal"]').first().click();
+ const list=page.locator('#card-2-5-3 ol.answer-points').first();
+ await expect(list).toBeVisible();
+ await expect(list.locator(':scope > li')).toHaveCount(3);
+ await expect(list.locator(':scope > li').first()).toHaveAttribute('value','1');
+ await expect(list).toHaveAttribute('aria-label','Itens numerados da resposta');
+});
+
+test('overdrive: clinical formula is HTML with true superscripts, never raw LaTeX',async({page})=>{
+ await page.goto('./');
+ await page.locator('#searchBox').fill('7.4.3');
+ await expect(page.locator('#card-7-4-3')).toBeVisible();
+ await page.locator('#card-7-4-3 [data-action="reveal"]').first().click();
+ const card=page.locator('#card-7-4-3');
+ await expect(card.locator('.answer-formula')).toHaveCount(1);
+ await expect(card.locator('.answer-formula sup')).toHaveCount(2);
+ await expect(card.locator('.answer-formula')).toContainText('Na+/K+');
+ await expect(card.locator('.answer-copy')).not.toContainText('$\\text');
+});
+
+test('overdrive: case scenario and study question have correct native HTML structure',async({page})=>{
+ await page.goto('./');
+ await page.locator('#searchBox').fill('1.CAS.01.R');
+ await expect(page.locator('#card-1-CAS-01-R')).toBeVisible();
+ const card=page.locator('#card-1-CAS-01-R');
+ await expect(card.locator('.case-question .case-vignette')).toHaveCount(1);
+ await expect(card.locator('.case-question h3.question.case-prompt')).toHaveCount(1);
+ await expect(card.locator('p h3')).toHaveCount(0);
+ await card.locator('[data-action="reveal"]').first().click();
+ await expect(card.locator('.answer-copy p.answer-paragraph')).toHaveCount(1);
+});
+
+test('overdrive: original card data and audits remain 970 unique IDs and 25 themes',async({page})=>{
+ await page.goto('./');
+ const result=await page.evaluate(()=>{
+  const data=JSON.parse(document.querySelector('#sourceData').textContent);
+  const statuses={};for(const card of data.cards)statuses[card.audit?.status]=(statuses[card.audit?.status]||0)+1;
+  return{cards:data.cards.length,themes:data.themes.length,uniqueIds:new Set(data.cards.map(c=>c.id)).size,cases:data.cards.filter(c=>c.kind==='case').length,statuses};
+ });
+ expect(result).toMatchObject({cards:970,themes:25,uniqueIds:970,cases:250,statuses:{corrigido:92,revisar:17,triado:611,novo:250}});
 });
