@@ -534,60 +534,123 @@ a:hover { text-decoration:underline; }
 }
 
 
-/* Impeccable Overdrive — semantic HTML reading, editorial rather than decorative.
-   No framework, markdown, canvas or generated clinical assertions. */
+/* Impeccable Overdrive + Polish — clínica em leitura editorial.
+   Correlações somente entre títulos explícitos do próprio cartão. */
 .answer-box .answer-copy {
-  max-width:70ch;
-  font-size:clamp(16px,1.25vw + 11px,18px);
-  line-height:1.76;
-  letter-spacing:-.004em;
-  overflow-wrap:anywhere;
+ --clinical-mechanism:#557d77;
+ --clinical-assessment:#5d75a0;
+ --clinical-action:#577662;
+ --clinical-caution:#986c42;
+ max-inline-size:70ch;font-size:clamp(16px,1.1vw + 12px,18px);
+ line-height:1.75;letter-spacing:-.004em;overflow-wrap:anywhere;
 }
-.answer-copy .answer-paragraph { margin:0 0 1.05em; text-wrap:pretty; }
-.answer-copy .answer-paragraph:last-child { margin-bottom:0; }
-.answer-copy .answer-section { margin:1.55em 0; padding:1.05em 0 0; border-top:1px solid var(--stroke); scroll-margin-top:115px; }
-.answer-copy .answer-section:first-child { margin-top:0;padding-top:0;border-top:0; }
-.answer-copy .answer-section:last-child { margin-bottom:0; }
-.answer-copy .answer-section:target { outline:2px dashed var(--blue);outline-offset:5px;border-radius:2px; }
-.answer-copy .answer-subheading { display:block;margin:0 0 .63em;font-size:16px;line-height:1.48;letter-spacing:-.012em;font-weight:720;color:var(--ink);text-transform:none; }
-.answer-copy .answer-lead { font-weight:700;color:var(--ink); }
-.answer-copy .answer-points { display:grid;gap:1.05em;list-style:none;margin:1.25em 0 1.5em;padding:0; }
-.answer-copy .answer-points:first-child { margin-top:0; }
-.answer-copy .answer-points:last-child { margin-bottom:0; }
-.answer-copy .answer-point { display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;align-items:start;list-style:none;min-width:0; }
-.answer-copy .answer-point-index { display:flex;align-items:center;justify-content:center;min-width:36px;min-height:34px;margin-top:.04em;padding:4px 3px;border:1px solid var(--stroke);border-radius:7px;background:var(--subtle);color:var(--muted);font:650 12px/1 var(--font);letter-spacing:0;font-variant-numeric:tabular-nums; }
-.answer-copy .answer-point-body {min-width:0;}
-.answer-copy .answer-point-body .answer-paragraph { margin-bottom:.62em; }
-.answer-copy .answer-point-body .answer-paragraph:last-child { margin-bottom:0; }
-.answer-outline { margin:0 0 1.6em;padding:0 0 1.3em;border-bottom:1px solid var(--stroke); }
-.answer-outline-title { display:block;margin:0 0 .65em;color:var(--quiet);font-size:11px;line-height:1.4;font-weight:700;letter-spacing:.045em;text-transform:uppercase; }
-.answer-outline-links { display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;list-style:none;margin:0;padding:0; }
-.answer-outline-links li { margin:0; padding:0; }
-.answer-outline-links a { display:inline-block;padding:5px 0;font-size:13px;line-height:1.5;letter-spacing:0;font-weight:600;color:var(--blue-soft-ink);text-decoration:underline;text-decoration-color:var(--stroke-strong);text-underline-offset:4px; }
-.answer-outline-links a:hover { color:var(--blue);text-decoration-color:currentColor; }
-.answer-outline-links a:focus-visible { outline:2px dashed var(--blue);outline-offset:4px;border-radius:2px; }
-.answer-formula { display:inline-block;white-space:nowrap;font-variant-numeric:lining-nums; }
-.answer-formula sub,.answer-formula sup { font-size:.72em; }
-.case-question .case-vignette { margin:5px 0 0;max-width:70ch; }
-.case-question .case-prompt { margin:6px 0 0;max-width:68ch; }
-.case-question .case-prompt-label { margin-top:16px; }
-::selection {background:var(--blue-soft);color:var(--ink);}
-@media(max-width:640px){
- .answer-box .answer-copy { font-size:16px;line-height:1.7; }
- .answer-copy .answer-section {margin:1.4em 0;padding-top:.95em;}
- .answer-copy .answer-subheading {font-size:15px;}
- .answer-copy .answer-point {grid-template-columns:29px minmax(0,1fr);gap:10px;}
- .answer-copy .answer-point-index {min-width:29px;min-height:29px;font-size:11px;}
- .answer-copy .answer-points {gap:.93em;margin:1.1em 0 1.3em;}
- .answer-outline-links {gap:4px 12px;}
- .answer-outline-links a {font-size:12px;padding:6px 0;}
+:root[data-theme="dark"] .answer-copy {
+ --clinical-mechanism:#9bc9c0;
+ --clinical-assessment:#b1bef0;
+ --clinical-action:#9ac6a4;
+ --clinical-caution:#e6bc88;
+}
+.answer-copy .answer-paragraph {margin:0 0 1em;line-height:inherit;text-wrap:pretty;overflow-wrap:anywhere}
+.answer-copy .answer-paragraph:last-child {margin-bottom:0}
+.answer-copy .answer-lead {font-weight:700;color:var(--ink)}
+.answer-copy .answer-section {
+ --section-accent:var(--stroke-strong);
+ margin:1.45em 0;padding:1.05em 0 0 16px;
+ border-block-start:1px solid var(--stroke);
+ border-inline-start:2px solid var(--section-accent);
+ scroll-margin-block-start:100px;min-inline-size:0;
+}
+.answer-copy .answer-section--mechanism {--section-accent:var(--clinical-mechanism)}
+.answer-copy .answer-section--assessment {--section-accent:var(--clinical-assessment)}
+.answer-copy .answer-section--action {--section-accent:var(--clinical-action)}
+.answer-copy .answer-section--caution {--section-accent:var(--clinical-caution)}
+.answer-copy .answer-section:first-child {margin-block-start:0}
+.answer-copy .answer-section:last-child {margin-block-end:0}
+.answer-copy .answer-section:target {outline:2px dashed var(--blue);outline-offset:4px;border-radius:3px}
+.answer-copy .answer-subheading {
+ display:flex;align-items:baseline;gap:10px;margin:0 0 .67em;
+ font-size:16px;line-height:1.44;letter-spacing:-.012em;
+ font-weight:720;color:var(--ink);text-transform:none;overflow-wrap:anywhere;
+}
+.answer-subheading-text {min-inline-size:0}
+.answer-section-number {
+ flex:none;font:650 11px/1.4 var(--mono);letter-spacing:0;
+ color:var(--muted);font-variant-numeric:tabular-nums;
+}
+.answer-copy .answer-points {
+ display:grid;gap:1em;list-style:none;margin:1.15em 0 1.45em;padding:0;
+}
+.answer-copy .answer-points:first-child {margin-block-start:0}
+.answer-copy .answer-points:last-child {margin-block-end:0}
+.answer-copy .answer-point {
+ display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;
+ align-items:start;min-inline-size:0;list-style:none;
+}
+.answer-copy .answer-point-index {
+ display:flex;align-items:center;justify-content:center;
+ min-inline-size:32px;min-block-size:32px;padding:4px 3px;margin-block-start:.08em;
+ border:1px solid var(--stroke);border-radius:7px;background:var(--subtle);
+ color:var(--muted);font:650 11px/1.1 var(--mono);letter-spacing:0;
+ font-variant-numeric:tabular-nums;
+}
+.answer-copy .answer-point-body {min-inline-size:0}
+.answer-copy .answer-point-body .answer-paragraph {margin-bottom:.62em}
+.answer-copy .answer-point-body .answer-paragraph:last-child {margin-bottom:0}
+.answer-outline {
+ margin:0 0 1.55em;padding:0 0 1.35em;
+ border-block-end:1px solid var(--stroke);
+}
+.answer-outline-title {
+ display:block;margin:0 0 .8em;color:var(--quiet);
+ font-size:11px;line-height:1.4;font-weight:700;
+ letter-spacing:.055em;text-transform:uppercase;
+}
+.answer-outline-links {
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ column-gap:12px;row-gap:6px;list-style:none;margin:0;padding:0;
+}
+.answer-outline-item {--link-accent:var(--stroke-strong);min-inline-size:0;list-style:none}
+.answer-outline--mechanism {--link-accent:var(--clinical-mechanism)}
+.answer-outline--assessment {--link-accent:var(--clinical-assessment)}
+.answer-outline--action {--link-accent:var(--clinical-action)}
+.answer-outline--caution {--link-accent:var(--clinical-caution)}
+.answer-outline-links a {
+ display:flex;align-items:baseline;gap:9px;min-block-size:44px;
+ padding:9px 10px;color:var(--ink);text-decoration:none;
+ border:1px solid var(--stroke);border-radius:7px;background:transparent;
+ font-size:13px;line-height:1.45;font-weight:550;letter-spacing:0;
+ overflow-wrap:anywhere;
+}
+.answer-outline-links a:hover {background:var(--subtle);border-color:var(--stroke-strong)}
+.answer-outline-links a:focus-visible {outline:2px dashed var(--blue);outline-offset:2px}
+.answer-outline-node {
+ flex:none;font:650 11px/1.4 var(--mono);letter-spacing:0;
+ font-variant-numeric:tabular-nums;color:var(--muted);
+ border-block-end:2px solid var(--link-accent);padding-block-end:2px;
+}
+.answer-outline-label {min-inline-size:0}
+.answer-formula {display:inline-block;white-space:nowrap;font-variant-numeric:lining-nums}
+.answer-formula sub,.answer-formula sup {font-size:.72em}
+.case-question .case-vignette {margin:5px 0 0;max-inline-size:70ch}
+.case-question .case-prompt {margin:6px 0 0;max-inline-size:68ch}
+.case-question .case-prompt-label {margin-block-start:16px}
+@media(max-width:640px) {
+ .answer-box .answer-copy {font-size:16px;line-height:1.69}
+ .answer-copy .answer-section {margin:1.25em 0;padding:1em 0 0 12px}
+ .answer-copy .answer-subheading {font-size:15px;gap:8px}
+ .answer-copy .answer-point {grid-template-columns:28px minmax(0,1fr);gap:9px}
+ .answer-copy .answer-point-index {min-inline-size:28px;min-block-size:28px;font-size:10px}
+ .answer-copy .answer-points {gap:.9em;margin:1em 0 1.25em}
+ .answer-outline-links {grid-template-columns:minmax(0,1fr);gap:5px}
+ .answer-outline-links a {min-block-size:44px;padding:8px 10px}
+}
+@media(min-width:641px) and (max-width:980px){
+ .answer-outline-links {grid-template-columns:minmax(0,1fr)}
 }
 @media print {
- .answer-outline { display:none; }
- .answer-copy .answer-point { break-inside:avoid; }
- .answer-copy .answer-section {break-before:auto;}
+ .answer-outline {display:none}
+ .answer-copy .answer-section,.answer-copy .answer-point {break-inside:avoid}
 }
-
 
 /* Notion supplies the reading surfaces and semantic colors.
    Figma supplies the pill controls, compact metadata and dashed focus. */
@@ -885,6 +948,14 @@ function answerBlocks(answer){
  return blocks;
 }
 
+function answerRole(label){
+ const s=String(label).replace(/:$/,'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ if(/^(?:armadilha\b|alerta\b|atencao\b|cautela\b|contraindicac|farmacos a evitar\b|evitar\b|nao usar\b|precaucao\b)/.test(s))return 'caution';
+ if(/^(?:tratamento\b|conduta\b|manejo\b|terapia\b|terapeutica\b|profilaxia\b|prevencao\b|intervencao\b|vacinacao\b|monitorizacao\b|acompanhamento\b|seguimento\b)/.test(s))return 'action';
+ if(/^(?:diagnostico\b|investigacao\b|criterios?\b|avaliacao\b|exames?\b|sinais?\b|sintomas?\b|clinica\b|quadro\b|diferenciais?\b|classificacao\b|rastreio\b|rastreamento\b|confirmacao\b)/.test(s))return 'assessment';
+ if(/^(?:fisiopatologia\b|causas?\b|etiologia\b|mecanismo\b|fatores de risco\b|definicao\b|conceito\b|principio\b)/.test(s))return 'mechanism';
+ return 'neutral';
+}
 function answerHtml(answer,cardId){
  const raw=String(answer??""),key=String(cardId)+"\u0000"+raw;
  if(structuredAnswerCache.has(key))return structuredAnswerCache.get(key);
@@ -893,12 +964,12 @@ function answerHtml(answer,cardId){
  const body=blocks.map(block=>{
   if(block.kind==="list")return answerListMarkup(block);
   if(block.kind==="paragraph")return answerTextMarkup(block.text);
-  const id=`answer-${stem}-${++chapter}`;
-  sections.push({id,label:block.label.slice(0,-1).trim()});
-  return `<section class="answer-section" id="${safe(id)}"><h4 class="answer-subheading">${answerFormulaHtml(block.label)}</h4>${block.lines.map(answerTextMarkup).join("")}</section>`;
+  const id=`answer-${stem}-${++chapter}`,role=answerRole(block.label);
+  sections.push({id,label:block.label.slice(0,-1).trim(),role});
+  return `<section class="answer-section answer-section--${role}" data-role="${role}" id="${safe(id)}"><h4 class="answer-subheading"><span class="answer-section-number" aria-hidden="true">${String(chapter).padStart(2,'0')}</span><span class="answer-subheading-text">${answerFormulaHtml(block.label)}</span></h4>${block.lines.map(answerTextMarkup).join("")}</section>`;
  }).join("");
- const outline=sections.length>=3&&raw.length>=550?
-  `<nav class="answer-outline" aria-label="Navegação pelas seções do cartão"><span class="answer-outline-title">Nesta resposta</span><ol class="answer-outline-links">${sections.slice(0,6).map(item=>`<li><a href="#${safe(item.id)}">${answerFormulaHtml(item.label)}</a></li>`).join("")}</ol></nav>`:"";
+ const outline=sections.length>=2&&raw.length>=450?
+  `<nav class="answer-outline" aria-label="Tópicos desta resposta"><span class="answer-outline-title">Mapa da resposta</span><ol class="answer-outline-links">${sections.map((item,i)=>`<li class="answer-outline-item answer-outline--${item.role}"><a href="#${safe(item.id)}"><span class="answer-outline-node" aria-hidden="true">${String(i+1).padStart(2,"0")}</span><span class="answer-outline-label">${answerFormulaHtml(item.label)}</span></a></li>`).join("")}</ol></nav>`:"";
  const markup=`<div class="answer-title">Resposta</div><div class="answer-copy">${outline}${body}</div>`;
  structuredAnswerCache.set(key,markup);
  return markup;

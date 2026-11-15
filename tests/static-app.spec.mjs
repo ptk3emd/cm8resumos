@@ -184,3 +184,52 @@ test('overdrive: original card data and audits remain 970 unique IDs and 25 them
  });
  expect(result).toMatchObject({cards:970,themes:25,uniqueIds:970,cases:250,statuses:{corrigido:92,revisar:17,triado:611,novo:250}});
 });
+
+
+test('polish: visual answer map references every original clinical section',async({page})=>{
+ await page.goto('./');
+ await page.locator('#searchBox').fill('4.2.5');
+ const card=page.locator('#card-4-2-5');
+ await expect(card).toBeVisible();
+ await card.locator('[data-action="reveal"]').click();
+ const sections=card.locator('section.answer-section');
+ const map=card.locator('nav.answer-outline');
+ await expect(sections).toHaveCount(4);
+ await expect(map.locator('a')).toHaveCount(4);
+ await expect(map.locator('.answer-outline-node')).toHaveCount(4);
+ await expect(map.locator('.answer-outline-title')).toContainText('Mapa da resposta');
+ await map.locator('a').nth(2).click();
+ await expect(page).toHaveURL(/#answer-4-2-5-3$/);
+ await expect(card.locator('#answer-4-2-5-3')).toBeVisible();
+});
+
+test('polish: explicit mechanism and management labels get matching visual roles',async({page})=>{
+ await page.goto('./');
+ await page.locator('#searchBox').fill('4.5.3');
+ const card=page.locator('#card-4-5-3');
+ await expect(card).toBeVisible();
+ await card.locator('[data-action="reveal"]').click();
+ await expect(card.locator('section.answer-section[data-role="mechanism"]')).toHaveCount(1);
+ await expect(card.locator('section.answer-section[data-role="action"]')).toHaveCount(1);
+ await expect(card.locator('.answer-outline-links a')).toHaveCount(2);
+ const seen=await card.evaluate(el=>({
+  headings:[...el.querySelectorAll('.answer-section')].map(n=>n.querySelector('.answer-subheading-text')?.textContent),
+  roles:[...el.querySelectorAll('.answer-section')].map(n=>n.dataset.role)
+ }));
+ expect(seen.headings).toEqual(['Fisiopatologia:','Conduta:']);
+ expect(seen.roles).toEqual(['mechanism','action']);
+});
+
+test('polish: mobile answer navigation has touch target and no page overflow',async({page,isMobile})=>{
+ test.skip(!isMobile,'Only emulated mobile runs');
+ await page.goto('./');
+ await page.locator('#searchBox').fill('4.2.5');
+ const card=page.locator('#card-4-2-5');
+ await card.locator('[data-action="reveal"]').click();
+ const link=card.locator('.answer-outline-links a').first();
+ const box=await link.boundingBox();
+ expect(box.height).toBeGreaterThanOrEqual(44);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBeTruthy();
+ await link.click();
+ await expect(page).toHaveURL(/#answer-4-2-5-1$/);
+});
