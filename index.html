@@ -805,7 +805,7 @@ $('shuffleBtn').addEventListener('click',()=>{ui.shuffle=!ui.shuffle;if(ui.shuff
 $('revealAllBtn').addEventListener('click',()=>{ui.showAll=!ui.showAll;openAnswers.clear();renderCards(getFiltered());renderControls();});
 $('cardsContainer').addEventListener('click',actions);$('focusNav').addEventListener('click',actions);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){for(const menu of qsa('details.more-actions[open]')){menu.open=false;menu.querySelector('summary')?.focus({preventScroll:true});}}});
-document.addEventListener('click',e=>{for(const menu of qsa('details.more-actions[open]'))if(!menu.contains(e.target))menu.open=false;});
+document.addEventListener('click',e=>{if(e.target.closest?.('[data-action]'))return;for(const menu of qsa('details.more-actions[open]'))if(!menu.contains(e.target))menu.open=false;});
 $('moreBtn').addEventListener('click',()=>{ui.limit+=22;renderCards(getFiltered());});
 
 function updateFilterCues(){

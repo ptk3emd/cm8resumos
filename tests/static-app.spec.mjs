@@ -40,6 +40,9 @@ test('studied/review, secondary menu, source disclosure and focus mode',async({p
  await expect(page.locator('#nDone')).toHaveText('1');
  await page.locator('.study-card').first().locator('details.more-actions summary').click();
  await page.locator('.study-card').first().locator('[data-action="star"]').click();
+ expect(await page.evaluate(()=>document.activeElement?.closest('details.more-actions')?.open===true)).toBeTruthy();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('.study-card').first().locator('details.more-actions')).not.toHaveAttribute('open','');
  await page.locator('.study-card').first().locator('[data-action="review"]').click();
  await expect(page.locator('#nReview')).toHaveText('1');
  await page.locator('[data-mode="focus"]').click();
