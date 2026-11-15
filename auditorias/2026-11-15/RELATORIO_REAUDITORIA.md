@@ -40,6 +40,35 @@ Esta rodada percorreu **cada ID individualmente** com validação de estrutura, 
 - **24.2.5:** Verificar terapias específicas para fenótipo AQP4/MOG e aprovação/disponibilidade local.
 - **25.1.5:** Evitar limiar absoluto de CVF para intubação; incluir esforço respiratório e comprometimento bulbar.
 
+
+## Etapa 2 — revisão dirigida de pendências clínicas (15/11/2026)
+
+Após a primeira passagem de 970 IDs, houve uma **segunda leitura especializada de todas as 17 pendências previamente sinalizadas**, com pesquisa de guias/revisões para corrigir afirmações generalizadas. Foram editados **12 cartões** em **20 intervenções textuais**; os 17 permanecem marcados como `revisar`, porque a checagem de pontos selecionados não certifica todas as doses/afirmações.
+
+| ID | Correção dirigida | Fontes |
+|---|---|---|
+| 2.5.5 | Remover obrigatoriedade de regime único e ressaltar controvérsia em doença neurológica | https://pubmed.ncbi.nlm.nih.gov/42594858/ |
+| 5.4.5 | Separar tratamento eclâmptico de estratégias de prevenção da pré-eclâmpsia; Padronizar comparadores e esclarecer dependência de protocolo | https://www.scielo.br/j/rbsmi/a/S6RPBc5nb6yf4CkLvdhLG4h/?format=html&ilang=pt_BR |
+| 8.5.3 | Rever especificidade anti-TPO e a afirmação de resposta universal a corticoide | https://pubmed.ncbi.nlm.nih.gov/34061124/ |
+| 9.5.5 | Remover ACTH fixo e crescimento agressivo como critérios obrigatórios; Telotristate é adjuvante para diarreia refratária, não para todos os pacientes | https://pubmed.ncbi.nlm.nih.gov/33444221/ ; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=f9108ac3-ca6e-4faf-9d04-953abb64d072 |
+| 14.2.5 | Corrigir indicação de glicocorticoides e combinação automática de anti-fibrótico | https://pmc.ncbi.nlm.nih.gov/articles/PMC12646475/ |
+| 16.2.5 | Reconhecer recomendações divergentes ACR versus SMFM para vigilância fetal | https://acrjournals.onlinelibrary.wiley.com/doi/full/10.1002/art.41191 ; https://publications.smfm.org/publications/462-society-for-maternal-fetal-medicine-consult-series-64/ |
+| 17.3.5 | Separar falha clínica real de sintomas sem atividade inflamatória; Evitar troca obrigatória para outro antiTNF em toda imunogenicidade; Evitar aplicar tofacitinibe indiscriminadamente a Crohn | https://gastro.org/clinical-guidance/therapeutic-drug-monitoring-in-inflammatory-bowel-disease-ibd/ ; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cf74ba2f-afc5-4baa-8594-979c889a5831 |
+| 19.3.5 | Evitar anastomose como conduta universal em emergência; Evitar uma técnica obrigatória em todo caso de perfuração esquerda; Stent ponte é opção em selecionados, não garante preservação de estomia | https://www.giejournal.org/article/S0016-5107%2826%2900210-5/fulltext |
+| 21.3.5 | Evitar um único esquema IM como universal e individualizar bariátrica | https://www.nice.org.uk/guidance/ng239/chapter/Recommendations |
+| 22.5.5 | Evitar afirmar mecanismo único de SUDEP como estabelecido; Evitar taxa de cura generalizada e indicação universal de canabidiol/VNS | https://www.ncbi.nlm.nih.gov/books/NBK614260/ |
+| 24.2.5 | Evitar exclusividade temporal/regulatória sem contexto; Atualizar preventivos e distinguir AQP4-NMOSD de MOGAD | https://pmc.ncbi.nlm.nih.gov/articles/PMC12602111/ |
+| 25.1.5 | Evitar CVF isolada como gatilho absoluto de intubação | https://onlinelibrary.wiley.com/doi/10.1111/ene.16229 |
+
+### Cinco pendências mantidas sem alteração do conteúdo
+- **3.3.5:** esporotricose na gestante, piomiosite e hidradenite; recomendações dependem de forma clínica, gravidez e agente.
+- **11.2.2:** ACR/KDIGO e sedimentoscopia na biópsia lúpica; o alerta full-house foi corrigido na etapa anterior.
+- **12.4.2:** correlação histológica e sorológica ANCA/anti-MBG e doenças imunocomplexas, já corrigida a equivalência absoluta.
+- **15.3.5:** conduta e imunoterapia na disfagia miopática grave; confirmar com orientações específicas por fenótipo.
+- **20.5.4:** hidratação foi corrigida na etapa anterior, mas ainda é preciso revisar escolha de anti-reabsortivo, calcitonina e glicocorticoide por mecanismo/DRC.
+
+**Atenção:** mesmo nos 12 cartões editados, o status continua `revisar`; a tabela de 970 IDs é uma triagem sistemática e não uma certificação médica global. Também não atribuí automaticamente novos status `corrigido` ou `verificado`.
+
 ## Próximas verificações sugeridas
 - Priorizar `revisar`, doses, indicações em gestação, emergências e procedimentos, usando fontes oficiais atuais e adequadas ao SUS.
 - Conferir se números e operadores foram preservados exatamente após normalização da fonte.

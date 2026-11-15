@@ -977,6 +977,10 @@
 | 25.CAS.05.R | Miastenia gravis e doenças da junção neuromuscular | Caso | novo | P3 | Sem defeito estrutural identificado automaticamente; verificar acurácia médica separadamente | Revisar clareza e manter conteúdo original |
 | 25.CAS.05.T | Miastenia gravis e doenças da junção neuromuscular | Caso | novo | P3 | Sem defeito estrutural identificado automaticamente; verificar acurácia médica separadamente | Revisar clareza e manter conteúdo original |
 
+## Adendo — revisão dirigida de 12 dos 17 IDs com pendências clínicas
+
+A segunda etapa modificou 12 cartões, mantendo o status original de revisão. O registro acima conserva a triagem individual original de 970 IDs; as correções e suas fontes estão documentadas em `RELATORIO_REAUDITORIA.md`. Não usar a contagem de IDs como comprovação de precisão médica integral.
+
 ## Interpretação das prioridades
 - **P1:** pendência clínica já declarada; precisa de revisão dirigida e referência primária antes de ser considerada resolvida.
 - **P2:** critério, dose, atomicidade ou apresentação que merece conferência.
