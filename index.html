@@ -583,6 +583,17 @@ a:hover { text-decoration:underline; }
 
 
 .fsrs-settings{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 20px;background:var(--surface,#fff);border:1px solid var(--line,#ddd);border-radius:14px;margin:18px 0}.fsrs-settings[hidden]{display:none}.fsrs-settings input[type=number]{width:70px;margin-left:8px;padding:8px;border:1px solid #aaa;border-radius:7px}.fsrs-grade-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:18px}.fsrs-grade-row button{min-height:54px;border-radius:9px;border:1px solid #87929b;background:transparent;color:inherit;cursor:pointer}.fsrs-grade-row button:hover,.fsrs-grade-row button:focus-visible{outline:2px solid #2870b5}.fsrs-grade-row small{display:block;opacity:.75}.fsrs-prompt{padding:14px 0}.fsrs-empty{padding:30px;text-align:center}.fsrs-settings button,.fsrs-settings label.subtle-btn{min-height:44px;cursor:pointer}@media(max-width:620px){.fsrs-grade-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mode-switch .mode-btn[data-mode="fsrs"][aria-pressed="true"] {
+ background:var(--ink);color:var(--panel);
+}
+.fsrs-settings {padding:12px 16px}
+.fsrs-backup {margin-inline-start:auto}
+.fsrs-backup summary {display:list-item;min-height:44px;align-content:center;cursor:pointer}
+.fsrs-backup-actions {display:flex;flex-wrap:wrap;gap:8px;margin-block-start:8px}
+.fsrs-grading {padding:16px 18px}
+.fsrs-grading p {margin:0;font-size:14px;color:var(--muted)}
+.fsrs-grade-row {margin-top:10px}
+#cardsContainer .question, #cardsContainer .case-question, #cardsContainer .answer-box, #listTitle {scroll-margin-top:90px}
 </style>
 </head>
 <body>
@@ -618,7 +629,7 @@ a:hover { text-decoration:underline; }
    <div class="divider"></div>
    <div class="filter-second"><div class="pill-scroller"><div class="filter-pills" id="statusFilters" role="group" aria-label="Filtrar situação" aria-describedby="filterSwipeHint"><button class="pill active" data-filter="all" aria-pressed="true">Todos</button><button class="pill" data-filter="todo" aria-pressed="false">Não estudados</button><button class="pill" data-filter="review" aria-pressed="false">Revisar</button><button class="pill" data-filter="done" aria-pressed="false">Estudados</button><button class="pill" data-filter="star" aria-pressed="false">★ Favoritos</button><button class="pill" data-filter="hidden" aria-pressed="false">Ocultos</button></div><span class="filter-scroll-cue" id="filterScrollCue" aria-hidden="true">→</span></div><span class="sr-only" id="filterSwipeHint">No celular, deslize horizontalmente para acessar todos os estados, incluindo Favoritos e Ocultos.</span><div class="mode-switch" aria-label="Modo de visualização"><button class="mode-btn active" data-mode="list" aria-pressed="true">Lista</button><button class="mode-btn" data-mode="focus" aria-pressed="false">Foco</button><button class="mode-btn" data-mode="fsrs" aria-pressed="false">Revisão FSRS</button></div></div>
  </section>
- <section id="fsrsSettings" class="fsrs-settings" hidden aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico FSRS</button><label class="subtle-btn">Importar histórico FSRS <input type="file" id="fsrsImport" accept=".json,application/json" hidden></label></section>
+ <section id="fsrsSettings" class="fsrs-settings" hidden aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><details class="fsrs-backup"><summary class="subtle-btn">Backup FSRS</summary><div class="fsrs-backup-actions"><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico</button><button type="button" id="fsrsImportButton" class="subtle-btn">Importar histórico</button><input type="file" id="fsrsImport" accept=".json,application/json" hidden></div></details></section>
  <section aria-labelledby="listTitle"><div class="list-head"><div><h2 class="list-title" id="listTitle" tabindex="-1">Todos os flashcards</h2><div class="list-sub" id="listSub" aria-live="polite">970 resultados</div></div><div class="list-actions"><button type="button" id="focusSidebarToggle" class="subtle-btn focus-sidebar-toggle" hidden aria-expanded="false" aria-controls="sidebar">Mostrar temas</button><button id="shuffleBtn" class="subtle-btn" aria-pressed="false" title="Embaralhar ordem">⇄ Aleatório</button><button id="revealAllBtn" class="subtle-btn" title="Mostrar ou ocultar respostas visíveis">◉ Mostrar todas</button></div></div><div id="cardsContainer" class="cards"></div><div id="focusNav" class="focus-nav" hidden></div><div class="more-wrap" id="moreWrap" hidden><button class="more-btn" id="moreBtn">Carregar mais</button></div></section>
  <footer class="footer">Adaptado do PDF <strong>“Flashcards — 8º Período · CMN”</strong>. 92 cartões receberam revisão médica e reescrita direcionada; os demais passaram por triagem estrutural/pedagógica e ainda requerem validação clínica individual. O arquivo contém etiquetas de auditoria por cartão e mantém os IDs originais. Os 250 cartões adicionais são vinhetas didáticas sem referência de página no PDF. Os cartões originais mantêm suas marcações e avisos de auditoria.<div class="utility-row"><span>Offline depois da primeira visita online · sem cadastro</span><span id="offlineStatus" class="offline-status" role="status" aria-live="polite">Preparando uso offline…</span><span aria-hidden="true">·</span><button id="resetBtn">Apagar progresso salvo</button><button id="unhideBtn">Reexibir todos os cartões ocultos</button></div><div class="focus-tip">Atalhos no modo Foco (fora dos controles): <strong>←</strong> / <strong>→</strong> navegar, <strong>Espaço</strong> revelar, <strong>1</strong> estudar, <strong>2</strong> revisar, <strong>3</strong> favoritar.</div></footer>
 </main></div>
@@ -863,6 +874,7 @@ function renderCards(list){let focusBefore=rememberFocus();let container=$('card
  $('focusNav').hidden=true;
  let shown=list.slice(0,ui.limit);container.innerHTML=shown.length?shown.map(cardHtml).join(''):emptyHtml();let rest=list.length-shown.length;$('moreWrap').hidden=rest<=0;if(rest>0)$('moreBtn').textContent=`Mostrar mais ${Math.min(22,rest)} cartões · ${rest} restantes`;restoreFocus(focusBefore);}
 function renderControls(){
+ if(ui.mode!=='fsrs')clearTimeout(fsrsRefreshTimer);
  $('fsrsSettings').hidden=ui.mode!=='fsrs';
  $('shuffleBtn').hidden=ui.mode==='fsrs';
  $('revealAllBtn').hidden=ui.mode==='fsrs';
@@ -885,7 +897,7 @@ function fallbackCopy(text){return new Promise((resolve,reject)=>{const previous
  try{area.focus();area.select();if(document.execCommand?.('copy'))resolve();else reject(Error('Sem permissão para copiar'));}catch(err){reject(err);}finally{area.remove();if(previous?.isConnected)previous.focus({preventScroll:true});}});}
 function copyText(text){if(navigator.clipboard?.writeText&&window.isSecureContext)return navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));return fallbackCopy(text);}
 function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let action=b.dataset.action,id=b.dataset.id,m=mark(id);
- switch(action){case'reveal':if(ui.showAll){ui.showAll=false;openAnswers=new Set([id]);}else if(openAnswers.has(id))openAnswers.delete(id);else openAnswers.add(id);if(ui.mode==='fsrs')renderFSRS();else renderCards(getFiltered());if(openAnswers.has(id))document.getElementById('card-'+id.replaceAll('.','-'))?.querySelector('.answer-box')?.classList.add('is-revealing');break;
+ switch(action){case'reveal':if(ui.showAll){ui.showAll=false;openAnswers=new Set([id]);}else if(openAnswers.has(id))openAnswers.delete(id);else openAnswers.add(id);if(ui.mode==='fsrs'){renderFSRS();$('cardsContainer').querySelector('.answer-box')?.focus();}else renderCards(getFiltered());if(openAnswers.has(id))document.getElementById('card-'+id.replaceAll('.','-'))?.querySelector('.answer-box')?.classList.add('is-revealing');break;
  case'done':setMark(id,'status',status(id)==='done'?'todo':'done');break;
  case'review':setMark(id,'status',status(id)==='review'?'todo':'review');break;
  case'star':setMark(id,'star',!m.star);break;
@@ -896,7 +908,10 @@ function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let a
 }
 $('topicList').addEventListener('click',ev=>{let b=ev.target.closest('[data-topic]');if(!b)return;ui.topic=b.dataset.topic;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();if(window.matchMedia('(max-width:850px)').matches){$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}});
 $('statusFilters').addEventListener('click',ev=>{let b=ev.target.closest('[data-filter]');if(!b)return;ui.status=b.dataset.filter;ui.limit=22;ui.focusId=null;render();});
-qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;render();}));
+qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;
+ if(ui.mode==='fsrs')openAnswers.clear();
+ render();
+ if(ui.mode==='fsrs')focusFSRSQuestion();}));
 $('startFocusBtn').addEventListener('click',()=>{ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;render();$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});});
 $('focusSidebarToggle').addEventListener('click',()=>{ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();});
 let searchTimer;function applySearch(){ui.search=norm($('searchBox').value.trim());ui.limit=22;ui.focusId=null;render();}
@@ -998,7 +1013,7 @@ window.addEventListener('storage',event=>{
 let theme;try{theme=localStorage.getItem(THEME_KEY)||'light';}catch{theme='light';}setTheme(theme==='dark');
 document.addEventListener('keydown',e=>{const target=e.target instanceof Element?e.target:document.activeElement;const interactive=target?.closest('button,a,input,textarea,select,summary,[role=button],[role=link],[contenteditable=true]');if(ui.mode!=='focus'||e.altKey||e.ctrlKey||e.metaKey||interactive||target?.isContentEditable)return;let list=getFiltered();if(!list.length)return;let id=ui.focusId||list[0].id;
  if(e.key==='ArrowLeft'){e.preventDefault();jump(-1);}else if(e.key==='ArrowRight'){e.preventDefault();jump(1);}else if(e.code==='Space'){e.preventDefault();if(ui.showAll){ui.showAll=false;openAnswers.clear();}else if(openAnswers.has(id))openAnswers.delete(id);else openAnswers.add(id);renderCards(list);if(openAnswers.has(id))document.getElementById('card-'+id.replaceAll('.','-'))?.querySelector('.answer-box')?.classList.add('is-revealing');renderControls();}else if(e.key==='1'){setMark(id,'status',status(id)==='done'?'todo':'done');}else if(e.key==='2'){setMark(id,'status',status(id)==='review'?'todo':'review');}else if(e.key==='3'){setMark(id,'star',!mark(id).star);}});
-render();storageNotice();
+
 function pwaStatus(){
  const el=$('offlineStatus');
  if(!navigator.onLine){el.textContent='Sem conexão · usando os arquivos disponíveis';return;}
@@ -1021,6 +1036,17 @@ pwaStatus();
 const fsrsRecords=new Map();
 let fsrsDB=null,fsrsReady=false,fsrsBusy=false,fsrsScheduler=null;
 const FSRS_RETENTION=0.90;
+const FSRS_DEFAULT_DAILY=20;
+let fsrsRefreshTimer;
+function fsrsDailyLimit(value){
+ if(value==null||String(value).trim()===''||!Number.isFinite(Number(value)))return FSRS_DEFAULT_DAILY;
+ return Math.min(100,Math.max(0,Math.trunc(Number(value))));
+}
+function focusFSRSQuestion(){
+ const target=$('cardsContainer').querySelector('.question')||$('listTitle');
+ target.focus({preventScroll:true});
+ (target.closest('.case-question')||target).scrollIntoView({block:'start'});
+}
 function openFSRSDB(){return new Promise((resolve,reject)=>{
  const request=indexedDB.open('cm8-fsrs-v1',1);
  request.onupgradeneeded=()=>request.result.createObjectStore('cards',{keyPath:'id'});
@@ -1039,28 +1065,45 @@ function fsrsCard(id){return fsrsRecords.has(id)?hydrateFSRS(fsrsRecords.get(id)
 function fsrsDay(date){const d=new Date(date);return [d.getFullYear(),d.getMonth(),d.getDate()].join('-');}
 function fsrsNewToday(){const today=fsrsDay(new Date());return [...fsrsRecords.values()].filter(record=>record.logs?.some(log=>log.state===0&&fsrsDay(log.reviewTime)===today)).length;}
 function fsrsQueue(){
- const now=Date.now(),allowed=Math.max(0,Number($('fsrsDaily').value)||0)-fsrsNewToday();
+ const now=new Date();
+ const allowed=Math.max(0,fsrsDailyLimit($('fsrsDaily').value)-fsrsNewToday());
  const candidates=getFiltered().filter(c=>!mark(c.id).hidden);
  const due=candidates.filter(c=>fsrsRecords.has(c.id)&&new Date(fsrsRecords.get(c.id).card.dueAt).getTime()<=now);
  due.sort((a,b)=>{const x=fsrsRecords.get(a.id).card,y=fsrsRecords.get(b.id).card;
   return (x.state===1||x.state===3?0:1)-(y.state===1||y.state===3?0:1)||new Date(x.dueAt)-new Date(y.dueAt);});
- return {due,newCards:candidates.filter(c=>!fsrsRecords.has(c.id)).slice(0,allowed)};
+ const nextMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+ let refreshAt=nextMidnight.getTime();
+ for(const {id} of candidates){
+  const dueAt=new Date(fsrsRecords.get(id)?.card.dueAt).getTime();
+  if(dueAt>now&&dueAt<refreshAt)refreshAt=dueAt;
+ }
+ return {due,newCards:candidates.filter(c=>!fsrsRecords.has(c.id)).slice(0,allowed),refreshAt};
 }
 function fsrsInterval(due){const ms=new Date(due)-Date.now();if(ms<3600000)return Math.max(1,Math.round(ms/60000))+' min';if(ms<86400000)return Math.round(ms/3600000)+' h';return Math.round(ms/86400000)+' d';}
-function renderFSRS(){
+function renderFSRS({keepCard=false}={}){
  $('fsrsSettings').hidden=false;$('shuffleBtn').hidden=true;$('revealAllBtn').hidden=true;$('focusNav').hidden=true;$('moreWrap').hidden=true;
  $('listTitle').textContent='Revisão espaçada';const container=$('cardsContainer');
  if(!fsrsReady){$('listSub').textContent='Carregando histórico';container.innerHTML='<div class="fsrs-empty">Preparando revisões…</div>';return;}
- const {due,newCards}=fsrsQueue(),queue=[...due,...newCards];
+ const {due,newCards,refreshAt}=fsrsQueue(),queue=[...due,...newCards];
+ clearTimeout(fsrsRefreshTimer);
+ fsrsRefreshTimer=setTimeout(refreshFSRS,Math.max(1,refreshAt-Date.now()));
  $('fsrsSummary').textContent=due.length+' vencidos · '+newCards.length+' novos disponíveis';
  $('listSub').textContent=queue.length+' cartões disponíveis agora';
+ if(keepCard&&container.querySelector('.study-card'))return;
  if(!queue.length){container.innerHTML='<div class="fsrs-empty"><h3>Revisões em dia</h3><p>Volte quando houver cartões previstos ou ajuste os filtros.</p></div>';return;}
  const c=queue.find(c=>c.id===ui.focusId)||queue[0];ui.focusId=c.id;
  const visible=openAnswers.has(c.id),topic=topicsById.get(c.topic);
  const grades=visible?fsrsScheduler.preview({card:fsrsCard(c.id),now:new Date()}).map(({grade,card})=>
   `<button type="button" data-action="grade" data-id="${safe(c.id)}" data-grade="${grade}" ${fsrsBusy?'disabled':''}>${['','Errei','Difícil','Bom','Fácil'][grade]}<small>${fsrsInterval(card.dueAt)}</small></button>`).join(''):'';
- container.innerHTML=`<article class="study-card" id="card-${safe(c.id.replaceAll('.','-'))}"><div class="study-card-head"><div class="meta-line"><span class="meta-id">${safe(c.id)}</span><span class="chip">${fsrsRecords.has(c.id)?'Revisão':'Novo'}</span>${auditState(c)}</div>${questionHtml(c)}<div class="theme-hint">${safe(topic.title)}</div></div><div class="answer-region">${visible?`<div class="answer-box" tabindex="-1">${answerHtml(c.answer,c.id)}</div>`:`<div class="answer-hidden"><span class="hidden-copy">Responda antes de revelar.</span><button type="button" class="action action-primary reveal-btn" data-action="reveal" data-id="${safe(c.id)}">Revelar resposta</button></div>`}</div>${visible?auditInfoHtml(c):''}${visible?`<div class="fsrs-grade-row" role="group" aria-label="Avalie sua lembrança">${grades}</div>`:''}</article>`;
+ container.innerHTML=`<article class="study-card" id="card-${safe(c.id.replaceAll('.','-'))}"><div class="study-card-head"><div class="meta-line"><span class="meta-id">${safe(c.id)}</span><span class="chip">${fsrsRecords.has(c.id)?'Revisão':'Novo'}</span>${auditState(c)}</div>${questionHtml(c)}<div class="theme-hint">${safe(topic.title)}</div></div><div class="answer-region">${visible?`<div class="answer-box" tabindex="-1" role="region" aria-label="Resposta do flashcard">${answerHtml(c.answer,c.id)}</div>`:`<div class="answer-hidden"><span class="hidden-copy">Responda antes de revelar.</span><button type="button" class="action action-primary reveal-btn" data-action="reveal" data-id="${safe(c.id)}">Revelar resposta</button></div>`}</div>${visible?auditInfoHtml(c):''}${visible?`<div class="fsrs-grading"><p id="fsrsGradeGuide">Errei se errou ou omitiu o essencial. Difícil se acertou o essencial com hesitação. Bom se conseguiu justificar. Fácil se lembrou de imediato e explicou com segurança.</p><div class="fsrs-grade-row" role="group" aria-label="Avalie sua lembrança" aria-describedby="fsrsGradeGuide">${grades}</div></div>`:''}</article>`;
 }
+function refreshFSRS(){
+ if(ui.mode==='fsrs'&&fsrsReady)renderFSRS({keepCard:true});
+}
+window.addEventListener('focus',refreshFSRS);
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='visible')refreshFSRS();
+});
 async function gradeFSRS(id,grade){
  if(fsrsBusy||ui.mode!=='fsrs'||id!==ui.focusId||!openAnswers.has(id)||![1,2,3,4].includes(grade)||!fsrsReady)return;
  fsrsBusy=true;
@@ -1069,8 +1112,8 @@ async function gradeFSRS(id,grade){
   const previous=fsrsRecords.get(id);
   const record={id,card:result.card,logs:[...(previous?.logs||[]),result.revlog]};
   await fsrsTransaction('readwrite',store=>store.put(record));
-  fsrsRecords.set(id,record);openAnswers.delete(id);ui.focusId=null;render();
-  $('cardsContainer').querySelector('.reveal-btn')?.focus({preventScroll:true});
+  fsrsRecords.set(id,record);openAnswers.delete(id);ui.focusId=null;fsrsBusy=false;render();
+  if(ui.mode==='fsrs')focusFSRSQuestion();
  }catch{notify('Não foi possível salvar a revisão. Tente novamente.',5500);}
  finally{fsrsBusy=false;}
 }
@@ -1081,12 +1124,13 @@ function exportFSRS(){
  setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 $('fsrsExport').addEventListener('click',exportFSRS);
+$('fsrsImportButton').addEventListener('click',()=>$('fsrsImport').click());
 $('fsrsDaily').addEventListener('change',()=>{
- const value=Math.min(100,Math.max(0,Number($('fsrsDaily').value)||0));
+ const value=fsrsDailyLimit($('fsrsDaily').value);
  $('fsrsDaily').value=value;try{localStorage.setItem('cm8-fsrs-daily',String(value));}catch{}
  if(ui.mode==='fsrs')render();
 });
-try{$('fsrsDaily').value=String(Math.min(100,Math.max(0,Number(localStorage.getItem('cm8-fsrs-daily'))||20)));}catch{}
+try{$('fsrsDaily').value=String(fsrsDailyLimit(localStorage.getItem('cm8-fsrs-daily')));}catch{}
 $('fsrsImport').addEventListener('change',async event=>{
  const file=event.target.files?.[0];event.target.value='';if(!file)return;
  try{
@@ -1116,9 +1160,10 @@ async function initFSRS(){
   fsrsScheduler=await CM8FSRS.DefaultScheduler({version:'FSRS-7',desiredRetention:FSRS_RETENTION,enableShortTerm:true,learningSteps:['1m','10m'],relearningSteps:['10m'],enableFuzz:false});
   fsrsDB=await openFSRSDB();
   await new Promise((resolve,reject)=>{const request=fsrsDB.transaction('cards').objectStore('cards').getAll();request.onsuccess=()=>{for(const record of request.result)if(ALL_IDS.has(record.id))fsrsRecords.set(record.id,record);resolve();};request.onerror=()=>reject(request.error);});
-  fsrsReady=true;if(ui.mode==='fsrs')render();
+  fsrsReady=true;if(ui.mode==='fsrs'){render();if(document.activeElement===$('listTitle'))focusFSRSQuestion();}
  }catch{notify('Revisão FSRS indisponível neste navegador.',5500);$('fsrsSummary').textContent='Armazenamento indisponível';}
 }
+render();storageNotice();
 initFSRS();
 })();
 
