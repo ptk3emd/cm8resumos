@@ -29,6 +29,10 @@
   --stroke:rgba(0,0,0,.10);
   --stroke-strong:rgba(0,0,0,.16);
   --blue:#0075de;
+  --action-fill:#0066c2;
+  --action-ink:#fff;
+  --focus-ring:#005bab;
+  --control-radius:999px;
   --blue-hover:#005bab;
   --blue-soft:#f2f9ff;
   --blue-soft-ink:#0063b2;
@@ -55,6 +59,9 @@
   --stroke:rgba(255,255,255,.12);
   --stroke-strong:rgba(255,255,255,.23);
   --blue:#62aef0;
+  --action-fill:#62aef0;
+  --action-ink:#151515;
+  --focus-ring:#8bc5fc;
   --blue-hover:#8bc5fc;
   --blue-soft:#20374b;
   --blue-soft-ink:#8bc5fc;
@@ -582,27 +589,75 @@ a:hover { text-decoration:underline; }
 }
 
 
-.fsrs-settings{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 20px;background:var(--surface,#fff);border:1px solid var(--line,#ddd);border-radius:14px;margin:18px 0}.fsrs-settings[hidden]{display:none}.fsrs-settings input[type=number]{width:70px;margin-left:8px;padding:8px;border:1px solid #aaa;border-radius:7px}.fsrs-grade-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:18px}.fsrs-grade-row button{min-height:54px;border-radius:9px;border:1px solid #87929b;background:transparent;color:inherit;cursor:pointer}.fsrs-grade-row button:hover,.fsrs-grade-row button:focus-visible{outline:2px solid #2870b5}.fsrs-grade-row small{display:block;opacity:.75}.fsrs-prompt{padding:14px 0}.fsrs-empty{padding:30px;text-align:center}.fsrs-settings button,.fsrs-settings label.subtle-btn{min-height:44px;cursor:pointer}@media(max-width:620px){.fsrs-grade-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.mode-switch .mode-btn[data-mode="fsrs"][aria-pressed="true"] {
- background:var(--ink);color:var(--panel);
-}
-.fsrs-settings {padding:12px 16px}
-.fsrs-backup {margin-inline-start:auto}
-.fsrs-backup summary {display:list-item;min-height:44px;align-content:center;cursor:pointer}
-.fsrs-backup-actions {display:flex;flex-wrap:wrap;gap:8px;margin-block-start:8px}
-.fsrs-grading {padding:16px 18px}
-.fsrs-grading p {margin:0;font-size:14px;color:var(--muted)}
-.fsrs-grade-row {margin-top:10px}
-#cardsContainer .question, #cardsContainer .case-question, #cardsContainer .answer-box, #listTitle {scroll-margin-top:90px}
-/* Shared reading treatment for Lista, Foco and Revisão FSRS. */
+/* Notion supplies the reading surfaces and semantic colors.
+   Figma supplies the pill controls, compact metadata and dashed focus. */
+body {font-kerning:normal}
+.hero h1 {letter-spacing:-.034em}
+.study-card .question {font-weight:650;line-height:1.35;letter-spacing:-.018em}
 .study-card {min-width:0;overflow-wrap:anywhere}
-.study-card .question,.study-card .case-vignette,.study-card .answer-copy {max-inline-size:72ch}
-.study-card .case-vignette {padding:12px 16px;border-inline-start:1px solid var(--line,#a39e98);background:var(--panel);border-radius:0 8px 8px 0}
-.study-card .answer-section {scroll-margin-block-start:90px}
+.study-card .case-vignette,.study-card .answer-copy {max-inline-size:70ch}
+.study-card .case-vignette {
+ padding:12px 16px;border:0;border-inline-start:1px solid var(--stroke-strong);
+ background:var(--subtle);border-radius:0 8px 8px 0;
+}
 .study-card .answer-outline-links a {text-underline-offset:.2em}
-.study-card :is(.question,.answer-box):focus-visible {outline:2px solid currentColor;outline-offset:4px}
+.meta-id {font-family:var(--mono);font-variant-numeric:tabular-nums}
+.chip,.audit-status,.status-chip {border-radius:var(--control-radius)}
+.mode-switch {border-radius:var(--control-radius)}
+.mode-switch .mode-btn {
+ border-radius:var(--control-radius);min-height:44px;
+}
+.mode-switch .mode-btn[aria-pressed="true"] {
+ background:var(--ink);color:var(--panel);box-shadow:none;
+}
+.reveal-btn,.study-start button,.more-actions summary,.fsrs-backup summary {
+ border-radius:var(--control-radius);
+}
+.action-primary,.study-start button {
+ background:var(--action-fill);border-color:var(--action-fill);color:var(--action-ink);
+}
+.action-primary:hover,.study-start button:hover {
+ background:var(--blue-hover);border-color:var(--blue-hover);color:var(--action-ink);
+}
+:root :is(button,input,select,summary,a,.question,.answer-box):focus-visible {
+ outline:2px dashed var(--focus-ring);outline-offset:3px;
+}
+.fsrs-settings {
+ display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:12px 16px;
+ background:var(--subtle);border:1px solid var(--stroke);border-radius:8px;margin:16px 0;
+}
+.fsrs-settings[hidden] {display:none}
+.fsrs-settings input[type=number] {
+ width:4.5rem;margin-inline-start:8px;padding:8px;min-height:44px;
+ font-size:16px;color:var(--ink);background:var(--panel);
+ border:1px solid var(--stroke-strong);border-radius:6px;
+}
+#fsrsSummary {color:var(--muted);font-size:14px}
+.fsrs-settings button,.fsrs-backup summary {min-height:44px}
+.fsrs-backup {margin-inline-start:auto;max-width:100%}
+.fsrs-backup summary {display:list-item;align-content:center;cursor:pointer}
+.fsrs-backup-actions {display:flex;flex-wrap:wrap;gap:8px;margin-block-start:8px}
+.fsrs-grading {
+ margin-inline:18px;padding:16px 0 18px;border-top:1px solid var(--stroke);
+}
+.fsrs-grading p {margin:0;font-size:14px;color:var(--muted)}
+.fsrs-grade-row {
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px;
+}
+.fsrs-grade-row button {
+ min-height:54px;border:1px solid var(--stroke-strong);border-radius:8px;
+ background:var(--subtle);color:var(--ink);cursor:pointer;font-weight:600;
+}
+.fsrs-grade-row button:hover {background:var(--subtle-hover)}
 .fsrs-grade-row button:disabled {cursor:wait;opacity:.65}
-.fsrs-grade-row small {font-variant-numeric:tabular-nums}
+.fsrs-grade-row small {display:block;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+.fsrs-empty {padding:24px 16px;text-align:center}
+#cardsContainer .question,#cardsContainer .case-question,#cardsContainer .answer-box,#listTitle {
+ scroll-margin-block-start:90px;
+}
+@media(max-width:620px) {
+ .fsrs-grade-row {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media print {
  .study-card {break-inside:avoid}
  .fsrs-grading,.fsrs-settings,.action-row,.answer-hidden {display:none!important}
