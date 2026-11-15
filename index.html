@@ -433,6 +433,41 @@ a:hover { text-decoration:underline; }
 @media(prefers-reduced-motion:reduce){
  .sidebar.mobile-open .topic-list,.filter-pills {scroll-behavior:auto;}
 }
+
+/* Pedagogia visual: as 970 respostas usam a mesma estrutura sem alterar o texto-fonte.
+ * Hierarquia discreta para enunciados, raciocínio, listas e condutas. */
+.answer-copy { max-width:76ch; font-size:17px; line-height:1.65; letter-spacing:-.006em; overflow-wrap:anywhere; }
+.answer-copy .answer-paragraph { margin:0 0 13px; }
+.answer-copy .answer-paragraph:last-child { margin-bottom:0; }
+.answer-copy .answer-subheading { margin:17px 0 7px; font-size:15px; line-height:1.4; font-weight:700; color:var(--ink); letter-spacing:-.005em; }
+.answer-copy .answer-subheading:first-child { margin-top:0; }
+.answer-copy .answer-lead { font-weight:700; color:var(--ink); }
+.answer-copy .answer-points { display:grid; gap:15px; margin:14px 0 19px; }
+.answer-copy .answer-points:first-child { margin-top:0; }
+.answer-copy .answer-points:last-child { margin-bottom:0; }
+.answer-copy .answer-point { display:grid; grid-template-columns:29px minmax(0,1fr); gap:12px; align-items:start; }
+.answer-copy .answer-point-index { display:grid; place-items:center; min-width:29px; height:29px; box-sizing:border-box; border-radius:7px; border:1px solid var(--stroke); background:var(--subtle); color:var(--muted); font-size:12px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
+.answer-copy .answer-point-body { min-width:0; }
+.answer-copy .answer-point-body .answer-paragraph { margin-bottom:8px; }
+.answer-copy .answer-point-body .answer-paragraph:last-child { margin-bottom:0; }
+.answer-copy .answer-point-body .answer-subheading { margin:9px 0 6px; }
+.answer-box .answer-title { margin-bottom:16px; }
+.case-question .case-vignette-label,.case-question .case-prompt-label { display:block; color:var(--quiet); text-transform:uppercase; letter-spacing:.06em; font-size:11px; line-height:1.4; font-weight:700; }
+.case-question .case-vignette { margin:5px 0 0; padding:0 0 16px; border-bottom:1px solid var(--stroke); line-height:1.65; }
+.case-question .case-prompt-label { margin-top:15px; }
+.case-question .case-prompt { margin-top:5px; }
+@media(max-width:640px) {
+  .answer-copy { font-size:16px; line-height:1.68; }
+  .answer-copy .answer-points { gap:14px; margin:13px 0 17px; }
+  .answer-copy .answer-point { grid-template-columns:26px minmax(0,1fr); gap:9px; }
+  .answer-copy .answer-point-index { min-width:26px; height:26px; font-size:11px; }
+  .answer-copy .answer-paragraph { margin-bottom:12px; }
+  .case-question .case-vignette { line-height:1.58; }
+}
+@media print {
+  .answer-copy .answer-point,.answer-copy .answer-points { break-inside:avoid; }
+}
+
 </style>
 </head>
 <body>
@@ -518,9 +553,92 @@ function renderTopics(){let contents=`<button class="topic-btn topic-all ${ui.to
  for(const t of TOPICS){let list=CARDS.filter(c=>c.topic===t.id);let studied=list.filter(c=>status(c.id)==='done').length;let pct=Math.round(studied/list.length*100);
  contents+=`<button class="topic-btn ${ui.topic===String(t.id)?'active':''}" data-topic="${t.id}" aria-current="${ui.topic===String(t.id)?'page':'false'}"><span class="topic-num">${String(t.id).padStart(2,'0')}</span><span><span class="topic-name">${safe(t.title)}</span><span class="topic-small">${studied}/${list.length} estudados · ${pct}%</span><span class="mini-meter" aria-hidden="true"><i style="width:${pct}%"></i></span></span></button>`;}
   const rail=$('topicList'),previousScroll=rail.scrollLeft;rail.innerHTML=contents;if(previousScroll)rail.scrollLeft=previousScroll;}
-function answerHtml(answer){return `<div class="answer-title">Resposta</div><div class="answer-copy">${answer.split('\n').filter(Boolean).map(line=>{let s=safe(line);s=s.replace(/^([^:]{1,72}:)(\s)/,'<strong>$1</strong>$2');return `<p>${s}</p>`;}).join('')}</div>`;}
+const structuredAnswerCache=new Map();
+function answerLabelIndex(line){
+  const raw=String(line);let depth=0;
+  for(let i=0;i<raw.length;i++){
+    const ch=raw[i];
+    if(ch==="("||ch==="["||ch==="{")depth++;
+    else if(ch===")"||ch==="]"||ch==="}")depth=Math.max(0,depth-1);
+    else if(ch===":"&&depth===0){
+      const label=raw.slice(0,i).trim();
+      if(label.length<2||label.length>86||/[.!?]$/.test(label)||/^https?$/i.test(label))return -1;
+      return i;
+    }
+  }
+  return -1;
+}
+function answerReadUnits(line){
+  const raw=String(line).trim(),units=[];let depth=0,start=0;
+  for(let i=0;i<raw.length;i++){
+    const ch=raw[i];
+    if(ch==="("||ch==="["||ch==="{"){depth++;continue;}
+    if(ch===")"||ch==="]"||ch==="}"){depth=Math.max(0,depth-1);continue;}
+    if(depth||i-start<110||raw.length-i<65)continue;
+    const semicolon=ch===";"&&/\s/.test(raw[i+1]||"");
+    const period=ch==="."&&raw[i+1]===" "&&/[A-ZÀ-Ú]/.test(raw[i+2]||"")&&!/(?:\b(?:ex|p\.ex|dr|prof|sr|sra|fig)\.)$/i.test(raw.slice(Math.max(start,i-10),i+1));
+    if(!semicolon&&!period)continue;
+    const part=raw.slice(start,i+1).trim();
+    if(part.length<100)continue;
+    units.push(part);
+    start=i+1;while(raw[start]===" ")start++;
+    i=start-1;
+  }
+  if(raw.slice(start).trim())units.push(raw.slice(start).trim());
+  return units.length?units:[raw];
+}
+function answerInline(line){
+  const raw=String(line).trim(),at=answerLabelIndex(raw);
+  if(at<0)return safe(raw);
+  const label=raw.slice(0,at),body=raw.slice(at+1).trimStart();
+  return `<strong class="answer-lead">${safe(label)}:</strong>${body?" "+safe(body):""}`;
+}
+function answerTextMarkup(line){
+  const raw=String(line).trim();
+  if(!raw)return "";
+  const label=answerLabelIndex(raw);
+  if(label===raw.length-1&&raw.length<=88)return `<h4 class="answer-subheading">${safe(raw)}</h4>`;
+  return answerReadUnits(raw).map(unit=>`<p class="answer-paragraph">${answerInline(unit)}</p>`).join("");
+}
+function answerListMarkup(group){
+  const rows=group.items.map(item=>{
+    const index=item.number!==null?item.number:"•";
+    return `<div class="answer-point" role="listitem"><span class="answer-point-index" aria-hidden="true">${safe(index)}</span><div class="answer-point-body">${item.lines.map(answerTextMarkup).join("")}</div></div>`;
+  }).join("");
+  return `<div class="answer-points" role="list" aria-label="${group.kind==="number"?"Etapas da resposta":"Pontos da resposta"}">${rows}</div>`;
+}
+function answerHtml(answer){
+  if(structuredAnswerCache.has(answer))return structuredAnswerCache.get(answer);
+  const raw=String(answer??"").replace(/\r\n?/g,"\n");
+  const fragments=[];
+  let group=null;
+  const flush=()=>{if(group){fragments.push(answerListMarkup(group));group=null;}};
+  const segments=raw.replace(/;\s+(?=\d{1,2}[.)]\s+)/g,";\n").split("\n").map(x=>x.trim()).filter(Boolean);
+  for(const segment of segments){
+    const numbered=segment.match(/^(\d{1,2})[.)]\s+(.+)$/);
+    const bulleted=segment.match(/^[•▪]\s+(.+)$/);
+    if(numbered||bulleted){
+      const kind=numbered?"number":"bullet";
+      if(!group||group.kind!==kind){flush();group={kind,items:[]};}
+      group.items.push({number:numbered?numbered[1]:null,lines:[numbered?numbered[2]:bulleted[1]]});
+      continue;
+    }
+    if(group&&group.items.length){
+      const item=group.items[group.items.length-1];
+      const previous=item.lines[item.lines.length-1];
+      const isNewSection=answerLabelIndex(segment)>=2&&/[.;]$/.test(previous)&&!/:$/.test(previous);
+      if(!isNewSection){item.lines.push(segment);continue;}
+    }
+    flush();
+    fragments.push(answerTextMarkup(segment));
+  }
+  flush();
+  const markup=`<div class="answer-title">Resposta</div><div class="answer-copy">${fragments.join("")}</div>`;
+  structuredAnswerCache.set(answer,markup);
+  return markup;
+}
 function cardHtml(c){let m=mark(c.id),s=status(c.id),visible=ui.showAll||openAnswers.has(c.id),topic=topicsById.get(c.topic),ss=s==='done'?'✓ Estudado':s==='review'?'↻ Revisar':m.hidden?'◌ Oculto':'';
- return `<article class="study-card ${s==='done'?'is-done':s==='review'?'is-review':''}" id="card-${safe(c.id.replaceAll('.','-'))}" aria-label="Cartão de estudo ${safe(c.id)}"><div class="study-card-head"><div class="meta-line"><div class="meta-chips"><span class="meta-id">${safe(c.id)}</span><span class="chip">${c.new?'Complemento':'Nível '+c.level}</span>${c.new?'<span class="chip chip-new">NOVO</span>':''}${c.page!=null?`<span class="chip">p. ${safe(c.page)}</span>`:''}${c.audit?.status==='corrigido'?'<span class="chip chip-audit-ok">Correção médica</span>':c.audit?.status==='revisar'?'<span class="chip chip-audit-flag">Conferir conteúdo</span>':''}</div>${ss?`<span class="status-chip ${s==='done'?'done':s==='review'?'review':'hidden'}">${ss}</span>`:''}</div><h3 tabindex="-1" class="question${c.kind==='case'?' case-question':''}">${c.kind==='case'?`<span class="case-vignette">${safe(c.scenario)}</span><span class="case-prompt">${safe(c.question)}</span>`:safe(c.question)}</h3><div class="theme-hint">${String(c.topic).padStart(2,'0')} · ${safe(topic.title)}</div></div>
+ return `<article class="study-card ${s==='done'?'is-done':s==='review'?'is-review':''}" id="card-${safe(c.id.replaceAll('.','-'))}" aria-label="Cartão de estudo ${safe(c.id)}"><div class="study-card-head"><div class="meta-line"><div class="meta-chips"><span class="meta-id">${safe(c.id)}</span><span class="chip">${c.new?'Complemento':'Nível '+c.level}</span>${c.new?'<span class="chip chip-new">NOVO</span>':''}${c.page!=null?`<span class="chip">p. ${safe(c.page)}</span>`:''}${c.audit?.status==='corrigido'?'<span class="chip chip-audit-ok">Correção médica</span>':c.audit?.status==='revisar'?'<span class="chip chip-audit-flag">Conferir conteúdo</span>':''}</div>${ss?`<span class="status-chip ${s==='done'?'done':s==='review'?'review':'hidden'}">${ss}</span>`:''}</div><h3 tabindex="-1" class="question${c.kind==='case'?' case-question':''}">${c.kind==='case'?`<span class="case-vignette-label">Caso clínico</span><span class="case-vignette">${safe(c.scenario)}</span><span class="case-prompt-label">Pergunta</span><span class="case-prompt">${safe(c.question)}</span>`:safe(c.question)}</h3><div class="theme-hint">${String(c.topic).padStart(2,'0')} · ${safe(topic.title)}</div></div>
  <div class="answer-region">${visible?`<div class="answer-box" tabindex="-1" role="region" aria-label="Resposta do flashcard ${safe(c.id)}">${answerHtml(c.answer)}</div>`:`<div class="answer-hidden"><span class="hidden-copy">Tente responder antes de revelar a resposta.</span><button type="button" class="action action-primary reveal-btn" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="false">Revelar resposta</button></div>`}</div>
  <div class="action-row">${visible?`<button type="button" class="action" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="true">◉ Ocultar resposta</button>`:''}<button type="button" class="action ${s==='done'?'done':''}" data-action="done" data-id="${safe(c.id)}" aria-label="${s==='done'?'Desmarcar como estudado':'Marcar como estudado'}" aria-pressed="${s==='done'}">✓ Estudado</button><button type="button" class="action ${s==='review'?'review':''}" data-action="review" data-id="${safe(c.id)}" aria-label="${s==='review'?'Retirar da revisão':'Marcar para revisar depois'}" aria-pressed="${s==='review'}">↻ Revisar</button><button type="button" class="action ${m.star?'starred':''}" data-action="star" data-id="${safe(c.id)}" aria-label="${m.star?'Remover dos favoritos':'Adicionar aos favoritos'}" aria-pressed="${!!m.star}">${m.star?'★':'☆'} Favorito</button><button type="button" class="action secondary spacer-left" data-action="hide" data-id="${safe(c.id)}" aria-label="${m.hidden?'Reexibir cartão oculto':'Ocultar cartão da lista'}">${m.hidden?'◉ Reexibir':'◌ Ocultar cartão'}</button><button type="button" class="action secondary" data-action="copy" data-id="${safe(c.id)}" title="Copiar pergunta e resposta">⧉ Copiar</button></div></article>`;}
 function emptyHtml(){const onlyHidden=ui.status==='hidden',searching=Boolean(ui.search);
