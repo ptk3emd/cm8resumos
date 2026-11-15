@@ -21,7 +21,7 @@ The project-local skill directories point to the upstream providers:
 These are **relative Git symlinks**, not copies. If your Git client checks them out as plain text instead of symlinks (e.g. some Windows setups), use the official installer locally instead:
 
 ```bash
-npx impeccable install --providers=claude,codex,copilot --scope=project
+npx impeccable install
 ```
 
 Run the project's agent command after reloading the coding tool, for example `/impeccable init` in Claude Code or `$impeccable init` in Codex. The official installer is also required if you want to enable automatic design-check hooks; this submodule-based setup intentionally does not install executable hooks.
