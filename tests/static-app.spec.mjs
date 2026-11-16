@@ -1,10 +1,10 @@
 import {test,expect} from '@playwright/test';
 
-test('1097 cards and 25 topics, no horizontal document overflow',async({page},testInfo)=>{
+test('1202 cards and 31 topics, no horizontal document overflow',async({page},testInfo)=>{
  await page.goto('./');
- await expect(page.locator('#nTotal')).toHaveText('1097');
- await expect(page.locator('#listSub')).toContainText('1097 resultados');
- await expect(page.locator('#topicList .topic-btn')).toHaveCount(26);
+ await expect(page.locator('#nTotal')).toHaveText('1202');
+ await expect(page.locator('#listSub')).toContainText('1202 resultados');
+ await expect(page.locator('#topicList .topic-btn')).toHaveCount(32);
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
  const ok=await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2);
  expect(ok,'No page-level horizontal overflow at '+testInfo.project.name).toBeTruthy();
@@ -117,8 +117,8 @@ test('PWA manifests correct relative scope and offline shell on Chromium',async(
  await context.setOffline(true);
  try{
   await page.reload();
-  await expect(page.locator('#nTotal')).toHaveText('1097');
-  await expect(page.locator('#listSub')).toContainText('1097 resultados');
+  await expect(page.locator('#nTotal')).toHaveText('1202');
+  await expect(page.locator('#listSub')).toContainText('1202 resultados');
  }finally{await context.setOffline(false);}
 });
 
@@ -175,14 +175,14 @@ test('overdrive: case scenario and study question have correct native HTML struc
  await expect(card.locator('.answer-copy p.answer-paragraph')).toHaveCount(1);
 });
 
-test('overdrive: all cards have unique IDs and the original audit counts are preserved',async({page})=>{
+test('overdrive: all cards have unique IDs and the clinical audit count reflects focused replacement',async({page})=>{
  await page.goto('./');
  const result=await page.evaluate(()=>{
   const data=JSON.parse(document.querySelector('#sourceData').textContent);
   const statuses={};for(const card of data.cards.filter(card=>!card.splitFrom))statuses[card.audit?.status]=(statuses[card.audit?.status]||0)+1;
   return{cards:data.cards.length,themes:data.themes.length,uniqueIds:new Set(data.cards.map(c=>c.id)).size,cases:data.cards.filter(c=>c.kind==='case').length,statuses};
  });
- expect(result).toMatchObject({cards:1097,themes:25,uniqueIds:1097,cases:250,statuses:{corrigido:92,revisar:17,triado:611,novo:250}});
+ expect(result).toMatchObject({cards:1202,themes:31,uniqueIds:1202,cases:254,statuses:{corrigido:252,revisar:16,triado:583,novo:240}});
 });
 
 

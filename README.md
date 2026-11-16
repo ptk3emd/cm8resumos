@@ -1,5 +1,8 @@
 # CM8 · progresso XML, backups e PWA
 
+**Coleção atual (16/11/2026): 1202 flashcards, 31 temas, 254 cartões de casos clínicos.** A área de Hemato-oncologia/Emergências foi reorganizada em sete temas, cada um com níveis 1–3 e casos de aplicação. As fichas editoriais e fontes estão em `auditorias/2026-11-16/hemato-onco/`. Outros 24 temas preservam seus cartões e IDs. As seções abaixo documentam versões e auditorias anteriores.
+
+
 ## Importar / exportar
 O formato oficial é XML versão 1, validado com `DOMParser` e regras equivalentes ao esquema em `schema/progress-v1.xsd`. Arquivos XML malformados, com DOCTYPE, elementos ou atributos desconhecidos, IDs repetidos, status inválido ou entradas sem marcação são rejeitados **antes** de substituir o progresso. O usuário confere a contagem e confirma a substituição. Arquivos JSON exportados pela versão anterior continuam aceitos. A exportação agora é somente XML.
 

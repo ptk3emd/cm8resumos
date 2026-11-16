@@ -1,0 +1,108 @@
+{
+  "topic": 30,
+  "title": "Síndrome de hiperviscosidade",
+  "source": "https://iwmf.com/wp-content/uploads/2024/02/waldenstroms-NCCN-2024.pdf",
+  "levels": {
+    "1": [
+      [
+        "O que é síndrome de hiperviscosidade?",
+        "Comprometimento microcirculatório causado por aumento patológico da viscosidade sanguínea."
+      ],
+      [
+        "Qual doença é classicamente associada à hiperviscosidade por IgM?",
+        "Macroglobulinemia de Waldenström."
+      ],
+      [
+        "Qual característica da IgM favorece hiperviscosidade?",
+        "Sua estrutura pentamérica e grande massa molecular."
+      ],
+      [
+        "Qual achado hemorrágico é clássico na hiperviscosidade?",
+        "Sangramento mucoso, como epistaxe ou gengivorragia."
+      ],
+      [
+        "Qual manifestação oftalmológica sugere hiperviscosidade?",
+        "Visão turva ou outros distúrbios visuais."
+      ],
+      [
+        "Qual manifestação neurológica pode ocorrer na hiperviscosidade?",
+        "Cefaleia, tontura, confusão ou alteração da consciência."
+      ],
+      [
+        "Qual tríade de órgãos/sistemas é clássica na hiperviscosidade?",
+        "Sangramento mucoso, alterações visuais e manifestações neurológicas."
+      ]
+    ],
+    "2": [
+      [
+        "Qual exame ocular pode revelar hiperviscosidade antes de dano grave?",
+        "Fundoscopia, buscando dilatação e segmentação venosa retiniana."
+      ],
+      [
+        "Que achado retiniano é descrito como 'veias em salsicha'?",
+        "Veias retinianas dilatadas e segmentadas por estase na hiperviscosidade."
+      ],
+      [
+        "A decisão de tratar hiperviscosidade sintomática depende de limiar fixo de viscosidade?",
+        "Não. É principalmente clínica; sintomas justificam ação urgente."
+      ],
+      [
+        "Qual proteína monoclonal medir na suspeita de Waldenström?",
+        "IgM sérica, com eletroforese e imunofixação."
+      ],
+      [
+        "Qual neoplasia não IgM também pode produzir hiperviscosidade por paraproteína?",
+        "Mieloma múltiplo, sobretudo com IgA e ocasionalmente IgG."
+      ],
+      [
+        "Por que o fundo de olho é útil na hiperviscosidade?",
+        "Pode detectar alterações microvasculares indicativas de gravidade."
+      ],
+      [
+        "Qual investigação confirma o diagnóstico hematológico de Waldenström?",
+        "Biópsia de medula com infiltração linfoplasmocitária e identificação de IgM monoclonal."
+      ]
+    ],
+    "3": [
+      [
+        "Qual tratamento reduz imediatamente hiperviscosidade sintomática por IgM?",
+        "Troca plasmática terapêutica (plasmaférese)."
+      ],
+      [
+        "Por que evitar transfusão de hemácias antes de plasmaférese, se possível?",
+        "Pode aumentar ainda mais a viscosidade e piorar a perfusão."
+      ],
+      [
+        "A plasmaférese cura a doença produtora de IgM?",
+        "Não. É medida de ponte; é necessário tratamento hematológico do clone."
+      ],
+      [
+        "Qual efeito do rituximabe pode piorar a hiperviscosidade na Waldenström?",
+        "Elevação transitória da IgM ('IgM flare')."
+      ],
+      [
+        "Quando considerar plasmaférese antes de rituximabe na Waldenström?",
+        "Em IgM muito elevada ou hiperviscosidade, segundo risco e protocolo."
+      ],
+      [
+        "Paciente com Waldenström, epistaxe e visão turva deve esperar resultado de viscosidade?",
+        "Não. Suspeitar hiperviscosidade sintomática e acionar plasmaférese urgente."
+      ],
+      [
+        "O que monitorar após plasmaférese na Waldenström?",
+        "Melhora clínica e redução da IgM, planejando terapia definitiva."
+      ]
+    ]
+  },
+  "scenario": "Paciente com Waldenström apresenta epistaxe, visão turva e confusão, com IgM muito elevada.",
+  "caseCards": [
+    [
+      "Qual complicação explica o quadro?",
+      "Síndrome de hiperviscosidade sintomática."
+    ],
+    [
+      "Qual tratamento não deve aguardar quimioterapia?",
+      "Troca plasmática terapêutica urgente; depois tratar o clone produtor de IgM."
+    ]
+  ]
+}
