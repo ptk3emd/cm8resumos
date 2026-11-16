@@ -1,0 +1,108 @@
+{
+  "topic": 26,
+  "title": "Síndrome de lise tumoral",
+  "source": "https://doclibrary-rcht.cornwall.nhs.uk/DocumentsLibrary/RoyalCornwallHospitalsTrust/Clinical/Haematology/PreventionAndManagementOfTumourLysisSyndromeInAdultPatientsStandardOperatingProcedure.pdf",
+  "levels": {
+    "1": [
+      [
+        "O que é a síndrome de lise tumoral (SLT)?",
+        "Liberação maciça de conteúdo intracelular por destruição rápida de células tumorais."
+      ],
+      [
+        "Qual é o padrão clássico do potássio na SLT?",
+        "Hipercalemia."
+      ],
+      [
+        "Qual é o padrão clássico do fósforo na SLT?",
+        "Hiperfosfatemia."
+      ],
+      [
+        "Qual é o padrão clássico do ácido úrico na SLT?",
+        "Hiperuricemia."
+      ],
+      [
+        "Qual é o padrão clássico do cálcio na SLT?",
+        "Hipocalcemia secundária à hiperfosfatemia."
+      ],
+      [
+        "Quais neoplasias apresentam risco elevado de lise tumoral?",
+        "Linfoma de Burkitt e leucemias agudas com alta carga tumoral são exemplos clássicos."
+      ],
+      [
+        "A SLT pode ocorrer antes da quimioterapia?",
+        "Sim. Pode surgir espontaneamente, embora seja mais comum após tratamento citotóxico."
+      ]
+    ],
+    "2": [
+      [
+        "Qual alteração renal marca SLT clinicamente grave?",
+        "Lesão renal aguda, frequentemente por hiperuricemia e deposição de fosfato de cálcio."
+      ],
+      [
+        "No critério laboratorial clássico de Cairo-Bishop, quantas alterações metabólicas são necessárias?",
+        "Duas ou mais entre ácido úrico, potássio, fósforo e cálcio no período definido."
+      ],
+      [
+        "Quais marcadores aumentam risco de SLT antes do tratamento?",
+        "Grande massa tumoral, DHL elevada, proliferação rápida e disfunção renal."
+      ],
+      [
+        "Qual é a base da prevenção da SLT em pacientes de risco?",
+        "Hidratação intravenosa individualizada e monitorização metabólica frequente."
+      ],
+      [
+        "Como o alopurinol age na profilaxia da SLT?",
+        "Inibe a xantina oxidase: previne nova formação de ácido úrico, mas não remove o já existente."
+      ],
+      [
+        "Qual uricolítico é preferido na SLT estabelecida ou em alto risco?",
+        "Rasburicase, conforme risco, contraindicações e protocolo."
+      ],
+      [
+        "Qual deficiência enzimática contraindica rasburicase?",
+        "Deficiência de G6PD, pelo risco de hemólise e meta-hemoglobinemia."
+      ]
+    ],
+    "3": [
+      [
+        "Qual distúrbio da SLT exige tratamento cardiológico imediato?",
+        "Hipercalemia com alterações eletrocardiográficas: tratar imediatamente com protocolo de emergência."
+      ],
+      [
+        "Deve-se corrigir hipocalcemia assintomática na SLT?",
+        "Em geral, não: o cálcio pode favorecer precipitação de fosfato de cálcio."
+      ],
+      [
+        "Quando tratar hipocalcemia na SLT?",
+        "Quando houver tetania, convulsões, arritmias ou outros sintomas relevantes."
+      ],
+      [
+        "A alcalinização urinária é recomendada rotineiramente na SLT?",
+        "Não. Pode aumentar a precipitação renal de fosfato de cálcio."
+      ],
+      [
+        "Qual distúrbio metabólico pode determinar diálise na SLT?",
+        "Hipercalemia refratária, hiperfosfatemia grave ou sobrecarga/uremia com indicação dialítica."
+      ],
+      [
+        "Que exames monitorar repetidamente durante SLT ativa?",
+        "Potássio, fósforo, cálcio, ácido úrico, creatinina e débito urinário."
+      ],
+      [
+        "Como colher ácido úrico após rasburicase para evitar resultado falsamente baixo?",
+        "Manter a amostra refrigerada e processá-la rapidamente, conforme protocolo do laboratório."
+      ]
+    ]
+  },
+  "scenario": "Após iniciar terapia para linfoma de Burkitt, paciente apresenta K 6,4 mEq/L, fósforo alto, ácido úrico alto e cálcio baixo.",
+  "caseCards": [
+    [
+      "Qual síndrome explica o padrão metabólico?",
+      "Síndrome de lise tumoral."
+    ],
+    [
+      "Qual alteração exige manejo prioritário?",
+      "Hipercalemia potencialmente fatal: ECG, monitorização e tratamento emergencial."
+    ]
+  ]
+}
