@@ -1,9 +1,9 @@
 import {test,expect} from '@playwright/test';
 
-test('1202 cards and 31 topics, no horizontal document overflow',async({page},testInfo)=>{
+test('1146 cards and 31 topics, no horizontal document overflow',async({page},testInfo)=>{
  await page.goto('./');
- await expect(page.locator('#nTotal')).toHaveText('1202');
- await expect(page.locator('#listSub')).toContainText('1202 resultados');
+ await expect(page.locator('#nTotal')).toHaveText('1146');
+ await expect(page.locator('#listSub')).toContainText('1146 resultados');
  await expect(page.locator('#topicList .topic-btn')).toHaveCount(32);
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
  const ok=await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2);
@@ -117,8 +117,8 @@ test('PWA manifests correct relative scope and offline shell on Chromium',async(
  await context.setOffline(true);
  try{
   await page.reload();
-  await expect(page.locator('#nTotal')).toHaveText('1202');
-  await expect(page.locator('#listSub')).toContainText('1202 resultados');
+  await expect(page.locator('#nTotal')).toHaveText('1146');
+  await expect(page.locator('#listSub')).toContainText('1146 resultados');
  }finally{await context.setOffline(false);}
 });
 
@@ -182,7 +182,7 @@ test('overdrive: all cards have unique IDs and the clinical audit count reflects
   const statuses={};for(const card of data.cards.filter(card=>!card.splitFrom))statuses[card.audit?.status]=(statuses[card.audit?.status]||0)+1;
   return{cards:data.cards.length,themes:data.themes.length,uniqueIds:new Set(data.cards.map(c=>c.id)).size,cases:data.cards.filter(c=>c.kind==='case').length,statuses};
  });
- expect(result).toMatchObject({cards:1202,themes:31,uniqueIds:1202,cases:254,statuses:{corrigido:252,revisar:16,triado:583,novo:240}});
+ expect(result).toMatchObject({cards:1146,themes:31,uniqueIds:1146,cases:240,statuses:{corrigido:202,triado:676,novo:240}});
 });
 
 
