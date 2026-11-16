@@ -6,7 +6,7 @@ test('cardinalidade do baralho expandido e IDs únicos',async({page})=>{
   const d=JSON.parse(document.querySelector('#sourceData').textContent);
   return {n:d.cards.length,unique:new Set(d.cards.map(c=>c.id)).size,themes:d.themes.length,cases:d.cards.filter(c=>c.kind==='case').length};
  });
- expect(x).toEqual({n:1044,unique:1044,themes:25,cases:250});
+ expect(x).toEqual({n:1097,unique:1097,themes:25,cases:250});
 });
 test('reanálise clínica: ressalva full-house preservada em questão e resposta',async({page})=>{
  await page.goto('./');
