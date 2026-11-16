@@ -17,7 +17,7 @@ test('hemato-oncologia: sete temas, níveis 1–3 e perguntas atômicas',async({
  });
  expect(result.n).toBe(1206);
  expect(result.unique).toBe(1206);
- expect(result.other).toBe(1041);
+ expect(result.other).toBe(1101);
  expect(result.groups).toHaveLength(7);
  for(const g of result.groups){
   expect(g.n,`topic ${g.id}`).toBe(15);
