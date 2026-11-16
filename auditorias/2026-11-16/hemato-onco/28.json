@@ -1,0 +1,108 @@
+{
+  "topic": 28,
+  "title": "Hipercalcemia da malignidade",
+  "source": "https://www.endocrine.org/clinical-practice-guidelines/hypercalcemia",
+  "levels": {
+    "1": [
+      [
+        "O que define hipercalcemia da malignidade?",
+        "Elevação do cálcio sérico causada por neoplasia ou por suas consequências metabólicas."
+      ],
+      [
+        "Qual valor de cálcio total caracteriza hipercalcemia grave?",
+        "Cálcio sérico >14 mg/dL (3,5 mmol/L)."
+      ],
+      [
+        "Qual perfil do PTH é esperado na hipercalcemia humoral maligna?",
+        "PTH endógeno suprimido."
+      ],
+      [
+        "Qual mediador é clássico na hipercalcemia humoral por carcinoma escamoso?",
+        "Peptídeo relacionado ao PTH (PTHrP)."
+      ],
+      [
+        "Qual mecanismo domina a hipercalcemia do mieloma múltiplo?",
+        "Osteólise mediada por atividade osteoclástica."
+      ],
+      [
+        "Qual mecanismo explica hipercalcemia em alguns linfomas?",
+        "Produção extrarrenal de calcitriol (1,25-di-hidroxivitamina D)."
+      ],
+      [
+        "Cite um achado neurológico de hipercalcemia grave.",
+        "Confusão mental, sonolência ou rebaixamento da consciência."
+      ]
+    ],
+    "2": [
+      [
+        "Qual dosagem de cálcio é mais confiável quando albumina ou pH estão alterados?",
+        "Cálcio ionizado; a correção do cálcio total pode ser imprecisa."
+      ],
+      [
+        "Qual dosagem hormonal inicia a investigação etiológica da hipercalcemia?",
+        "PTH intacto."
+      ],
+      [
+        "Qual é a primeira medida em hipercalcemia maligna com desidratação?",
+        "Hidratação isotônica IV individualizada à volemia e à função cardíaca/renal."
+      ],
+      [
+        "Qual classe farmacológica reduz a reabsorção óssea na hipercalcemia maligna?",
+        "Antirreabsortivos: denosumabe ou bisfosfonatos intravenosos."
+      ],
+      [
+        "Qual agente é sugerido preferencialmente pela Endocrine Society entre antirreabsortivos?",
+        "Denosumabe, recomendação condicional e dependente do contexto clínico."
+      ],
+      [
+        "Qual risco merece atenção com denosumabe na disfunção renal avançada?",
+        "Hipocalcemia significativa; monitorar cálcio e vitamina D."
+      ],
+      [
+        "Diuréticos de alça são rotina para eliminar cálcio?",
+        "Não. Reservar sobretudo para sobrecarga volêmica após adequada hidratação."
+      ]
+    ],
+    "3": [
+      [
+        "Qual combinação inicial é sugerida para hipercalcemia maligna grave (>14 mg/dL)?",
+        "Calcitonina mais denosumabe ou bisfosfonato intravenoso."
+      ],
+      [
+        "Por quanto tempo limitar a calcitonina na hipercalcemia da malignidade?",
+        "48–72 horas devido à taquifilaxia."
+      ],
+      [
+        "Quando preferir glicocorticoide como tratamento etiológico da hipercalcemia?",
+        "Na hipercalcemia mediada por calcitriol, como em alguns linfomas."
+      ],
+      [
+        "Qual agente considerar se hipercalcemia recorre apesar de bisfosfonato IV?",
+        "Denosumabe, segundo diretriz da Endocrine Society."
+      ],
+      [
+        "Qual é a conduta perante hipercalcemia grave com arritmia e rebaixamento?",
+        "Monitorização hospitalar urgente, volume conforme tolerância e tratamento antirreabsortivo/calcitonina."
+      ],
+      [
+        "Por que bisfosfonatos exigem atenção à função renal?",
+        "Podem provocar ou agravar lesão renal; escolha e dose dependem do contexto."
+      ],
+      [
+        "Que medida definitiva evita recorrência da hipercalcemia paraneoplásica?",
+        "Tratar a neoplasia subjacente, além de corrigir a hipercalcemia."
+      ]
+    ]
+  },
+  "scenario": "Paciente com carcinoma escamoso apresenta cálcio 15,2 mg/dL, desidratação e confusão mental.",
+  "caseCards": [
+    [
+      "Qual emergência metabólica está presente?",
+      "Hipercalcemia grave da malignidade."
+    ],
+    [
+      "Qual abordagem farmacológica inicial é recomendada?",
+      "Calcitonina por até 48–72 h associada a denosumabe ou bisfosfonato IV."
+    ]
+  ]
+}
