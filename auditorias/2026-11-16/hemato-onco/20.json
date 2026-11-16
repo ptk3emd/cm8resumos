@@ -1,0 +1,108 @@
+{
+  "topic": 20,
+  "title": "Neutropenia febril",
+  "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11836497/",
+  "levels": {
+    "1": [
+      [
+        "Qual é a definição hematológica de neutropenia febril?",
+        "Neutrófilos <500/µL ou queda prevista para <500/µL em 48 h, associados à febre."
+      ],
+      [
+        "Qual temperatura isolada define febre na neutropenia pelo critério clássico?",
+        "Temperatura oral ≥38,3 °C em uma medida."
+      ],
+      [
+        "Qual febre sustentada também preenche o critério clássico?",
+        "Temperatura oral ≥38,0 °C mantida por pelo menos 1 hora."
+      ],
+      [
+        "O que define neutropenia profunda?",
+        "Contagem absoluta de neutrófilos <100/µL."
+      ],
+      [
+        "Por que a neutropenia febril é uma emergência?",
+        "Pode progredir rapidamente para sepse, mesmo sem foco infeccioso evidente."
+      ],
+      [
+        "Por que sinais inflamatórios locais podem ser discretos?",
+        "A escassez de neutrófilos reduz a produção de pus e de sinais inflamatórios típicos."
+      ],
+      [
+        "Qual duração esperada de neutropenia eleva significativamente o risco?",
+        "Neutropenia prevista por mais de 7 dias."
+      ]
+    ],
+    "2": [
+      [
+        "Qual exame hematológico confirma a intensidade da neutropenia?",
+        "Hemograma com diferencial e contagem absoluta de neutrófilos."
+      ],
+      [
+        "Qual coleta microbiológica é prioritária antes do antibiótico, sem atrasá-lo?",
+        "Hemoculturas periféricas; se houver cateter, coletar também de seus lúmens."
+      ],
+      [
+        "Qual escore é usado para estratificar complicações da neutropenia febril?",
+        "MASCC; pontuação ≥21 sugere baixo risco, mas não basta isoladamente para alta."
+      ],
+      [
+        "Em qual população o escore CISNE foi validado?",
+        "Adultos clinicamente estáveis com tumores sólidos e neutropenia febril."
+      ],
+      [
+        "Qual germe deve ser coberto na antibioticoterapia empírica inicial?",
+        "Pseudomonas aeruginosa, além de outros patógenos bacterianos relevantes."
+      ],
+      [
+        "Qual achado gastrointestinal sugere enterocolite neutropênica?",
+        "Dor abdominal, especialmente em fossa ilíaca direita, com febre e/ou diarreia."
+      ],
+      [
+        "Quando solicitar imagem na neutropenia febril?",
+        "Conforme sintomas e suspeita de foco; TC torácica é útil diante de suspeita pulmonar ou fúngica."
+      ]
+    ],
+    "3": [
+      [
+        "Em quanto tempo iniciar antibiótico na neutropenia febril com sepse ou instabilidade?",
+        "Idealmente em até 60 minutos, após culturas se não atrasarem o tratamento."
+      ],
+      [
+        "Cite um betalactâmico intravenoso inicial para neutropenia febril de alto risco.",
+        "Cefepime ou piperacilina-tazobactam; considerar meropenem conforme resistência local."
+      ],
+      [
+        "Vancomicina é indicada de rotina na neutropenia febril?",
+        "Não. Reservar para instabilidade, suspeita de infecção de cateter ou pele e partes moles, entre outras indicações."
+      ],
+      [
+        "Como conduzir neutropenia febril com risco de bactéria multirresistente?",
+        "Ajustar cobertura ao histórico de colonização, culturas, gravidade e antibiograma local."
+      ],
+      [
+        "Febre persistente isolada exige antifúngico imediato em todo neutropênico?",
+        "Não. Reavaliar risco e investigar infecção fúngica; considerar estratégia preemptiva ou empírica."
+      ],
+      [
+        "Qual condição, além do MASCC, é essencial para tratamento ambulatorial?",
+        "Estabilidade clínica, baixo risco e acesso confiável a reavaliação e tratamento rápidos."
+      ],
+      [
+        "G-CSF terapêutico deve ser usado rotineiramente em toda neutropenia febril?",
+        "Não. Considerar apenas em situações selecionadas de alto risco e conforme protocolo."
+      ]
+    ]
+  },
+  "scenario": "Paciente em quimioterapia, T 38,7 °C, neutrófilos 180/µL, sem foco evidente.",
+  "caseCards": [
+    [
+      "Qual emergência deve ser reconhecida?",
+      "Neutropenia febril: presumir infecção potencialmente grave mesmo sem foco."
+    ],
+    [
+      "Qual é a conduta imediata?",
+      "Colher hemoculturas sem atrasar betalactâmico antipseudomonas IV e avaliar sepse."
+    ]
+  ]
+}
