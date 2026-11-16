@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-test('per-card read counter is independent and persists across reloads',async({page})=>{
+test('manual read counter stays independent of studied/review actions and persists',async({page})=>{
  await page.goto('./');
  const first=page.locator('.study-card').first();
  const id=await first.getAttribute('id');
@@ -11,12 +11,16 @@ test('per-card read counter is independent and persists across reloads',async({p
  await button.click();
  await expect(first.locator('.cmn-read-number')).toHaveText('1');
  await first.locator('[data-action="done"]').click();
- await expect(first.locator('.cmn-read-number')).toHaveText('2');
+ await expect(first.locator('.cmn-read-number')).toHaveText('1');
  await expect(page.locator('#nDone')).toHaveText('1');
+ await first.locator('[data-action="review"]').click();
+ await expect(first.locator('.cmn-read-number')).toHaveText('1');
+ await expect(page.locator('#nReview')).toHaveText('1');
  await page.reload();
- await expect(page.locator('#'+id+' .cmn-read-number')).toHaveText('2');
+ await expect(page.locator('#'+id+' .cmn-read-number')).toHaveText('1');
  await page.locator('#'+id+' [data-action="count-read"]').click();
- await expect(page.locator('#'+id+' .cmn-read-number')).toHaveText('3');
+ await expect(page.locator('#'+id+' .cmn-read-number')).toHaveText('2');
+ await expect(page.locator('#nReview')).toHaveText('1');
 });
 
 test('XML backup retains read totals and restores after import',async({page})=>{
