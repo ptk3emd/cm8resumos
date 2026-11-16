@@ -173,8 +173,8 @@ function mountReadCounters(){
   const target=event.target?.closest?.('[data-action]');
   const card=target?.closest?.('.study-card[id^="card-"]');
   if(!card)return;
+  // Only an explicit counter action records a reading. Study status and FSRS stay independent.
   if(target.dataset.action==='count-read'){event.preventDefault();incrementRead(idForCard(card));}
-  else if(target.dataset.action==='done')incrementRead(idForCard(card));
  },true);
  document.addEventListener('click',event=>{
   if(!event.target?.closest?.('#confirmImportBtn')||pendingReads===null)return;
