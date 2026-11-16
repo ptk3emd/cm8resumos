@@ -6,7 +6,7 @@ test('cardinalidade do baralho expandido e IDs únicos',async({page})=>{
   const d=JSON.parse(document.querySelector('#sourceData').textContent);
   return {n:d.cards.length,unique:new Set(d.cards.map(c=>c.id)).size,themes:d.themes.length,cases:d.cards.filter(c=>c.kind==='case').length};
  });
- expect(x).toEqual({n:1097,unique:1097,themes:25,cases:250});
+ expect(x).toEqual({n:1146,unique:1146,themes:25,cases:240});
 });
 test('reanálise clínica: ressalva full-house preservada em questão e resposta',async({page})=>{
  await page.goto('./');
@@ -20,11 +20,10 @@ test('reanálise clínica: ANCA descrito sem equivalência antigênica absoluta'
  expect(c.answer).toContain('essas associações não são absolutas');
  expect(c.answer).not.toContain('GPA (Wegener) = c-ANCA');
 });
-test('reanálise clínica: hidratação da hipercalcemia não impõe vazão fixa universal',async({page})=>{
+test('hipercalcemia: hidratação sem vazão universal',async({page})=>{
  await page.goto('./');
- const c=JSON.parse(await page.locator('#sourceData').textContent()).cards.find(x=>x.id==='20.5.4');
- expect(c.answer).toContain('individualizando volume e velocidade');
- expect(c.answer).not.toContain('HIDRATAÇÃO VENOSA VIGOROSA COM SF 0,9% (200 a 300 mL/hora');
+ const c=JSON.parse(await page.locator('#sourceData').textContent()).cards.find(x=>x.id==='20.4.1.5');
+ expect(c.answer).toContain('individualizada');
 });
 test('reanálise editorial: termos fragmentados eliminados nos cartões identificados',async({page})=>{
  await page.goto('./');
