@@ -123,7 +123,7 @@ test('PWA manifests correct relative scope and offline shell on Chromium',async(
 });
 
 
-test('overdrive: a long clinical answer exposes semantic sections and a functional outline',async({page})=>{
+test('overdrive: a long clinical answer exposes semantic sections and a functional outline',async({page,isMobile})=>{
  await page.goto('./');
  await page.locator('#searchBox').fill('4.2.5');
  await expect(page.locator('#card-4-2-5')).toBeVisible();
@@ -133,7 +133,9 @@ test('overdrive: a long clinical answer exposes semantic sections and a function
  const nav=card.locator('nav.answer-outline');
  await expect(nav).toBeVisible();
  await expect(nav.locator('a')).toHaveCount(4);
- await nav.locator('a').nth(2).click();
+ const sectionLink=nav.locator('a').nth(2);
+ await expect(sectionLink).toHaveAttribute('href','#answer-4-2-5-3');
+ if(isMobile)await sectionLink.tap();else await sectionLink.click();
  await expect(page).toHaveURL(/#answer-4-2-5-3$/);
  await expect(card.locator('#answer-4-2-5-3 h4')).toContainText('GESTAÇÃO');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);

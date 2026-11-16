@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import fs from 'node:fs/promises';
+import {createServer} from 'node:http';
 async function open(page){await page.goto('./');await page.locator('#cognitiveTools summary').click();await page.locator('#cognitiveEnabled').check();await expect(page.locator('#cognitiveToday')).toContainText('revisados hoje');}
 async function dump(page){return page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('cm8-fsrs-v1');r.onsuccess=()=>{const db=r.result,tx=db.transaction('cards'),q=tx.objectStore('cards').getAll();q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error);tx.oncomplete=()=>db.close();};r.onerror=()=>reject(r.error);}));}
 async function seed(page,ids,reps=4){return page.evaluate(async({ids,reps})=>{
@@ -94,7 +95,43 @@ test('cognitive: shared daily quota is enforced across two already revealed card
  await other.locator('#fsrsDaily').fill('0');await other.locator('#fsrsDaily').dispatchEvent('change');await other.reload();await other.locator('[data-mode=fsrs]').click();await expect(other.locator('#fsrsDaily')).toHaveValue('0');await expect(other.locator('#fsrsSummary')).toContainText('0 novos');
 });
 
-test('cognitive: next due refreshes without reload and cognitive assets work offline',async({page,context})=>{
+test('cognitive: next due refreshes without reload',async({page})=>{
  await page.clock.install();await page.goto('./');await page.locator('#searchBox').fill('1.1.1');await page.locator('[data-mode=fsrs]').click();await page.locator('[data-action=reveal]').first().click();await page.locator('[data-grade="1"]').click();await expect(page.locator('#fsrsSummary')).toContainText('0 vencidos');await page.clock.fastForward(65000);await expect(page.locator('#fsrsSummary')).toContainText('1 vencidos');
- await page.waitForFunction(()=>!!navigator.serviceWorker.controller);await context.setOffline(true);try{await page.reload();await expect(page.locator('#nTotal')).toHaveText('1206');await page.locator('#cognitiveTools summary').click();await page.locator('#cognitiveEnabled').check();await page.locator('#cognitiveTopic').selectOption('26');await page.locator('[data-practice=context]').click();await expect(page.locator('.context-card')).toHaveCount(15);}finally{await context.setOffline(false);}
+});
+
+test('cognitive: cached shell and practice work when the origin is unavailable',async({page,context},testInfo)=>{
+ // A reachable loopback server lets WebKit dispatch the navigation to its worker.
+ // The origin fails every request after installation, including the app assets.
+ let unavailable=false;
+ const types={'html':'text/html','js':'text/javascript','png':'image/png','webmanifest':'application/manifest+json'};
+ const server=createServer(async(req,res)=>{
+  if(unavailable){res.writeHead(503).end('Origin unavailable');return;}
+  const path=new URL(req.url,'http://localhost').pathname.slice(1)||'index.html';
+  if(!/^(?:assets\/)?[\w.-]+$/.test(path)){res.writeHead(404).end();return;}
+  try{
+   const body=await fs.readFile(new URL('../'+path,import.meta.url));
+   res.writeHead(200,{'Content-Type':types[path.split('.').at(-1)]||'application/octet-stream','Cache-Control':'no-store'}).end(body);
+  }catch{res.writeHead(404).end();}
+ });
+ await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
+ try{
+  const url='http://127.0.0.1:'+server.address().port+'/';
+  await page.goto(url);
+  await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
+  unavailable=true;
+  // Chromium additionally covers a disconnected network. WebKit exercises the
+  // same cached app through the worker's HTTP 503 fallback.
+  if(testInfo.project.name!=='ios-webkit')await context.setOffline(true);
+  await page.goto(url+'?offline-practice=1');
+  await expect(page.locator('#nTotal')).toHaveText('1206');
+  await page.locator('#cognitiveTools summary').click();
+  await page.locator('#cognitiveEnabled').check();
+  await page.locator('#cognitiveTopic').selectOption('26');
+  await page.locator('[data-practice=context]').click();
+  await expect(page.locator('.context-card')).toHaveCount(15);
+ }finally{
+  await context.setOffline(false);
+  server.closeAllConnections();
+  await new Promise(resolve=>server.close(resolve));
+ }
 });

@@ -23,7 +23,7 @@ test('manual read counter stays independent of studied/review actions and persis
  await expect(page.locator('#nReview')).toHaveText('1');
 });
 
-test('XML backup retains read totals and restores after import',async({page})=>{
+test('XML backup retains read totals and restores after import',async({page,isMobile})=>{
  await page.goto('./');
  const first=page.locator('.study-card').first();
  await first.locator('[data-action="count-read"]').click();
@@ -39,7 +39,9 @@ test('XML backup retains read totals and restores after import',async({page})=>{
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('0');
  await page.locator('#importFile').setInputFiles({name:'leituras.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
  await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
- await page.locator('#confirmImportBtn').click();
+ const confirm=page.locator('#confirmImportBtn');
+ if(isMobile)await confirm.tap();else await confirm.click();
+ await expect(page.locator('#importReview')).toBeHidden();
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('2');
 });
 
