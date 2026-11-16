@@ -11,6 +11,8 @@
   <xs:simpleType name="CardID"><xs:restriction base="xs:string">
     <xs:pattern value="[0-9A-Z.]+"/>
   </xs:restriction></xs:simpleType>
+  <xs:simpleType name="TraceType"><xs:restriction base="xs:string"><xs:enumeration value="verbatim"/><xs:enumeration value="gist"/><xs:enumeration value="transfer"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="EventKind"><xs:restriction base="xs:string"><xs:enumeration value="contrast"/><xs:enumeration value="context"/><xs:enumeration value="gist"/><xs:enumeration value="transfer"/></xs:restriction></xs:simpleType>
   <xs:element name="cmn-progress">
     <xs:complexType>
       <xs:sequence><xs:element name="card" minOccurs="0" maxOccurs="10000">
@@ -19,8 +21,24 @@
           <xs:attribute name="status" type="Status" use="optional"/>
           <xs:attribute name="star" type="BooleanText" use="optional"/>
           <xs:attribute name="hidden" type="BooleanText" use="optional"/>
+          <xs:attribute name="read-count" use="optional"><xs:simpleType><xs:restriction base="xs:nonNegativeInteger"><xs:maxInclusive value="10000000"/></xs:restriction></xs:simpleType></xs:attribute>
         </xs:complexType>
-      </xs:element></xs:sequence>
+      </xs:element>
+        <xs:element name="cognitive" minOccurs="0" maxOccurs="1">
+          <xs:complexType><xs:sequence>
+            <xs:element name="cognitive-card" minOccurs="0" maxOccurs="10000">
+              <xs:complexType><xs:sequence>
+                <xs:element name="depends-on" minOccurs="0" maxOccurs="100"><xs:complexType><xs:attribute name="ref" type="CardID" use="required"/><xs:attribute name="weight" type="xs:double" use="optional" default="1"/></xs:complexType></xs:element>
+                <xs:element name="confusable-with" minOccurs="0" maxOccurs="100"><xs:complexType><xs:attribute name="ref" type="CardID" use="required"/></xs:complexType></xs:element>
+                <xs:element name="transfer-variant" minOccurs="0" maxOccurs="20"><xs:complexType><xs:sequence><xs:element name="prompt" type="xs:string"/><xs:element name="answer" type="xs:string"/></xs:sequence></xs:complexType></xs:element>
+              </xs:sequence><xs:attribute name="id" type="CardID" use="required"/><xs:attribute name="trace-type" type="TraceType" use="required"/><xs:attribute name="anchor" type="BooleanText" use="required"/></xs:complexType>
+            </xs:element>
+            <xs:element name="event" minOccurs="0" maxOccurs="50000"><xs:complexType>
+              <xs:attribute name="id" type="xs:string" use="required"/><xs:attribute name="kind" type="EventKind" use="required"/><xs:attribute name="cardId" type="CardID" use="required"/><xs:attribute name="topic" type="xs:positiveInteger" use="required"/><xs:attribute name="time" type="xs:dateTime" use="required"/><xs:attribute name="success" type="xs:nonNegativeInteger" use="required"/><xs:attribute name="total" type="xs:positiveInteger" use="required"/><xs:attribute name="cycle" type="xs:nonNegativeInteger" use="required"/><xs:attribute name="variant" type="xs:nonNegativeInteger" use="required"/>
+            </xs:complexType></xs:element>
+          </xs:sequence><xs:attribute name="schema-version" type="xs:string" fixed="1" use="required"/><xs:attribute name="enabled" type="BooleanText" use="required"/></xs:complexType>
+        </xs:element>
+      </xs:sequence>
       <xs:attribute name="format" type="xs:string" fixed="cmn-flashcards-progresso" use="required"/>
       <xs:attribute name="schema-version" type="xs:string" fixed="1" use="required"/>
       <xs:attribute name="exported-at" type="xs:dateTime" use="required"/>

@@ -182,7 +182,7 @@ test('overdrive: all cards have unique IDs and the clinical audit count reflects
   const statuses={};for(const card of data.cards.filter(card=>!card.splitFrom))statuses[card.audit?.status]=(statuses[card.audit?.status]||0)+1;
   return{cards:data.cards.length,themes:data.themes.length,uniqueIds:new Set(data.cards.map(c=>c.id)).size,cases:data.cards.filter(c=>c.kind==='case').length,statuses};
  });
- expect(result).toMatchObject({cards:1206,themes:31,uniqueIds:1206,cases:240,statuses:{corrigido:289,triado:551,novo:240}});
+ expect(result).toMatchObject({cards:1206,themes:31,uniqueIds:1206,cases:240,statuses:{corrigido:289,triado:551,revisar:15,novo:240}});
 });
 
 

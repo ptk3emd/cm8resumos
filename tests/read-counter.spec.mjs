@@ -51,3 +51,22 @@ test('read count XML rejects invalid values without mutating storage',async({pag
  await expect(page.locator('#importReviewTitle')).toHaveText('Não foi possível importar');
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('1');
 });
+
+test('XML readings wait for the effective confirmation after another tab changes progress',async({page})=>{
+ await page.goto('./');
+ await page.locator('.study-card [data-action="count-read"]').first().click();
+ const xml=await page.evaluate(()=>CMNProgressIO.encodeXML({},1206));
+ await page.locator('.study-card [data-action="count-read"]').first().click();
+ await page.locator('#importFile').setInputFiles({name:'readings.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
+ await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
+ await page.evaluate(()=>{
+  const key='cmn-flashcards-v1',saved=JSON.parse(localStorage.getItem(key)||'{}');
+  saved.cards={'1.1.1':{star:true}};
+  localStorage.setItem(key,JSON.stringify(saved));
+ });
+ await page.locator('#confirmImportBtn').click();
+ await expect(page.locator('#importReviewTitle')).toHaveText('Progresso alterado em outra aba');
+ await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('2');
+ await page.locator('#confirmImportBtn').click();
+ await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('1');
+});
