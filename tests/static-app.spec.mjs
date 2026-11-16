@@ -1,9 +1,9 @@
 import {test,expect} from '@playwright/test';
 
-test('1044 cards and 25 topics, no horizontal document overflow',async({page},testInfo)=>{
+test('1097 cards and 25 topics, no horizontal document overflow',async({page},testInfo)=>{
  await page.goto('./');
- await expect(page.locator('#nTotal')).toHaveText('1044');
- await expect(page.locator('#listSub')).toContainText('1044 resultados');
+ await expect(page.locator('#nTotal')).toHaveText('1097');
+ await expect(page.locator('#listSub')).toContainText('1097 resultados');
  await expect(page.locator('#topicList .topic-btn')).toHaveCount(26);
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
  const ok=await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2);
@@ -117,8 +117,8 @@ test('PWA manifests correct relative scope and offline shell on Chromium',async(
  await context.setOffline(true);
  try{
   await page.reload();
-  await expect(page.locator('#nTotal')).toHaveText('1044');
-  await expect(page.locator('#listSub')).toContainText('1044 resultados');
+  await expect(page.locator('#nTotal')).toHaveText('1097');
+  await expect(page.locator('#listSub')).toContainText('1097 resultados');
  }finally{await context.setOffline(false);}
 });
 
@@ -182,7 +182,7 @@ test('overdrive: all cards have unique IDs and the original audit counts are pre
   const statuses={};for(const card of data.cards.filter(card=>!card.splitFrom))statuses[card.audit?.status]=(statuses[card.audit?.status]||0)+1;
   return{cards:data.cards.length,themes:data.themes.length,uniqueIds:new Set(data.cards.map(c=>c.id)).size,cases:data.cards.filter(c=>c.kind==='case').length,statuses};
  });
- expect(result).toMatchObject({cards:1044,themes:25,uniqueIds:1044,cases:250,statuses:{corrigido:92,revisar:17,triado:611,novo:250}});
+ expect(result).toMatchObject({cards:1097,themes:25,uniqueIds:1097,cases:250,statuses:{corrigido:92,revisar:17,triado:611,novo:250}});
 });
 
 
@@ -205,19 +205,14 @@ test('polish: visual answer map references every original clinical section',asyn
 
 test('polish: explicit mechanism and management labels get matching visual roles',async({page})=>{
  await page.goto('./');
- await page.locator('#searchBox').fill('4.5.3');
- const card=page.locator('#card-4-5-3');
+ await page.locator('#searchBox').fill('18.C.3');
+ const card=page.locator('#card-18-C-3');
  await expect(card).toBeVisible();
  await card.locator('[data-action="reveal"]').click();
- await expect(card.locator('section.answer-section[data-role="mechanism"]')).toHaveCount(1);
- await expect(card.locator('section.answer-section[data-role="action"]')).toHaveCount(1);
- await expect(card.locator('.answer-outline-links a')).toHaveCount(2);
- const seen=await card.evaluate(el=>({
-  headings:[...el.querySelectorAll('.answer-section')].map(n=>n.querySelector('.answer-subheading-text')?.textContent),
-  roles:[...el.querySelectorAll('.answer-section')].map(n=>n.dataset.role)
- }));
- expect(seen.headings).toEqual(['Fisiopatologia:','Conduta:']);
- expect(seen.roles).toEqual(['mechanism','action']);
+ await expect(card.locator('section.answer-section[data-role="mechanism"] .answer-subheading-text').filter({hasText:/^Fisiopatologia:$/})).toHaveCount(1);
+ await expect(card.locator('section.answer-section[data-role="action"] .answer-subheading-text').filter({hasText:/^Manejo:$/})).toHaveCount(1);
+ await expect(card.locator('.answer-outline-links').getByRole('link',{name:'Fisiopatologia',exact:false})).toBeVisible();
+ await expect(card.locator('.answer-outline-links').getByRole('link',{name:'Manejo',exact:false})).toBeVisible();
 });
 
 test('polish: mobile answer navigation has touch target and no page overflow',async({page,isMobile})=>{

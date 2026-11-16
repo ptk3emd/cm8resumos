@@ -6,7 +6,7 @@ test('17 questões de alto risco mantêm revisão pendente após correções dir
   const source=JSON.parse(node.textContent);
   return {cards:source.cards.length,unique:new Set(source.cards.map(c=>c.id)).size,flagged:source.cards.filter(c=>!c.splitFrom&&c.audit?.status==='revisar').length,cases:source.cards.filter(c=>c.kind==='case').length};
  });
- expect(result).toEqual({cards:1044,unique:1044,flagged:17,cases:250});
+ expect(result).toEqual({cards:1097,unique:1097,flagged:17,cases:250});
 });
 test('SREAT não é diagnosticada isoladamente por anti-TPO e não garante resposta universal',async({page})=>{
  await page.goto('./');
@@ -45,6 +45,6 @@ test('SUDEP mantém incerteza sobre fisiopatologia e resultados cirúrgicos',asy
 });
 test('esquemas em B12 não pressupõem IM vitalícia após toda bariátrica',async({page})=>{
  await page.goto('./');
- const c=await page.locator('#sourceData').evaluate(node=>JSON.parse(node.textContent).cards.find(c=>c.id==='21.3.5'));
+ const c=await page.locator('#sourceData').evaluate(node=>JSON.parse(node.textContent).cards.find(c=>c.id==='21.3.5.1'));
  expect(c.answer).toContain('dependem do procedimento e da absorção');
 });
