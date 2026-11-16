@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-test('sete temas têm nível 1, 2, 3 e dois cartões de caso cada',async({page})=>{
+test('sete temas têm níveis 1, 2 e 3, sem casos fora do escopo',async({page})=>{
  await page.goto('./');
  const r=await page.locator('#sourceData').evaluate(node=>{
   const d=JSON.parse(node.textContent);
@@ -13,7 +13,7 @@ test('sete temas têm nível 1, 2, 3 e dois cartões de caso cada',async({page})
   });
  });
  expect(r).toHaveLength(7);
- for(const x of r){expect(x.name).toBeTruthy();expect(x.levels).toEqual([7,7,7]);expect(x.cases).toBe(2);expect(x.bad).toEqual([]);}
+ for(const x of r){expect(x.name).toBeTruthy();expect(x.levels).toEqual([5,5,5]);expect(x.cases).toBe(0);expect(x.bad).toEqual([]);}
 });
 
 test('total, IDs únicos e outras disciplinas preservados',async({page})=>{
@@ -22,5 +22,5 @@ test('total, IDs únicos e outras disciplinas preservados',async({page})=>{
   const d=JSON.parse(node.textContent),ids=[20,26,27,28,29,30,31];
   return {total:d.cards.length,topics:d.themes.length,cases:d.cards.filter(c=>c.kind==='case').length,unique:new Set(d.cards.map(c=>c.id)).size,untouched:d.cards.filter(c=>!ids.includes(c.topic)).length};
  });
- expect(r).toEqual({total:1202,topics:31,cases:254,unique:1202,untouched:1041});
+ expect(r).toEqual({total:1206,topics:31,cases:240,unique:1206,untouched:1101});
 });

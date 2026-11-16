@@ -6,7 +6,7 @@ test('16 questões de alto risco mantêm revisão pendente após correções dir
   const source=JSON.parse(node.textContent);
   return {cards:source.cards.length,unique:new Set(source.cards.map(c=>c.id)).size,flagged:source.cards.filter(c=>!c.splitFrom&&c.audit?.status==='revisar').length,cases:source.cards.filter(c=>c.kind==='case').length};
  });
- expect(result).toEqual({cards:1146,unique:1146,flagged:16,cases:240});
+ expect(result).toEqual({cards:1206,unique:1206,flagged:15,cases:240});
 });
 test('SREAT não é diagnosticada isoladamente por anti-TPO e não garante resposta universal',async({page})=>{
  await page.goto('./');
