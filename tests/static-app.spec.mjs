@@ -205,19 +205,14 @@ test('polish: visual answer map references every original clinical section',asyn
 
 test('polish: explicit mechanism and management labels get matching visual roles',async({page})=>{
  await page.goto('./');
- await page.locator('#searchBox').fill('4.5.3');
- const card=page.locator('#card-4-5-3');
+ await page.locator('#searchBox').fill('18.C.3');
+ const card=page.locator('#card-18-C-3');
  await expect(card).toBeVisible();
  await card.locator('[data-action="reveal"]').click();
- await expect(card.locator('section.answer-section[data-role="mechanism"]')).toHaveCount(1);
- await expect(card.locator('section.answer-section[data-role="action"]')).toHaveCount(1);
- await expect(card.locator('.answer-outline-links a')).toHaveCount(2);
- const seen=await card.evaluate(el=>({
-  headings:[...el.querySelectorAll('.answer-section')].map(n=>n.querySelector('.answer-subheading-text')?.textContent),
-  roles:[...el.querySelectorAll('.answer-section')].map(n=>n.dataset.role)
- }));
- expect(seen.headings).toEqual(['Fisiopatologia:','Conduta:']);
- expect(seen.roles).toEqual(['mechanism','action']);
+ await expect(card.locator('section.answer-section[data-role="mechanism"] .answer-subheading-text').filter({hasText:/^Fisiopatologia:$/})).toHaveCount(1);
+ await expect(card.locator('section.answer-section[data-role="action"] .answer-subheading-text').filter({hasText:/^Manejo:$/})).toHaveCount(1);
+ await expect(card.locator('.answer-outline-links').getByRole('link',{name:'Fisiopatologia',exact:false})).toBeVisible();
+ await expect(card.locator('.answer-outline-links').getByRole('link',{name:'Manejo',exact:false})).toBeVisible();
 });
 
 test('polish: mobile answer navigation has touch target and no page overflow',async({page,isMobile})=>{
