@@ -139,7 +139,7 @@ a:hover { text-decoration:underline; }
 .hero-progress strong { font-size:29px;line-height:1.1;letter-spacing:-.045em;font-weight:650;font-variant-numeric:tabular-nums; }
 .hero-progress span { font-size:11px;line-height:1.4;color:var(--quiet);max-width:73px; }
 .progress-track { height:5px;border-radius:2px;background:var(--subtle-hover);overflow:hidden; }
-.progress-fill { height:100%;background:var(--blue);width:0;transition:width .18s ease; }
+.progress-fill { height:100%;background:var(--success);width:0;transition:width .18s ease; }
 .hero-foot { font-size:12px;line-height:1.4;color:var(--quiet); }
 .stat-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0 auto 32px;padding:22px 0;border-bottom:1px solid var(--stroke); }
 .stat { min-width:0;padding:0 18px;border-left:1px solid var(--stroke); }
@@ -813,6 +813,94 @@ input,select {accent-color:var(--blue);caret-color:var(--ink)}
  .editor-fields {overflow:visible}
  .editor-actions {position:static}
 }
+
+/* Study home refinement: ledger progress, content map, search and active filters. */
+.hero { grid-template-columns:minmax(0,1fr) 168px; }
+.sidebar-count { font-size:12px;line-height:1.2;color:var(--quiet);font-variant-numeric:tabular-nums; }
+.topic-filter { position:relative;display:block;margin:0 2px 10px; }
+.topic-filter svg { position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--quiet);pointer-events:none; }
+.topic-filter input { width:100%;min-height:44px;padding:8px 10px 8px 34px;border:1px solid var(--stroke);border-radius:7px;background:var(--subtle);color:var(--ink);font-size:13px; }
+.topic-filter input:focus { background:var(--page);border-color:var(--stroke-strong); }
+.topic-filter input::placeholder { color:var(--quiet); }
+.topic-filter-empty { margin:4px 10px 10px;font-size:12px;color:var(--quiet); }
+.topic-btn[data-state="done"] .topic-num { color:var(--success); }
+.topic-state { display:inline-flex;align-items:center;gap:4px; }
+.topic-state svg { flex:none; }
+.topic-state.is-done { color:var(--success); }
+.topic-state.is-review { color:var(--warning); }
+.mini-meter { display:flex;gap:0; }
+.mini-meter>b { display:block;height:100%;background:var(--warning); }
+.stat-grid { display:block;padding:22px 0 18px; }
+.stack-bar { display:flex;height:6px;border-radius:3px;background:var(--subtle-hover);overflow:hidden;margin-bottom:14px; }
+.stack-bar i { display:block;height:100%;width:0;transition:width .32s cubic-bezier(.16,1,.3,1); }
+.seg-done { background:var(--success); }
+.seg-review { background:var(--warning); }
+.stat-row { display:grid;grid-template-columns:repeat(5,minmax(0,1fr)); }
+button.stat { font:inherit;text-align:left;background:transparent;border:0;border-left:1px solid var(--stroke);border-radius:0;color:var(--ink);padding:6px 16px;min-height:56px;cursor:pointer; }
+button.stat:first-child { border-left:0;padding-left:0; }
+button.stat:hover .stat-label,button.stat[aria-pressed="true"] .stat-label { color:var(--ink); }
+button.stat[aria-pressed="true"] .number { text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px; }
+.stat .stat-label { display:flex;align-items:center;gap:6px; }
+.stat .dot { width:8px;height:8px;border-radius:2px;flex:none;background:var(--subtle-hover);box-shadow:inset 0 0 0 1px var(--stroke-strong); }
+.stat-done .dot { background:var(--success);box-shadow:none; }
+.stat-review .dot { background:var(--warning);box-shadow:none; }
+.stat-done .number { color:var(--success); }
+.stat-review .number { color:var(--warning); }
+.stat:nth-child(2) .number,.stat:nth-child(3) .number { color:inherit; }
+.stat-row .stat-done .number { color:var(--success); }
+.stat-row .stat-review .number { color:var(--warning); }
+.content-map { max-width:var(--read);margin:0 auto 28px;border-bottom:1px solid var(--stroke);padding-bottom:20px; }
+.content-map summary { list-style:none;display:flex;align-items:center;gap:12px;min-height:44px;cursor:pointer;border-radius:7px; }
+.content-map summary::-webkit-details-marker { display:none; }
+.content-map summary:focus-visible { outline:2px dashed var(--blue);outline-offset:3px; }
+.map-title { font-size:15px;font-weight:650;letter-spacing:-.012em; }
+.map-hint { font-size:12px;color:var(--quiet);margin-right:auto; }
+.map-chevron { color:var(--quiet);transition:transform .2s cubic-bezier(.16,1,.3,1); }
+.content-map:not([open]) .map-chevron { transform:rotate(-90deg); }
+.map-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:6px;margin-top:10px; }
+.map-cell { position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:6px;min-height:92px;padding:10px 11px 11px;border:1px solid var(--stroke);border-radius:8px;background:var(--panel);color:var(--ink);text-align:left;font:inherit;overflow:hidden; }
+.map-cell:hover { border-color:var(--stroke-strong);background:var(--subtle); }
+.map-cell[aria-current="true"] { border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue); }
+.map-cell .map-num { display:flex;justify-content:space-between;font:500 11px/1.3 var(--mono);color:var(--quiet);font-variant-numeric:tabular-nums; }
+.map-cell .map-name { font-size:12.5px;line-height:1.35;font-weight:550;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden; }
+.map-bar { display:flex;height:4px;border-radius:2px;background:var(--subtle-hover);overflow:hidden; }
+.map-bar i { background:var(--success); } .map-bar b { background:var(--warning); }
+.map-cell.is-complete .map-num span:last-child { color:var(--success);font-weight:650; }
+.map-legend { display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11.5px;color:var(--quiet); }
+.map-legend span { display:inline-flex;align-items:center;gap:6px; }
+.lg { width:10px;height:4px;border-radius:2px;display:inline-block; }
+.lg-done { background:var(--success); } .lg-review { background:var(--warning); } .lg-todo { background:var(--subtle-hover);box-shadow:inset 0 0 0 1px var(--stroke-strong); }
+.search-input { padding-right:76px; }
+.search-input::-webkit-search-cancel-button { -webkit-appearance:none;appearance:none; }
+.search-input:focus { border-color:var(--blue); }
+.search-kbd { position:absolute;right:12px;top:50%;transform:translateY(-50%);min-width:22px;padding:1px 6px;border:1px solid var(--stroke-strong);border-radius:5px;font:500 11px/1.5 var(--mono);color:var(--quiet);text-align:center;pointer-events:none; }
+.search-wrap:focus-within .search-kbd,.search-wrap.has-value .search-kbd { display:none; }
+.search-clear { position:absolute;right:2px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:7px;background:transparent;color:var(--muted); }
+.search-clear:hover { color:var(--ink);background:var(--subtle); }
+.search-status { margin:8px 2px 0;font-size:12px;color:var(--muted);min-height:0; }
+.search-status:empty { display:none; }
+.active-filters { display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px; }
+.filter-chip { display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 8px 6px 12px;border:1px solid var(--stroke-strong);border-radius:999px;background:var(--blue-soft);color:var(--blue-soft-ink);font-size:12px;font-weight:550; }
+.filter-chip svg { flex:none; }
+.filter-chip:hover { border-color:var(--blue); }
+.filter-reset { min-height:44px;padding:6px 10px;border:0;background:transparent;color:var(--muted);font-size:12px;text-decoration:underline;text-underline-offset:3px; }
+.pill .pill-count { margin-left:6px;font-variant-numeric:tabular-nums;color:var(--quiet);font-weight:500; }
+.pill.active .pill-count { color:var(--muted); }
+mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:inherit;border-radius:2px;padding:0 1px; }
+::selection { background:color-mix(in srgb,var(--blue) 28%,transparent); }
+@media(max-width:850px){
+  .stat-row { grid-template-columns:repeat(3,minmax(0,1fr));row-gap:8px; }
+  button.stat:nth-child(4) { border-left:0;padding-left:0; }
+  .map-grid { grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); }
+  .search-kbd { display:none; }
+}
+@media(max-width:520px){
+  .map-grid { display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:6px;scrollbar-width:thin; }
+  .map-cell { flex:0 0 140px;scroll-snap-align:start; }
+  .stat .number { font-size:20px; }
+  button.stat { padding:4px 10px; }
+}
+@media(prefers-reduced-motion:reduce){ .stack-bar i,.map-chevron { transition:none; } }
 </style>
 </head>
 <body>
@@ -826,26 +914,27 @@ input,select {accent-color:var(--blue);caret-color:var(--ink)}
  </div>
 </div></header>
 <div class="main-shell">
-<aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="eyebrow">25 assuntos</span></div><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside>
+<aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="sidebar-count" id="topicCount">31 temas</span></div><label class="topic-filter"><span class="sr-only">Filtrar lista de temas</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="topicFilter" type="search" placeholder="Filtrar temas" autocomplete="off"></label><p class="topic-filter-empty" id="topicFilterEmpty" hidden>Nenhum tema com esse nome.</p><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside>
 <main class="workspace" id="workspace">
- <section class="hero" aria-labelledby="heroTitle"><div><div class="hero-kicker">CLÍNICA MÉDICA · 8º PERÍODO</div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1202 flashcards em 31 temas, incluindo 254 cartões clínicos para reconhecimento e conduta. Os 720 anteriores e seus avisos de auditoria foram preservados.</p>
+ <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1202 flashcards em 31 temas, incluindo 254 cartões clínicos para reconhecimento e conduta. Os 720 anteriores e seus avisos de auditoria foram preservados.</p>
 <div class="study-start" id="studyStart"><p>Escolha um tema ou comece com um cartão de cada vez.</p><button type="button" id="startFocusBtn">Iniciar em Foco</button></div>
 <p class="study-backup-hint">Seu progresso fica neste navegador. Exporte XML para transferi-lo a outro dispositivo.</p></div><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>do material estudado</span></div><div class="progress-track" role="progressbar" aria-label="Progresso total" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1202 flashcards</div></div></section>
   <div class="storage-alert" id="storageAlert" role="alert" hidden>O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div>
    <section class="import-review" id="importReview" hidden aria-labelledby="importReviewTitle" role="status"><h2 id="importReviewTitle" tabindex="-1">Backup selecionado</h2><p id="importReviewText"></p><div class="import-review-actions"><button type="button" class="subtle-btn import-apply" id="confirmImportBtn">Substituir progresso</button><button type="button" class="subtle-btn" id="cancelImportBtn">Cancelar</button></div></section>
-  <section class="stat-grid" aria-label="Resumo de estudo"><div class="stat"><span class="number" id="nTotal">1202</span><span class="stat-label">Flashcards</span></div><div class="stat"><span class="number" id="nDone">0</span><span class="stat-label">Estudados</span></div><div class="stat"><span class="number" id="nReview">0</span><span class="stat-label">Para revisar</span></div><div class="stat"><span class="number" id="nTodo">970</span><span class="stat-label">Não estudados</span></div></section>
+  <section class="stat-grid" aria-labelledby="statsTitle"><h2 class="sr-only" id="statsTitle">Resumo de estudo</h2><div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1202</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div></section>
+  <details class="content-map" id="contentMap" open><summary><span class="map-title">Mapa de conteúdos</span><span class="map-hint" id="mapHint">31 temas · toque para estudar</span><svg class="map-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="map-grid" id="mapGrid" role="list"></div><div class="map-legend" aria-hidden="true"><span><i class="lg lg-done"></i>Estudado</span><span><i class="lg lg-review"></i>Revisar</span><span><i class="lg lg-todo"></i>Não estudado</span></div></details>
  <section class="filters" aria-label="Filtros de estudo">
    <div class="filter-first">
     <button class="subtle-btn mobile-topic-btn" id="mobileTopics" aria-expanded="false" aria-controls="sidebar">☰ Temas</button>
      <button class="subtle-btn mobile-filter-btn" id="mobileFilters" type="button" aria-expanded="false" aria-controls="advancedFilters">Mais filtros</button>
-    <label class="search-wrap"><span class="sr-only">Buscar perguntas, respostas ou assuntos</span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="searchBox" class="search-input" type="search" placeholder="Buscar pergunta, resposta, assunto ou ID..." autocomplete="off"></label>
+    <label class="search-wrap"><span class="sr-only">Buscar perguntas, respostas ou assuntos</span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="searchBox" class="search-input" type="search" placeholder="Buscar pergunta, resposta, assunto ou ID" autocomplete="off" aria-keyshortcuts="/" aria-describedby="searchStatus"><kbd class="search-kbd" aria-hidden="true">/</kbd><button type="button" class="search-clear" id="searchClear" aria-label="Limpar busca" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></label>
      <div class="advanced-filters" id="advancedFilters">
      <label class="sr-only" for="levelSelect">Filtrar por nível</label><select id="levelSelect" class="field-select"><option value="all">Todos os níveis</option><option value="1">Nível 1</option><option value="2">Nível 2</option><option value="3">Nível 3</option><option value="4">Nível 4</option><option value="5">Nível 5</option><option value="0">Complementos</option></select>
-    <label class="sr-only" for="typeSelect">Filtrar por origem</label><select id="typeSelect" class="field-select"><option value="all">Todos os cartões</option><option value="original">Originais (625)</option><option value="new">Complementos (345)</option></select>
-     <label class="sr-only" for="auditSelect">Filtrar por auditoria</label><select id="auditSelect" class="field-select"><option value="all">Auditoria: todos</option><option value="corrigido">Corrigidos (92)</option><option value="revisar">Conferir (17)</option><option value="triado">Triados (611)</option></select>
+    <label class="sr-only" for="typeSelect">Filtrar por origem</label><select id="typeSelect" class="field-select"><option value="all">Todos os cartões</option><option value="original" data-label="Originais">Originais</option><option value="new" data-label="Complementos">Complementos</option></select>
+     <label class="sr-only" for="auditSelect">Filtrar por auditoria</label><select id="auditSelect" class="field-select"><option value="all">Auditoria: todos</option><option value="corrigido" data-label="Corrigidos">Corrigidos</option><option value="revisar" data-label="Conferir">Conferir</option><option value="triado" data-label="Triados">Triados</option></select>
      </div>
     </div>
-   <div class="divider"></div>
+   <p class="search-status" id="searchStatus" role="status" aria-live="polite"></p><div class="active-filters" id="activeFilters" hidden aria-label="Filtros ativos"></div><div class="divider"></div>
    <div class="filter-second"><div class="pill-scroller"><div class="filter-pills" id="statusFilters" role="group" aria-label="Filtrar situação" aria-describedby="filterSwipeHint"><button class="pill active" data-filter="all" aria-pressed="true">Todos</button><button class="pill" data-filter="todo" aria-pressed="false">Não estudados</button><button class="pill" data-filter="review" aria-pressed="false">Revisar manualmente</button><button class="pill" data-filter="done" aria-pressed="false">Estudados</button><button class="pill" data-filter="star" aria-pressed="false">★ Favoritos</button><button class="pill" data-filter="hidden" aria-pressed="false">Ocultos</button></div><span class="filter-scroll-cue" id="filterScrollCue" aria-hidden="true">→</span></div><span class="sr-only" id="filterSwipeHint">No celular, deslize horizontalmente para acessar todos os estados, incluindo Favoritos e Ocultos.</span><div class="mode-switch" aria-label="Modo de visualização"><button class="mode-btn active" data-mode="list" aria-pressed="true">Lista</button><button class="mode-btn" data-mode="focus" aria-pressed="false">Foco</button><button class="mode-btn" data-mode="fsrs" aria-pressed="false">Revisão FSRS</button></div></div>
  </section>
  <section id="fsrsSettings" class="fsrs-settings" hidden aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><details class="fsrs-backup"><summary class="subtle-btn">Backup FSRS</summary><div class="fsrs-backup-actions"><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico</button><button type="button" id="fsrsImportButton" class="subtle-btn">Importar histórico</button><input type="file" id="fsrsImport" accept=".json,application/json" hidden></div></details></section>
@@ -927,11 +1016,20 @@ function getFiltered(){let list=CARDS.filter(c=>{
  return true;});
  if(ui.shuffle){list=list.slice().sort((a,b)=>(shuffleOrder.get(a.id)||0)-(shuffleOrder.get(b.id)||0));}
  return list;}
-function renderStats(){let t=totals();$('studyStart').hidden=Object.keys(marks).length>0||ui.mode==='focus';$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} estudados · ${t.hidden} ocultos`;}
-function renderTopics(){let contents=`<button class="topic-btn topic-all ${ui.topic==='all'?'active':''}" data-topic="all" aria-current="${ui.topic==='all'?'page':'false'}"><span class="topic-num">◎</span><span><span class="topic-name">Todos os temas</span><span class="topic-small">${TOTAL} flashcards disponíveis</span></span></button>`;
- for(const t of TOPICS){let list=CARDS.filter(c=>c.topic===t.id);let studied=list.filter(c=>status(c.id)==='done').length;let pct=Math.round(studied/list.length*100);
- contents+=`<button class="topic-btn ${ui.topic===String(t.id)?'active':''}" data-topic="${t.id}" aria-current="${ui.topic===String(t.id)?'page':'false'}"><span class="topic-num">${String(t.id).padStart(2,'0')}</span><span><span class="topic-name">${safe(t.title)}</span><span class="topic-small">${studied}/${list.length} estudados · ${pct}%</span><span class="mini-meter" aria-hidden="true"><i style="width:${pct}%"></i></span></span></button>`;}
-  const rail=$('topicList'),previousScroll=rail.scrollLeft;rail.innerHTML=contents;if(previousScroll)rail.scrollLeft=previousScroll;}
+function renderStats(){let t=totals();$('studyStart').hidden=Object.keys(marks).length>0||ui.mode==='focus';$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;$('nStar').textContent=t.stars;$('segDone').style.width=(t.done/TOTAL*100)+'%';$('segReview').style.width=(t.review/TOTAL*100)+'%';qsa('[data-jump]').forEach(b=>b.setAttribute('aria-pressed',String(ui.mode!=='fsrs'&&b.dataset.jump!=='all'&&ui.status===b.dataset.jump)));let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} estudados · ${t.hidden} ocultos`;}
+const ICON_CHECK='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+function topicStats(){const map=new Map(TOPICS.map(t=>[t.id,{total:0,done:0,review:0}]));for(const c of CARDS){const r=map.get(c.topic);if(!r)continue;r.total++;const s=status(c.id);if(s==='done')r.done++;else if(s==='review')r.review++;}return map;}
+function renderTopics(){const stats=topicStats();let contents=`<button class="topic-btn topic-all ${ui.topic==='all'?'active':''}" data-topic="all" aria-current="${ui.topic==='all'?'page':'false'}"><span class="topic-num">∑</span><span><span class="topic-name">Todos os temas</span><span class="topic-small">${TOTAL} flashcards disponíveis</span></span></button>`;
+ let cells='';
+ for(const t of TOPICS){const r=stats.get(t.id),pct=r.total?Math.round(r.done/r.total*100):0,dPct=r.total?r.done/r.total*100:0,rPct=r.total?r.review/r.total*100:0,active=ui.topic===String(t.id),state=r.total&&r.done===r.total?'done':r.done||r.review?'progress':'new';
+  const stateHtml=state==='done'?`<span class="topic-state is-done">${ICON_CHECK}Concluído</span>`:`<span class="topic-state">${r.done}/${r.total} estudados · ${pct}%</span>`+(r.review?` · <span class="topic-state is-review">${r.review} a revisar</span>`:'');
+  contents+=`<button class="topic-btn ${active?'active':''}" data-topic="${t.id}" data-state="${state}" data-name="${safe(norm(t.title+' '+t.area))}" aria-current="${active?'page':'false'}"><span class="topic-num">${String(t.id).padStart(2,'0')}</span><span><span class="topic-name">${safe(t.title)}</span><span class="topic-small">${stateHtml}</span><span class="mini-meter" aria-hidden="true"><i style="width:${dPct}%"></i><b style="width:${rPct}%"></b></span></span></button>`;
+  cells+=`<button type="button" role="listitem" class="map-cell ${state==='done'?'is-complete':''}" data-topic="${t.id}" aria-current="${active?'true':'false'}" aria-label="${safe(t.title)}: ${r.done} de ${r.total} estudados${r.review?', '+r.review+' para revisar':''}"><span class="map-num"><span>${String(t.id).padStart(2,'0')}</span><span>${pct}%</span></span><span class="map-name">${safe(t.title)}</span><span class="map-bar" aria-hidden="true"><i style="width:${dPct}%"></i><b style="width:${rPct}%"></b></span></button>`;}
+ const rail=$('topicList'),previousScroll=rail.scrollLeft;rail.innerHTML=contents;if(previousScroll)rail.scrollLeft=previousScroll;
+ const grid=$('mapGrid');if(grid){const ps=grid.scrollLeft;grid.innerHTML=cells;if(ps)grid.scrollLeft=ps;}
+ const complete=[...stats.values()].filter(r=>r.total&&r.done===r.total).length;$('mapHint').textContent=`${complete} de ${TOPICS.length} temas concluídos`;$('topicCount').textContent=`${TOPICS.length} temas`;
+ applyTopicFilter();}
+function applyTopicFilter(){const q=norm($('topicFilter').value.trim());let shown=0;qsa('#topicList .topic-btn[data-name]').forEach(b=>{const ok=!q||b.dataset.name.includes(q)||b.dataset.topic===q.replace(/^0+/,'');b.hidden=!ok;if(ok)shown++;});$('topicFilterEmpty').hidden=shown>0;}
 const structuredAnswerCache=new Map();
 function answerLabelIndex(line){
  const raw=String(line).trim();let depth=0;
@@ -1126,7 +1224,8 @@ function restoreFocus(ref){
  }
  if(target){const menu=target.closest("details.more-actions");if(menu)menu.open=true;try{target.focus({preventScroll:true});}catch{target.focus();}}
 }
-function renderCards(list){let focusBefore=rememberFocus();let container=$('cardsContainer');if(ui.mode==='focus'){if(!list.length){container.innerHTML=emptyHtml();$('focusNav').hidden=true;$('moreWrap').hidden=true;restoreFocus(focusBefore);return;}
+function renderCards(list){renderCardsInner(list);if(ui.search&&ui.mode!=='fsrs')highlightHits($('cardsContainer'),ui.search);}
+function renderCardsInner(list){let focusBefore=rememberFocus();let container=$('cardsContainer');if(ui.mode==='focus'){if(!list.length){container.innerHTML=emptyHtml();$('focusNav').hidden=true;$('moreWrap').hidden=true;restoreFocus(focusBefore);return;}
  let idx=list.findIndex(c=>c.id===ui.focusId);if(idx<0){idx=0;ui.focusId=list[0].id;}
  container.innerHTML=cardHtml(list[idx]);$('focusNav').hidden=false;$('focusNav').innerHTML=`<span class="focus-counter">Cartão ${idx+1} de ${list.length}</span><div class="focus-arrows"><button data-action="prev" ${idx===0?'disabled':''} aria-label="Cartão anterior">← Anterior</button><button data-action="next" ${idx===list.length-1?'disabled':''} aria-label="Próximo cartão">Próximo →</button></div>`;$('moreWrap').hidden=true;restoreFocus(focusBefore);return;}
  $('focusNav').hidden=true;
@@ -1144,7 +1243,7 @@ function renderControls(){
  $('focusSidebarToggle').textContent=collapsed?'Mostrar temas':'Ocultar temas';
  $('focusSidebarToggle').setAttribute('aria-expanded',String(!collapsed));
  qsa('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter===ui.status);b.setAttribute('aria-pressed',b.dataset.filter===ui.status?'true':'false');});qsa('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===ui.mode);b.setAttribute('aria-pressed',b.dataset.mode===ui.mode?'true':'false');});$('shuffleBtn').classList.toggle('active',ui.shuffle);$('shuffleBtn').setAttribute('aria-pressed',String(ui.shuffle));$('revealAllBtn').textContent=ui.showAll?'◉ Ocultar respostas':'◉ Mostrar respostas';$('revealAllBtn').setAttribute('aria-pressed',String(ui.showAll));}
-function render(){if(ui.mode==='fsrs'){renderStats();renderTopics();renderControls();renderFSRS();updateFilterCues();return;}const focusBefore=rememberFocus();renderStats();renderTopics();let list=getFiltered(),head=ui.topic==='all'?'Todos os flashcards':topicsById.get(Number(ui.topic))?.title||'Flashcards';$('listTitle').textContent=head;$('listSub').textContent=`${list.length} ${list.length===1?'resultado':'resultados'}${ui.search?' para a busca':''}`;renderControls();renderCards(list);restoreFocus(focusBefore);updateFilterCues();}
+function render(){if(ui.mode==='fsrs'){renderStats();renderTopics();renderControls();renderFSRS();updateFilterCues();return;}const focusBefore=rememberFocus();renderStats();renderTopics();let list=getFiltered(),head=ui.topic==='all'?'Todos os flashcards':topicsById.get(Number(ui.topic))?.title||'Flashcards';$('listTitle').textContent=head;$('listSub').textContent=`${list.length} ${list.length===1?'resultado':'resultados'}${ui.search?' para a busca':''}`;renderControls();renderCards(list);restoreFocus(focusBefore);updateFilterCues();renderFilterState(list);}
 const prefersReduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
 function jump(delta){const list=getFiltered();if(!list.length)return;const i=list.findIndex(c=>c.id===ui.focusId),j=Math.min(Math.max(i+delta,0),list.length-1);if(i===j)return;
  ui.focusId=list[j].id;ui.showAll=false;renderCards(list);
@@ -1152,6 +1251,28 @@ function jump(delta){const list=getFiltered();if(!list.length)return;const i=lis
   const card=container.querySelector('.study-card');if(card){const finish=()=>{delete container.dataset.motion;};card.addEventListener('animationend',finish,{once:true});}}
  container.querySelector('.question')?.focus({preventScroll:true});container.scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'nearest'});
 }
+const LEVEL_LABEL=v=>v==='0'?'Complementos':'Nível '+v;
+function renderFilterState(list){
+ const raw=$('searchBox').value.trim();$('searchClear').hidden=!raw;$('searchBox').closest('.search-wrap').classList.toggle('has-value',!!raw);
+ $('searchStatus').textContent=ui.search?(list.length?`${list.length} ${list.length===1?'cartão encontrado':'cartões encontrados'} para “${raw}”`:`Nenhum cartão para “${raw}”. Tente outro termo ou limpe os filtros.`):'';
+ const chips=[];const X='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+ const add=(k,label)=>chips.push(`<button type="button" class="filter-chip" data-clear="${k}" aria-label="Remover filtro: ${safe(label)}">${safe(label)}${X}</button>`);
+ if(ui.topic!=='all')add('topic',topicsById.get(Number(ui.topic))?.title||'Tema');
+ if(ui.status!=='all')add('status',$('statusFilters').querySelector(`[data-filter="${ui.status}"]`)?.dataset.label||ui.status);
+ if(ui.level!=='all')add('level',LEVEL_LABEL(ui.level));
+ if(ui.type!=='all')add('type',ui.type==='new'?'Complementos':'Originais');
+ if(ui.audit!=='all')add('audit',$('auditSelect').selectedOptions[0]?.dataset.label||ui.audit);
+ if(ui.search)add('search','Busca: '+raw);
+ const box=$('activeFilters');box.hidden=chips.length===0;box.innerHTML=chips.join('')+(chips.length>1?'<button type="button" class="filter-reset" data-clear="all">Limpar tudo</button>':'');
+ if(ui.search)highlightHits($('cardsContainer'),ui.search);
+}
+function highlightHits(root,q){if(!q||q.length<2)return;const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('.question,.answer-box,.case-vignette,.meta-id')&&!n.parentElement.closest('mark,button,script')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+ for(const n of nodes){const text=n.nodeValue;if(text.length<q.length)continue;
+  // map normalized index -> original index (NFD may expand characters)
+  let normed='',idx=[];for(let i=0;i<text.length;i++){const k=norm(text[i]);for(let j=0;j<k.length;j++){normed+=k[j];idx.push(i);}}
+  let pos=normed.indexOf(q);if(pos<0)continue;const frag=document.createDocumentFragment();let last=0;
+  while(pos>=0){const a=idx[pos],b=idx[pos+q.length-1]+1;if(a>=last){frag.append(text.slice(last,a));const m=document.createElement('mark');m.className='hit';m.textContent=text.slice(a,b);frag.append(m);last=b;}pos=normed.indexOf(q,pos+q.length);}
+  frag.append(text.slice(last));n.replaceWith(frag);}}
 function clearFilters(){clearTimeout(searchTimer);ui.topic='all';ui.level='all';ui.type='all';ui.audit='all';ui.status='all';ui.search='';ui.limit=22;ui.focusId=null;$('searchBox').value='';$('levelSelect').value='all';$('typeSelect').value='all';$('auditSelect').value='all';render();}
 function fallbackCopy(text){return new Promise((resolve,reject)=>{const previous=document.activeElement,area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;opacity:0;top:0;left:0;pointer-events:none;';document.body.appendChild(area);
  try{area.focus();area.select();if(document.execCommand?.('copy'))resolve();else reject(Error('Sem permissão para copiar'));}catch(err){reject(err);}finally{area.remove();if(previous?.isConnected)previous.focus({preventScroll:true});}});}
@@ -1168,6 +1289,20 @@ function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let a
  case'prev':jump(-1);break;case'next':jump(1);break;case'clearFilters':clearFilters();break;}
 }
 $('topicList').addEventListener('click',ev=>{let b=ev.target.closest('[data-topic]');if(!b)return;ui.topic=b.dataset.topic;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();if(window.matchMedia('(max-width:850px)').matches){$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}});
+function selectTopic(id){ui.topic=id;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
+$('mapGrid').addEventListener('click',ev=>{const b=ev.target.closest('[data-topic]');if(b)selectTopic(b.dataset.topic);});
+try{const v=localStorage.getItem('cm8.mapOpen');if(v==='0')$('contentMap').open=false;}catch(e){}
+$('contentMap').addEventListener('toggle',()=>{try{localStorage.setItem('cm8.mapOpen',$('contentMap').open?'1':'0');}catch(e){}});
+$('topicFilter').addEventListener('input',applyTopicFilter);
+$('topicFilter').addEventListener('keydown',e=>{if(e.key==='Enter'){const first=qsa('#topicList .topic-btn[data-name]').find(b=>!b.hidden);if(first){e.preventDefault();first.click();}}});
+qsa('[data-jump]').forEach(b=>b.addEventListener('click',()=>{if(ui.mode==='fsrs')ui.mode='list';ui.status=b.dataset.jump;ui.limit=22;ui.focusId=null;render();$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}));
+$('searchClear').addEventListener('click',()=>{clearTimeout(searchTimer);$('searchBox').value='';applySearch();$('searchBox').focus();});
+$('searchBox').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('searchBox').value){e.preventDefault();$('searchClear').click();}});
+document.addEventListener('keydown',e=>{if(e.key!=='/'||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t.closest?.('input,textarea,select,[contenteditable="true"],dialog[open]'))return;e.preventDefault();$('searchBox').focus();$('searchBox').select();});
+$('activeFilters').addEventListener('click',ev=>{const b=ev.target.closest('[data-clear]');if(!b)return;const k=b.dataset.clear;
+ if(k==='all'){clearFilters();$('searchBox').focus();return;}
+ if(k==='topic')ui.topic='all';else if(k==='status')ui.status='all';else if(k==='level'){ui.level='all';$('levelSelect').value='all';}else if(k==='type'){ui.type='all';$('typeSelect').value='all';}else if(k==='audit'){ui.audit='all';$('auditSelect').value='all';}else if(k==='search'){clearTimeout(searchTimer);$('searchBox').value='';ui.search='';}
+ ui.limit=22;ui.focusId=null;render();($('activeFilters').querySelector('.filter-chip')||$('searchBox')).focus();});
 $('statusFilters').addEventListener('click',ev=>{let b=ev.target.closest('[data-filter]');if(!b)return;ui.status=b.dataset.filter;ui.limit=22;ui.focusId=null;render();});
 qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;
  if(ui.mode==='fsrs')openAnswers.clear();
@@ -1189,7 +1324,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){for(const menu of q
 document.addEventListener('click',e=>{if(e.target.closest?.('[data-action]'))return;for(const menu of qsa('details.more-actions[open]'))if(!menu.contains(e.target))menu.open=false;});
 $('moreBtn').addEventListener('click',()=>{ui.limit+=22;renderCards(getFiltered());});
 
-function updateFilterCues(){
+function labelSelectCounts(){const nNew=CARDS.filter(c=>c.new).length,a={};for(const c of CARDS){const k=c.audit?.status;if(k)a[k]=(a[k]||0)+1;}
+ qsa('#typeSelect option[data-label],#auditSelect option[data-label]').forEach(o=>{const n=o.value==='new'?nNew:o.value==='original'?TOTAL-nNew:(a[o.value]||0);o.textContent=`${o.dataset.label} (${n})`;});}
+function renderPillCounts(){if(!labelSelectCounts.done){labelSelectCounts();labelSelectCounts.done=1;}const t=totals(),counts={todo:t.todo,review:t.review,done:t.done,star:t.stars,hidden:t.hidden};qsa('#statusFilters [data-filter]').forEach(b=>{if(!b.dataset.label)b.dataset.label=b.textContent.replace('★','').trim();const n=counts[b.dataset.filter];let el=b.querySelector('.pill-count');if(n==null){el?.remove();return;}if(!el){el=document.createElement('span');el.className='pill-count';b.append(el);}el.textContent=n;});}
+function updateFilterCues(){renderPillCounts();
  const pill=$('statusFilters'),cue=$('filterScrollCue');
  cue.hidden=pill.scrollWidth<=pill.clientWidth+2||pill.scrollLeft+pill.clientWidth>=pill.scrollWidth-3;
  const selected=[ui.level,ui.type,ui.audit].filter(v=>v!=='all').length;
