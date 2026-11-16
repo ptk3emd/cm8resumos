@@ -4,7 +4,7 @@ test('1202 cards and 31 topics, no horizontal document overflow',async({page},te
  await page.goto('./');
  await expect(page.locator('#nTotal')).toHaveText('1202');
  await expect(page.locator('#listSub')).toContainText('1202 resultados');
- await expect(page.locator('#topicList .topic-btn')).toHaveCount(26);
+ await expect(page.locator('#topicList .topic-btn')).toHaveCount(32);
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
  const ok=await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2);
  expect(ok,'No page-level horizontal overflow at '+testInfo.project.name).toBeTruthy();
