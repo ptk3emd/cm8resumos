@@ -1,0 +1,108 @@
+{
+  "topic": 27,
+  "title": "Compressão medular neoplásica",
+  "source": "https://www.nice.org.uk/guidance/ng234/chapter/recommendations",
+  "levels": {
+    "1": [
+      [
+        "O que caracteriza a compressão medular neoplásica?",
+        "Compressão da medula espinal ou cauda equina por tumor vertebral ou epidural."
+      ],
+      [
+        "Qual costuma ser o primeiro sintoma de compressão medular maligna?",
+        "Dor axial progressiva, frequentemente noturna ou agravada por movimento/Valsalva."
+      ],
+      [
+        "Qual alteração motora sugere compressão medular evolutiva?",
+        "Fraqueza progressiva dos membros, com alteração da marcha."
+      ],
+      [
+        "Qual sinal sensitivo localiza uma possível lesão medular?",
+        "Nível sensitivo no tronco ou nos membros."
+      ],
+      [
+        "Qual sinal esfincteriano é um alerta tardio de compressão?",
+        "Retenção urinária ou nova incontinência urinária/fecal."
+      ],
+      [
+        "Cite três tumores frequentemente associados à compressão medular metastática.",
+        "Câncer de mama, próstata e pulmão."
+      ],
+      [
+        "Por que não esperar paralisia para investigar compressão medular?",
+        "Déficits neurológicos estabelecidos podem se tornar irreversíveis."
+      ]
+    ],
+    "2": [
+      [
+        "Qual exame de imagem é preferido na suspeita de compressão medular?",
+        "Ressonância magnética de toda a coluna."
+      ],
+      [
+        "Qual é o prazo máximo recomendado pela NICE para RM na suspeita de compressão medular?",
+        "O mais rápido possível, sempre dentro de 24 horas."
+      ],
+      [
+        "Por que investigar toda a coluna na compressão medular neoplásica?",
+        "Podem existir níveis múltiplos de acometimento."
+      ],
+      [
+        "Qual corticoide a NICE recomenda diante de sinais neurológicos por compressão maligna?",
+        "Dexametasona 16 mg, por via oral ou parenteral equivalente, o quanto antes."
+      ],
+      [
+        "Qual dose de manutenção de dexametasona é recomendada enquanto se define o tratamento?",
+        "16 mg ao dia, sob acompanhamento especializado."
+      ],
+      [
+        "O que fazer quando RM é contraindicada e há suspeita de compressão?",
+        "Considerar TC da coluna e, quando indicado, mielografia por TC em centro especializado."
+      ],
+      [
+        "Quando a imobilização imediata é particularmente importante?",
+        "Na suspeita de instabilidade vertebral com sintomas ou sinais neurológicos."
+      ]
+    ],
+    "3": [
+      [
+        "Quais equipes devem ser acionadas ao suspeitar de compressão medular neoplásica?",
+        "Oncologia/radioterapia e equipe de cirurgia da coluna, em avaliação urgente."
+      ],
+      [
+        "Quando descompressão cirúrgica é especialmente considerada?",
+        "Compressão com instabilidade vertebral, déficit progressivo ou necessidade de estabilização."
+      ],
+      [
+        "Quando radioterapia urgente pode ser o tratamento principal da compressão?",
+        "Quando cirurgia não é apropriada e existe alvo tumoral passível de radioterapia."
+      ],
+      [
+        "Qual cuidado exige a suspeita de linfoma antes de usar corticoide?",
+        "Se não houver urgência neurológica, discutir biópsia antes: esteroides podem prejudicar o diagnóstico."
+      ],
+      [
+        "O que fazer com dexametasona se exames excluírem compressão e metástase espinal?",
+        "Suspender o corticoide, conforme recomendação da NICE."
+      ],
+      [
+        "Qual variável funcional pré-tratamento prediz recuperação da marcha?",
+        "A capacidade de deambular antes do tratamento é um importante fator prognóstico."
+      ],
+      [
+        "Paciente oncológico com dor lombar nova e retenção urinária pode aguardar consulta eletiva?",
+        "Não. Exige avaliação hospitalar urgente para compressão medular/cauda equina."
+      ]
+    ]
+  },
+  "scenario": "Paciente com câncer de próstata apresenta dor dorsal noturna, fraqueza progressiva nas pernas e retenção urinária.",
+  "caseCards": [
+    [
+      "Qual é a hipótese que não pode ser perdida?",
+      "Compressão medular maligna ou da cauda equina."
+    ],
+    [
+      "Qual conduta deve ocorrer urgentemente?",
+      "RM de toda a coluna, dexametasona 16 mg e avaliação de cirurgia da coluna/radioterapia."
+    ]
+  ]
+}
