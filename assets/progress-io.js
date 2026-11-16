@@ -19,7 +19,7 @@ function normalize(src,allowedIds){
  return cards;
 }
 const xmlAttr=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
-function encodeXML(marks,total){
+function encodeXML(marks,total,cognitive){
  const allowed=new Set(Object.keys(marks));
  const cards=normalize(marks,allowed);
  const reads=getReads();
@@ -34,6 +34,7 @@ function encodeXML(marks,total){
   if(reads[id])line+=' read-count="'+reads[id]+'"';
   lines.push(line+' />');
  }
+ if(cognitive)lines.push(global.CMNCognitive.encodeXML(cognitive));
  lines.push('</cmn-progress>');
  return lines.join('\n');
 }
@@ -51,9 +52,9 @@ function parseXML(raw,allowedIds){
  const exportedAt=root.getAttribute('exported-at');
  if(!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(exportedAt||'')||!Number.isFinite(Date.parse(exportedAt)))error('O XML não contém uma data de exportação válida.');
  if(!/^\d+$/.test(root.getAttribute('card-count')||''))error('O XML não contém uma contagem de cartões válida.');
- const elements=[];
+ const elements=[];let cognitive;
  for(const node of root.childNodes){
-  if(node.nodeType===1){if(node.tagName!=='card'||node.namespaceURI)error('O XML contém elementos não reconhecidos.');elements.push(node);}
+  if(node.nodeType===1){if(node.tagName==='cognitive'&&!node.namespaceURI){if(cognitive)error('Dados cognitivos duplicados.');cognitive=global.CMNCognitive.decodeXML(node,allowedIds);}else{if(node.tagName!=='card'||node.namespaceURI)error('O XML contém elementos não reconhecidos.');if(cognitive)error('Marcações devem preceder dados cognitivos.');elements.push(node);}}
   else if(node.nodeType===3){if(node.textContent.trim())error('O XML contém texto fora das marcações.');}
   else if(node.nodeType!==8)error('O XML contém estrutura não permitida.');
  }
@@ -84,7 +85,7 @@ function parseXML(raw,allowedIds){
   if(Object.keys(mark).length)cards[id]=mark;
  }
  if(elements.length&&!Object.keys(cards).length&&!Object.keys(readCounts).length)error('Nenhum cartão do XML corresponde a esta biblioteca. O progresso foi preservado.');
- return{cards,valid:new Set([...Object.keys(cards),...Object.keys(readCounts)]).size,ignored,format:'XML',readCounts,hasReadCounts:elements.some(el=>el.hasAttribute('read-count'))};
+ return{cards,valid:new Set([...Object.keys(cards),...Object.keys(readCounts)]).size,ignored,format:'XML',readCounts,hasReadCounts:elements.some(el=>el.hasAttribute('read-count')),...(cognitive?{cognitive}:{})};
 }
 function parseJSON(raw,allowedIds){
  let object;
@@ -109,12 +110,10 @@ function parse(raw,allowedIds){
  const trimmed=raw.replace(/^\uFEFF/,'').trim();
  if(!trimmed)error('O arquivo está vazio.');
  const result=trimmed.startsWith('<')?parseXML(trimmed,allowedIds):parseJSON(trimmed,allowedIds);
- pendingReads=result.hasReadCounts?result.readCounts:null;
  return result;
 }
 
 const READ_KEY='cmn-flashcards-read-counts-v1',MAX_READS=10000000;
-let pendingReads=null;
 const validCount=n=>Number.isSafeInteger(n)&&n>=0&&n<=MAX_READS;
 function getReads(){
  try{
@@ -176,14 +175,11 @@ function mountReadCounters(){
   // Only an explicit counter action records a reading. Study status and FSRS stay independent.
   if(target.dataset.action==='count-read'){event.preventDefault();incrementRead(idForCard(card));}
  },true);
- document.addEventListener('click',event=>{
-  if(!event.target?.closest?.('#confirmImportBtn')||pendingReads===null)return;
-  const imported=pendingReads;pendingReads=null;
-  queueMicrotask(()=>{if(putReads(imported))updateReadUI();});
- });
+
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountReadCounters,{once:true});
 else mountReadCounters();
 
-global.CMNProgressIO=Object.freeze({encodeXML,parse,version:VERSION,getReadCounts:getReads,incrementRead});
+function applyReadCounts(reads){if(!reads||typeof reads!=='object'||Array.isArray(reads)||Object.entries(reads).some(([id,count])=>!/^[0-9A-Z.]+$/.test(id)||!validCount(count)))return false;if(!putReads(reads))return false;updateReadUI();return true;}
+global.CMNProgressIO=Object.freeze({encodeXML,parse,version:VERSION,getReadCounts:getReads,incrementRead,applyReadCounts});
 })(window);

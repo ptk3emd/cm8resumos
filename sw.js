@@ -1,7 +1,7 @@
 /* CM8: app shell offline. This path is scoped to /cm8resumos/ on GitHub Pages. */
-const CACHE_NAME='cm8resumos-shell-2026-11-16-read-counter-v4';
+const CACHE_NAME='cm8resumos-shell-2026-11-16-cognitive-v1';
 const PREFIX='cm8resumos-shell-';
-const SHELL=['./','./index.html','./manifest.webmanifest','./assets/progress-io.js','./assets/icon-192.png','./assets/icon-512.png'];
+const SHELL=['./','./index.html','./manifest.webmanifest','./assets/progress-io.js','./assets/cognitive.js','./assets/icon-192.png','./assets/icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil((async()=>{
   const cache=await caches.open(CACHE_NAME);
@@ -28,6 +28,7 @@ self.addEventListener('fetch',event=>{
      await cache.put(request,response.clone());
      await cache.put('./index.html',response.clone());
     }
+    if(response.status>=500){const cached=await (await caches.open(CACHE_NAME)).match('./index.html');if(cached)return cached;}
     return response;
    }catch{
     const cache=await caches.open(CACHE_NAME);
