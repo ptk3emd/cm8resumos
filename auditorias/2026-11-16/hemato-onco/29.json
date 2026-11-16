@@ -1,0 +1,108 @@
+{
+  "topic": 29,
+  "title": "Síndrome da veia cava superior",
+  "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13098589/",
+  "levels": {
+    "1": [
+      [
+        "O que define a síndrome da veia cava superior (SVCS)?",
+        "Obstrução do retorno venoso pela veia cava superior ou veias braquiocefálicas."
+      ],
+      [
+        "Qual é a principal causa maligna de SVCS?",
+        "Câncer de pulmão."
+      ],
+      [
+        "Qual neoplasia hematológica também pode causar SVCS?",
+        "Linfoma mediastinal, especialmente tumores volumosos."
+      ],
+      [
+        "Qual edema é típico na SVCS?",
+        "Edema de face, pescoço e membros superiores."
+      ],
+      [
+        "Qual sinal superficial sugere circulação colateral na SVCS?",
+        "Veias torácicas superficiais dilatadas."
+      ],
+      [
+        "Que queixa respiratória é comum na SVCS?",
+        "Dispneia, tosse ou sensação de pressão cervicotorácica."
+      ],
+      [
+        "Por que inclinar-se para frente pode agravar sintomas da SVCS?",
+        "Ocorre piora do congestionamento venoso da cabeça e do pescoço."
+      ]
+    ],
+    "2": [
+      [
+        "Qual exame de imagem avalia melhor obstrução e colaterais da SVCS?",
+        "Tomografia contrastada do tórax, frequentemente com avaliação venográfica."
+      ],
+      [
+        "Qual dado deve ser obtido antes de tratar o tumor, se o paciente está estável?",
+        "Diagnóstico histológico por biópsia, quando ainda desconhecido."
+      ],
+      [
+        "Quais sinais tornam a SVCS ameaçadora à vida?",
+        "Estridor, edema laríngeo grave, rebaixamento da consciência ou instabilidade hemodinâmica."
+      ],
+      [
+        "Qual mecanismo não maligno pode causar SVCS?",
+        "Trombose relacionada a cateter venoso central ou dispositivo intravascular."
+      ],
+      [
+        "É obrigatório usar corticoide em toda SVCS?",
+        "Não. Evidência para uso rotineiro é limitada; indicar apenas em contextos selecionados."
+      ],
+      [
+        "Qual medida postural pode aliviar sintomas da SVCS?",
+        "Elevar a cabeceira, como medida de suporte."
+      ],
+      [
+        "Em SVCS estável por linfoma, por que a biópsia é fundamental?",
+        "Define o subtipo e orienta quimioterapia/radioterapia específicas."
+      ]
+    ],
+    "3": [
+      [
+        "Qual intervenção costuma proporcionar alívio venoso rápido na SVCS grave?",
+        "Recanalização endovascular com colocação de stent, quando viável."
+      ],
+      [
+        "Qual é a prioridade na SVCS com estridor e hipoxemia?",
+        "Proteger a via aérea e obter tratamento emergencial da obstrução venosa."
+      ],
+      [
+        "Quando considerar anticoagulação na SVCS?",
+        "Quando houver trombose associada, avaliando risco hemorrágico e contraindicações."
+      ],
+      [
+        "Em SVCS estável com tumor quimiossensível, qual tratamento pode resolver a causa?",
+        "Quimioterapia dirigida ao subtipo tumoral, após diagnóstico histológico."
+      ],
+      [
+        "Radioterapia deve preceder biópsia rotineiramente na SVCS estável?",
+        "Não. Priorizar diagnóstico tecidual antes de tratamento oncológico, se houver segurança clínica."
+      ],
+      [
+        "Qual é o papel da diurese forçada como tratamento definitivo da SVCS?",
+        "Nenhum. Diuréticos não corrigem a obstrução mecânica."
+      ],
+      [
+        "SVCS por massa mediastinal e síncope espontânea exige que nível de avaliação?",
+        "Atendimento emergencial; pesquisar comprometimento hemodinâmico e necessidade de stent."
+      ]
+    ]
+  },
+  "scenario": "Paciente com massa mediastinal tem edema facial, circulação colateral torácica e estridor progressivo.",
+  "caseCards": [
+    [
+      "Qual síndrome é mais provável?",
+      "Síndrome da veia cava superior com comprometimento ameaçador à vida."
+    ],
+    [
+      "Qual abordagem produz alívio rápido da obstrução?",
+      "Garantir via aérea e avaliar recanalização endovascular urgente com stent."
+    ]
+  ]
+}

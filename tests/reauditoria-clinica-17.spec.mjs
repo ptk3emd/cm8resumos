@@ -1,12 +1,12 @@
 import {test,expect} from '@playwright/test';
 
-test('17 questões de alto risco mantêm revisão pendente após correções dirigidas',async({page})=>{
+test('16 questões de alto risco mantêm revisão pendente após correções dirigidas',async({page})=>{
  await page.goto('./');
  const result=await page.locator('#sourceData').evaluate(node=>{
   const source=JSON.parse(node.textContent);
   return {cards:source.cards.length,unique:new Set(source.cards.map(c=>c.id)).size,flagged:source.cards.filter(c=>!c.splitFrom&&c.audit?.status==='revisar').length,cases:source.cards.filter(c=>c.kind==='case').length};
  });
- expect(result).toEqual({cards:1097,unique:1097,flagged:17,cases:250});
+ expect(result).toEqual({cards:1202,unique:1202,flagged:16,cases:254});
 });
 test('SREAT não é diagnosticada isoladamente por anti-TPO e não garante resposta universal',async({page})=>{
  await page.goto('./');

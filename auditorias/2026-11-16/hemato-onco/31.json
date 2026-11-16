@@ -1,0 +1,108 @@
+{
+  "topic": 31,
+  "title": "Linfoma não Hodgkin",
+  "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12456099/",
+  "levels": {
+    "1": [
+      [
+        "O que diferencia linfoma não Hodgkin (LNH) de Hodgkin em termos gerais?",
+        "LNH reúne neoplasias linfoides B, T ou NK, sem a definição histológica típica do Hodgkin clássico."
+      ],
+      [
+        "Qual é o subtipo agressivo de LNH mais comum no adulto?",
+        "Linfoma difuso de grandes células B (LDGCB/DLBCL)."
+      ],
+      [
+        "Qual é um exemplo clássico de LNH indolente?",
+        "Linfoma folicular."
+      ],
+      [
+        "Qual padrão de adenomegalia sugere linfoma?",
+        "Linfonodo persistente, geralmente indolor e progressivo."
+      ],
+      [
+        "Quais são os sintomas B clássicos do linfoma?",
+        "Febre inexplicada >38 °C, sudorese noturna profusa e perda >10% do peso em 6 meses."
+      ],
+      [
+        "Qual antígeno de superfície identifica muitos LNH de células B?",
+        "CD20, alvo do rituximabe."
+      ],
+      [
+        "Qual é o exame central para confirmar LNH?",
+        "Biópsia tecidual com histologia e imunofenotipagem."
+      ]
+    ],
+    "2": [
+      [
+        "Por que PAAF isolada é insuficiente para classificar muitos linfomas?",
+        "Não preserva adequadamente a arquitetura tecidual necessária à classificação."
+      ],
+      [
+        "Qual imagem é padrão para estadiamento do LDGCB?",
+        "PET-CT com FDG."
+      ],
+      [
+        "Qual sistema é usado para estadiar linfomas por distribuição anatômica?",
+        "Classificação de Lugano, baseada em Ann Arbor."
+      ],
+      [
+        "Qual translocação é típica do linfoma folicular?",
+        "t(14;18), associada à superexpressão de BCL2."
+      ],
+      [
+        "Qual translocação é típica do linfoma do manto?",
+        "t(11;14), com superexpressão de ciclina D1."
+      ],
+      [
+        "Qual translocação é clássica do linfoma de Burkitt?",
+        "t(8;14), envolvendo MYC e imunoglobulina pesada."
+      ],
+      [
+        "O que avalia o IPI nos linfomas agressivos?",
+        "Risco prognóstico por idade, estágio, DHL, performance status e sítios extranodais."
+      ]
+    ],
+    "3": [
+      [
+        "Qual esquema de imunopoliquimioterapia é clássico no LDGCB?",
+        "R-CHOP: rituximabe, ciclofosfamida, doxorrubicina, vincristina e prednisona."
+      ],
+      [
+        "Qual alternativa de primeira linha pode ser preferida no LDGCB avançado com IPI 2–5?",
+        "Pola-R-CHP, conforme elegibilidade, disponibilidade e diretrizes recentes."
+      ],
+      [
+        "O que significa Deauville 1–3 ao final do tratamento de linfoma ávido por FDG?",
+        "Resposta metabólica completa no contexto clínico apropriado."
+      ],
+      [
+        "Deauville 4–5 prova recidiva ou doença refratária?",
+        "Não isoladamente. Considerar inflamação e confirmar com avaliação especializada, muitas vezes biópsia."
+      ],
+      [
+        "Que exames moleculares pesquisar diante de suspeita de linfoma de alto grau B?",
+        "Rearranjos de MYC e BCL2, além de BCL6 quando indicado, por FISH."
+      ],
+      [
+        "Qual triagem infecciosa é importante antes de rituximabe?",
+        "Hepatite B: HBsAg e anti-HBc, com profilaxia/monitoramento conforme risco."
+      ],
+      [
+        "Quando considerar CAR-T no LDGCB?",
+        "Especialmente na doença primariamente refratária ou recidiva precoce, conforme elegibilidade e linha terapêutica."
+      ]
+    ]
+  },
+  "scenario": "Paciente tem linfonodos cervicais progressivos, febre, sudorese noturna e biópsia mostrando grandes células B CD20+.",
+  "caseCards": [
+    [
+      "Qual LNH agressivo é sugerido?",
+      "Linfoma difuso de grandes células B."
+    ],
+    [
+      "Qual exame de imagem é usado no estadiamento inicial?",
+      "PET-CT com FDG, após confirmação histológica."
+    ]
+  ]
+}
