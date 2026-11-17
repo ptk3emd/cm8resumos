@@ -1,0 +1,40 @@
+name: Exportar CM8 para Anki (31 temas)
+
+on:
+  push:
+    branches:
+      - export/anki-1206-20261117
+    paths:
+      - tools/export_anki.py
+      - .github/workflows/export-anki.yml
+      - data/flashcards.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gerar-apkg:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout da coleção
+        uses: actions/checkout@v4
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar gerador Anki
+        run: python -m pip install "genanki==0.13.1"
+      - name: Exportar e validar 1206 cartões em 31 temas
+        run: python tools/export_anki.py
+      - name: Publicar pacotes APKG
+        uses: actions/upload-artifact@v4
+        with:
+          name: CM8-1206-Flashcards-31-Temas-Anki
+          path: |
+            artifacts/CM8_1206_Flashcards_31_Temas.apkg
+            artifacts/CM8_31_Temas_APKG_Individualizados.zip
+            artifacts/MANIFESTO.json
+          if-no-files-found: error
+          retention-days: 30
