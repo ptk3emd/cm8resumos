@@ -67,25 +67,36 @@ test('answer outline hash navigation is not mistaken for topic history',async({p
 });
 
 
-test('mobile quick entry opens the topic selector early and returns focus on Escape',async({page,isMobile})=>{
- test.skip(!isMobile,'The early topic picker is mobile-specific');
+test('hero removes redundant quick actions while mode and topic controls remain accessible',async({page,isMobile})=>{
  await page.goto('./');
- const quick=page.locator('#quickTopicsBtn');
- await expect(quick).toBeVisible();
- await quick.click();
- await expect(page.locator('#sidebar')).toHaveClass(/mobile-open/);
- await expect(quick).toHaveAttribute('aria-expanded','true');
- await expect(page.locator('#mobileTopics')).toHaveAttribute('aria-expanded','true');
- await expect(page.locator('#topicJump')).toBeFocused();
- await page.keyboard.press('Escape');
- await expect(quick).toHaveAttribute('aria-expanded','false');
- await expect(quick).toBeFocused();
- await expect(page.locator('#sidebar')).not.toBeVisible();
+ for(const id of ['startReviewBtn','startFocusBtn','quickTopicsBtn','studyStart']){
+  await expect(page.locator('#'+id)).toHaveCount(0);
+ }
+ await expect(page.locator('#reviewStartSummary')).toContainText('Nesta seleção:');
+ await page.locator('[data-mode="focus"]').click();
+ await expect(page.locator('[data-mode="focus"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#cardsContainer .study-card')).toHaveCount(1);
+ await page.locator('[data-mode="list"]').click();
+ await page.locator('[data-mode="fsrs"]').click();
+ await expect(page.locator('[data-mode="fsrs"]')).toHaveAttribute('aria-pressed','true');
+ await page.locator('[data-mode="list"]').click();
+ if(isMobile){
+  const topics=page.locator('#mobileTopics');
+  await expect(topics).toBeVisible();
+  await topics.click();
+  await expect(page.locator('#sidebar')).toHaveClass(/mobile-open/);
+  await expect(topics).toHaveAttribute('aria-expanded','true');
+  await page.keyboard.press('Escape');
+  await expect(topics).toHaveAttribute('aria-expanded','false');
+  await expect(topics).toBeFocused();
+ }else{
+  await expect(page.locator('#topicList [data-topic="1"]')).toBeVisible();
+ }
 });
 
 test('FSRS keeps topic context, active filter chip and topic pager synchronized',async({page})=>{
  await page.goto('./?topic=1&mode=fsrs');
- await expect(page.locator('#startReviewBtn')).toBeEnabled();
+ await expect(page.locator('#reviewStartSummary')).toContainText('Nesta seleção:');
  await expect(page.locator('[data-mode="fsrs"]')).toHaveAttribute('aria-pressed','true');
  await expect(page.locator('#topicPager')).toBeVisible();
  await expect(page.locator('#topicPosition')).toHaveText('Tema 1 de 31');
@@ -123,7 +134,7 @@ for(const mode of ['focus','fsrs']){
  test('mobile '+mode+' Show topics opens actual navigation with accurate state',async({page,isMobile})=>{
   test.skip(!isMobile,'Mobile sidebar only');
   await page.goto('./?topic=3&mode='+mode);
-  if(mode==='fsrs')await expect(page.locator('#startReviewBtn')).toBeEnabled();
+  if(mode==='fsrs')await expect(page.locator('#reviewStartSummary')).toContainText('Nesta seleção:');
   const button=page.locator('#focusSidebarToggle');
   await expect(button).toBeVisible();
   await expect(button).toContainText('Mostrar temas');

@@ -507,11 +507,6 @@ a:hover { text-decoration:underline; }
 .study-card { overflow:visible; }
 .study-card-head { border-radius:12px 12px 0 0; }
 .action-row { border-radius:0 0 12px 12px; }
-.study-start { display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 8px; }
-.study-start p { margin:0;font-size:13px; }
-.study-start button { min-height:44px;padding:10px 15px;border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:7px;font-size:13px;font-weight:650; }
-.study-start button:hover { background:var(--blue-hover); }
-:root[data-theme="dark"] .study-start button { color:#151515; }
 .study-backup-hint { font-size:12px!important;line-height:1.55!important;color:var(--quiet)!important; }
 .offline-status { color:var(--muted);font-weight:550; }
 @media(min-width:851px){
@@ -673,13 +668,13 @@ body {font-kerning:normal}
 .mode-switch .mode-btn[aria-pressed="true"] {
  background:var(--ink);color:var(--panel);box-shadow:none;
 }
-.reveal-btn,.study-start button,.more-actions summary,.fsrs-backup summary {
+.reveal-btn,.more-actions summary,.fsrs-backup summary {
  border-radius:var(--control-radius);
 }
-.action-primary,.study-start button {
+.action-primary {
  background:var(--action-fill);border-color:var(--action-fill);color:var(--action-ink);
 }
-.action-primary:hover,.study-start button:hover {
+.action-primary:hover {
  background:var(--blue-hover);border-color:var(--blue-hover);color:var(--action-ink);
 }
 :root :is(button,input,select,summary,a,.question,.answer-box):focus-visible {
@@ -933,9 +928,6 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 .brand>div:last-child {min-width:0;}
 .hero {gap:24px;padding-bottom:20px;}
 .hero h1 {font-size:clamp(26px,3vw,34px);}
-.hero .study-start {margin-block:12px 8px;}
-.hero .study-start .study-secondary {background:var(--page);color:var(--ink);border-color:var(--stroke-strong);}
-.hero .study-start .study-secondary:hover {background:var(--subtle);}
 .hero #reviewStartSummary {font-size:14px;line-height:1.5;}
 .study-overview {max-width:var(--read);margin:0 auto 12px;border-bottom:1px solid var(--stroke);}
 .study-overview>summary {min-height:44px;align-content:center;cursor:pointer;font-size:14px;font-weight:600;}
@@ -994,24 +986,11 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 }
 
 
-/* Navigation usability: visible topic entry, correct scroll targets, consistent FSRS selection. */
+/* Correct scroll targets for mode and topic navigation without duplicate hero buttons. */
 #listTitle{scroll-margin-top:100px}
 #cardsContainer .question{scroll-margin-top:100px}
-.hero .study-start #quickTopicsBtn{display:none}
 @media(max-width:850px){
  #listTitle,#cardsContainer .question{scroll-margin-top:16px}
- .hero .study-start #quickTopicsBtn{display:inline-flex}
-}
-@media(max-width:390px){
- .hero .study-start #quickTopicsBtn{flex:1 1 auto}
-}
-
-
-/* Keep the first flashcard near the fold with three equal mobile study actions. */
-@media(max-width:640px){
- .hero .study-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
- .hero .study-start button{min-width:0;min-height:44px;padding:9px 5px;font-size:12px;line-height:1.25;text-align:center;white-space:normal}
- .hero .study-start #quickTopicsBtn{display:inline-flex;align-items:center;justify-content:center}
 }
 
 
@@ -1138,8 +1117,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 <div class="main-shell">
 <aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="sidebar-count" id="topicCount">31 temas</span></div><label class="topic-filter"><span class="sr-only">Filtrar lista de temas</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="topicFilter" type="search" placeholder="Filtrar temas" autocomplete="off"></label><label class="topic-jump" for="topicJump"><span>Ir diretamente para um tema</span><select id="topicJump" aria-label="Escolher tema"><option value="all">Todos os temas</option></select></label><p class="topic-filter-empty" id="topicFilterEmpty" hidden>Nenhum tema com esse nome.</p><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside>
 <main class="workspace" id="workspace">
- <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1206 flashcards em 31 temas. Escolha uma revisão ou estude um cartão por vez.</p>
-<div class="study-start" id="studyStart"><button type="button" id="startReviewBtn" disabled>Revisar agora</button><button type="button" id="startFocusBtn" class="study-secondary">Iniciar em Foco</button><button type="button" id="quickTopicsBtn" class="study-secondary" aria-controls="sidebar" aria-expanded="false">Escolher tema</button></div>
+ <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1206 flashcards em 31 temas. Escolha um tema, filtre os cartões e alterne os modos de estudo abaixo.</p>
 <p id="reviewStartSummary" role="status">Carregando a fila de revisão…</p>
 <p class="study-backup-hint">Salvo neste navegador. Use Exportar para fazer backup.</p></div><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>marcado como estudado</span></div><div class="progress-track" role="progressbar" aria-label="Proporção de cartões marcados manualmente como estudados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1206 marcados como estudados</div></div></section>
   <div class="storage-alert" id="storageAlert" role="alert" hidden>O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div>
@@ -1299,7 +1277,7 @@ function getFiltered(){let list=CARDS.filter(c=>{
  return true;});
  if(ui.shuffle){list=list.slice().sort((a,b)=>(shuffleOrder.get(a.id)||0)-(shuffleOrder.get(b.id)||0));}
  return list;}
-function renderStats(){let t=totals();$('studyStart').hidden=ui.mode!=='list';$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;$('nStar').textContent=t.stars;$('segDone').style.width=(t.done/TOTAL*100)+'%';$('segReview').style.width=(t.review/TOTAL*100)+'%';qsa('[data-jump]').forEach(b=>b.setAttribute('aria-pressed',String(ui.mode!=='fsrs'&&b.dataset.jump!=='all'&&ui.status===b.dataset.jump)));let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} marcados como estudados · ${t.hidden} ocultos`;}
+function renderStats(){let t=totals();$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;$('nStar').textContent=t.stars;$('segDone').style.width=(t.done/TOTAL*100)+'%';$('segReview').style.width=(t.review/TOTAL*100)+'%';qsa('[data-jump]').forEach(b=>b.setAttribute('aria-pressed',String(ui.mode!=='fsrs'&&b.dataset.jump!=='all'&&ui.status===b.dataset.jump)));let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} marcados como estudados · ${t.hidden} ocultos`;}
 const ICON_CHECK='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
 function topicStats(){const map=new Map(TOPICS.map(t=>[t.id,{total:0,done:0,review:0}]));for(const c of CARDS){const r=map.get(c.topic);if(!r)continue;r.total++;const s=status(c.id);if(s==='done')r.done++;else if(s==='review')r.review++;}return map;}
 function renderTopics(){const stats=topicStats();let contents=`<button class="topic-btn topic-all ${ui.topic==='all'?'active':''}" data-topic="all" aria-current="${ui.topic==='all'?'page':'false'}"><span class="topic-num">∑</span><span><span class="topic-name">Todos os temas</span><span class="topic-small">${TOTAL} flashcards disponíveis</span></span></button>`;
@@ -1616,8 +1594,6 @@ qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{cognitiveSession=n
  if(ui.mode==='fsrs'||ui.mode==='focus')$('contentMap').open=false;
  render();
  if(ui.mode==='fsrs'||ui.mode==='focus')focusFSRSQuestion();}));
-$('startReviewBtn').addEventListener('click',()=>document.querySelector('[data-mode="fsrs"]').click());
-$('startFocusBtn').addEventListener('click',()=>{$('contentMap').open=false;ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;openAnswers.clear();ui.showAll=false;render();focusFSRSQuestion();});
 $('focusSidebarToggle').addEventListener('click',()=>{
  if(window.matchMedia('(max-width:850px)').matches){
   setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('focusSidebarToggle'));
@@ -1687,7 +1663,6 @@ function setMobileTopicsOpen(open,trigger){
  const sidebar=$('sidebar');
  sidebar.classList.toggle('mobile-open',open);
  $('mobileTopics').setAttribute('aria-expanded',String(open));
- $('quickTopicsBtn').setAttribute('aria-expanded',String(open));
  if(!$('focusSidebarToggle').hidden&&window.matchMedia('(max-width:850px)').matches){
   $('focusSidebarToggle').textContent=open?'Ocultar temas':'Mostrar temas';
   $('focusSidebarToggle').setAttribute('aria-expanded',String(open));
@@ -1699,10 +1674,9 @@ function setMobileTopicsOpen(open,trigger){
   rail.scrollLeft=Math.max(0,left-12);
  }
  sidebar.scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});
- if(trigger===$('quickTopicsBtn')||trigger===$('focusSidebarToggle'))$('topicJump').focus({preventScroll:true});
+ if(trigger===$('focusSidebarToggle'))$('topicJump').focus({preventScroll:true});
 }
 $('mobileTopics').addEventListener('click',()=>setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('mobileTopics')));
-$('quickTopicsBtn').addEventListener('click',()=>setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('quickTopicsBtn')));
 const scrollTopics=direction=>{const rail=$('topicList');rail.scrollBy({left:direction*Math.min(rail.clientWidth*.8,260),behavior:prefersReduced()?'auto':'smooth'});};
 $('topicsPrev').addEventListener('click',()=>scrollTopics(-1));
 $('topicsNext').addEventListener('click',()=>scrollTopics(1));
@@ -2284,7 +2258,6 @@ function renderCognitive(){
  const today=fsrsDay(new Date()),reviewed=[...fsrsRecords.values()].filter(row=>row.logs?.some(log=>fsrsDay(log.reviewTime)===today)).length;
  const interventions=snapshot.events.filter(e=>['contrast','context'].includes(e.kind)&&fsrsDay(e.time)===today).length;
  $('cognitiveToday').textContent=reviewed+' '+(reviewed===1?'cartão revisado':'cartões revisados')+' hoje no FSRS · '+interventions+' '+(interventions===1?'intervenção':'intervenções')+' hoje';
- $('startReviewBtn').disabled=!fsrsReady;
  if(fsrsReady){const queue=fsrsQueue();$('reviewStartSummary').textContent='Hoje: '+reviewed+' '+(reviewed===1?'revisão':'revisões')+' FSRS · Nesta seleção: '+queue.due.length+' vencidos e '+queue.newCards.length+' novos.';}
  else $('reviewStartSummary').textContent=fsrsUnavailable?'Histórico indisponível. Você pode estudar em Foco.':'Carregando a fila de revisão…';
  const eligible=getFiltered().filter(c=>!mark(c.id).hidden),due=eligible.filter(c=>fsrsRecords.has(c.id)&&new Date(fsrsRecords.get(c.id).card.dueAt)<=new Date()),pools=CMNCognitive.pools(due,fsrsRecords,cognitiveState),sessions=CMNCognitive.sessions(eligible,fsrsRecords,snapshot);
