@@ -1559,7 +1559,21 @@ $('moreBtn').addEventListener('click',()=>{
  const next=getFiltered()[ui.limit];ui.limit+=22;renderCards(getFiltered());
  if(!next)return;
  const question=document.getElementById('card-'+next.id.replaceAll('.','-'))?.querySelector('.question');
- if(question){question.setAttribute('tabindex','-1');question.focus({preventScroll:true});question.scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
+ if(question){
+  question.setAttribute('tabindex','-1');
+  // After replacing 22 cards, wait for layout before moving the viewport.
+  // Instant positioning avoids smooth-scroll cancellation by scroll anchoring.
+  requestAnimationFrame(()=>{
+   if(!question.isConnected)return;
+   const root=document.documentElement,priorBehavior=root.style.scrollBehavior;
+   root.style.scrollBehavior='auto';
+   const offset=window.matchMedia('(max-width:850px)').matches?16:96;
+   const top=question.getBoundingClientRect().top+window.scrollY-offset;
+   window.scrollTo(0,Math.max(0,top));
+   root.style.scrollBehavior=priorBehavior;
+   question.focus({preventScroll:true});
+  });
+ }
 });
 
 function labelSelectCounts(){const nNew=CARDS.filter(c=>c.new).length,a={};for(const c of CARDS){const k=c.audit?.status;if(k)a[k]=(a[k]||0)+1;}
