@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test';
 test('Estudado and Revisar keep the clicked control at a fixed viewport position',async({page})=>{
  await page.goto('./');
  const card=page.locator('#cardsContainer .study-card').nth(9);
- for(const [action,pressed] of [['done','true'],['review','true'],['review','false'],['done','false']]){
+ for(const [action,pressed] of [['done','true'],['done','false'],['review','true'],['review','false']]){
   const button=card.locator('[data-action="'+action+'"]');
   await button.scrollIntoViewIfNeeded();
   const before=await button.evaluate(e=>({top:e.getBoundingClientRect().top,y:window.scrollY}));
