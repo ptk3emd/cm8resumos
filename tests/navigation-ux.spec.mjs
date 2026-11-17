@@ -117,3 +117,25 @@ test('topic pager remains keyboard-operable for successive themes',async({page})
  await expect(page.locator('#topicPosition')).toHaveText('Tema 3 de 31');
  await expect(prev).toBeFocused();
 });
+
+
+for(const mode of ['focus','fsrs']){
+ test('mobile '+mode+' Show topics opens actual navigation with accurate state',async({page,isMobile})=>{
+  test.skip(!isMobile,'Mobile sidebar only');
+  await page.goto('./?topic=3&mode='+mode);
+  if(mode==='fsrs')await expect(page.locator('#startReviewBtn')).toBeEnabled();
+  const button=page.locator('#focusSidebarToggle');
+  await expect(button).toBeVisible();
+  await expect(button).toContainText('Mostrar temas');
+  await button.click();
+  await expect(page.locator('#sidebar')).toBeVisible();
+  await expect(page.locator('#sidebar')).toHaveClass(/mobile-open/);
+  await expect(button).toHaveAttribute('aria-expanded','true');
+  await expect(button).toContainText('Ocultar temas');
+  await expect(page.locator('#topicJump')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#sidebar')).not.toBeVisible();
+  await expect(button).toHaveAttribute('aria-expanded','false');
+  await expect(button).toBeFocused();
+ });
+}
