@@ -3,10 +3,10 @@ import {test,expect} from '@playwright/test';
 async function rows(page){return page.evaluate(()=>new Promise((resolve,reject)=>{
  const request=indexedDB.open('cm8-fsrs-v1');request.onsuccess=()=>{const db=request.result,tx=db.transaction('cards'),q=tx.objectStore('cards').getAll();q.onsuccess=()=>resolve(q.result);tx.oncomplete=()=>db.close();tx.onerror=()=>reject(tx.error);};request.onerror=()=>reject(request.error);
 }));}
-async function start(page){await page.goto('./');await page.locator('#startReviewBtn').click();}
+async function start(page){await page.goto('./');await expect(page.locator('#reviewStartSummary')).toContainText('Nesta seleção:');await page.locator('[data-mode=fsrs]').click();}
 async function grade(page){await page.locator('[data-action=reveal]').first().click();await page.locator('[data-grade="3"]').click();await expect(page.locator('#fsrsUndoBtn')).toBeEnabled();await expect(page.locator('#fsrsFeedbackText')).toContainText('Avaliado como');}
 async function seedDependents(page){
- await page.goto('./');await expect(page.locator('#startReviewBtn')).toBeEnabled();
+ await page.goto('./');await expect(page.locator('#reviewStartSummary')).toContainText('Nesta seleção:');
  await page.locator('#studyOverview summary').first().click();await page.locator('#cognitiveTools summary').click();await page.locator('#cognitiveEnabled').check();
  await page.evaluate(async()=>{
   const s=await CM8FSRS.DefaultScheduler({version:'FSRS-7',desiredRetention:.9,enableFuzz:false}),last=new Date(Date.now()-30*86400000);
@@ -32,7 +32,7 @@ test('undo rolls back the anchor and every propagated interval atomically',async
 
 test('undo never overwrites a dependent changed by another tab',async({page,context})=>{
  await seedDependents(page);await grade(page);await expect.poll(async()=>(await rows(page)).length).toBe(4);
- const other=await context.newPage();await other.goto('./');await expect(other.locator('#startReviewBtn')).toBeEnabled();
+ const other=await context.newPage();await other.goto('./');await expect(other.locator('#reviewStartSummary')).toContainText('Nesta seleção:');
  await other.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('cm8-fsrs-v1');r.onsuccess=()=>{const db=r.result,tx=db.transaction('cards','readwrite'),store=tx.objectStore('cards'),q=store.get('26.1.2');q.onsuccess=()=>store.put({...q.result,updatedByOtherTab:true});tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);};}));
  const changed=await rows(other);await page.locator('#fsrsUndoBtn').click();await expect(page.locator('#fsrsFeedbackText')).toContainText('mudou em outra aba');expect(await rows(page)).toEqual(changed);
 });
