@@ -139,3 +139,17 @@ for(const mode of ['focus','fsrs']){
   await expect(button).toBeFocused();
  });
 }
+
+
+test('browser history for a hash anchor does not reset the current Focus card',async({page})=>{
+ await page.goto('./?topic=1&mode=focus');
+ await expect(page.locator('#focusNav .focus-counter')).toContainText('Cartão 1 de');
+ await page.locator('#focusNav [data-action="next"]').click();
+ await expect(page.locator('#focusNav .focus-counter')).toContainText('Cartão 2 de');
+ await page.evaluate(()=>history.pushState({anchorOnly:true},'','#temporary-answer-anchor'));
+ await page.goBack();
+ await expect(page).not.toHaveURL(/temporary-answer-anchor/);
+ await expect(page.locator('#focusNav .focus-counter')).toContainText('Cartão 2 de');
+ await page.locator('#focusNav [data-action="next"]').click();
+ await expect(page.locator('#focusNav .focus-counter')).toContainText('Cartão 3 de');
+});
