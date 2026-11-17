@@ -1006,6 +1006,14 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  .hero .study-start #quickTopicsBtn{flex:1 1 auto}
 }
 
+
+/* Keep the first flashcard near the fold with three equal mobile study actions. */
+@media(max-width:640px){
+ .hero .study-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .hero .study-start button{min-width:0;min-height:44px;padding:9px 5px;font-size:12px;line-height:1.25;text-align:center;white-space:normal}
+ .hero .study-start #quickTopicsBtn{display:inline-flex;align-items:center;justify-content:center}
+}
+
 </style>
 </head>
 <body>
