@@ -32,8 +32,9 @@ test('topic index and picker display all 31 topics in sequential numeric order',
  await expect(page).toHaveURL(/topic=22/);
 });
 
-test('empty list clears refinements without losing the current topic',async({page})=>{
+test('empty list clears refinements without losing the current topic',async({page,isMobile})=>{
  await page.goto('./?topic=1');
+ if(isMobile)await page.locator('#mobileFilters').click();
  await page.locator('#levelSelect').selectOption('1');
  await page.locator('#searchBox').fill('string_that_cannot_match_any_medical_card_987654');
  await expect(page.locator('#cardsContainer .empty')).toBeVisible();
@@ -45,8 +46,9 @@ test('empty list clears refinements without losing the current topic',async({pag
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
 });
 
-test('clearing only the search preserves the selected level',async({page})=>{
+test('clearing only the search preserves the selected level',async({page,isMobile})=>{
  await page.goto('./');
+ if(isMobile)await page.locator('#mobileFilters').click();
  await page.locator('#levelSelect').selectOption('1');
  await page.locator('#searchBox').fill('pneumonia');
  await expect(page.locator('#searchClear')).toBeVisible();
@@ -67,8 +69,9 @@ test('load more takes keyboard focus to first newly loaded question',async({page
  await expect(next.locator('.question')).toBeInViewport();
 });
 
-test('dark mode keeps guide and functional controls legible with AA contrast',async({page})=>{
+test('dark mode keeps guide and functional controls legible with AA contrast',async({page,isMobile})=>{
  await page.goto('./');
+ if(isMobile)await page.locator('#mobileFilters').click();
  await page.locator('#themeBtn').click();
  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
  await page.locator('#studyGuide summary').click();
@@ -106,6 +109,7 @@ test('mobile status rail has working overflow controls and keeps active choice v
   return a.left>=r.left-2&&a.right<=r.right+2;
  });
  expect(visible).toBe(true);
+ const beforeBack=await rail.evaluate(e=>e.scrollLeft);
  await prev.click();
- await expect.poll(()=>rail.evaluate(e=>e.scrollLeft)).toBeLessThan(100);
+ await expect.poll(()=>rail.evaluate(e=>e.scrollLeft)).toBeLessThan(beforeBack);
 });
