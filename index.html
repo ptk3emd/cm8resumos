@@ -1392,8 +1392,10 @@ function renderControls(){
  document.querySelector('.main-shell').classList.toggle('focus-immersive',collapsed);
  $('focusSidebarToggle').hidden=!inSession;
  $('fsrsFeedback').hidden=ui.mode!=='fsrs'||!$('fsrsFeedbackText').textContent;
- $('focusSidebarToggle').textContent=collapsed?'Mostrar temas':'Ocultar temas';
- $('focusSidebarToggle').setAttribute('aria-expanded',String(!collapsed));
+ const mobileTopicsVisible=window.matchMedia('(max-width:850px)').matches;
+ const sidebarVisible=mobileTopicsVisible?$('sidebar').classList.contains('mobile-open'):!collapsed;
+ $('focusSidebarToggle').textContent=sidebarVisible?'Ocultar temas':'Mostrar temas';
+ $('focusSidebarToggle').setAttribute('aria-expanded',String(sidebarVisible));
  qsa('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter===ui.status);b.setAttribute('aria-pressed',b.dataset.filter===ui.status?'true':'false');});qsa('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===ui.mode);b.setAttribute('aria-pressed',b.dataset.mode===ui.mode?'true':'false');});$('shuffleBtn').classList.toggle('active',ui.shuffle);$('shuffleBtn').setAttribute('aria-pressed',String(ui.shuffle));$('revealAllBtn').textContent=ui.showAll?'◉ Ocultar respostas':'◉ Mostrar respostas';$('revealAllBtn').setAttribute('aria-pressed',String(ui.showAll));}
 function render(){if(!restoringNavigation)writeNavigationState();renderCognitive();if(cognitiveSession){renderStats();renderTopics();renderControls();renderIntervention();return;}if(ui.mode==='fsrs'){renderStats();renderTopics();renderControls();renderFSRS();updateFilterCues();renderFilterState(getFiltered());return;}const focusBefore=rememberFocus();renderStats();renderTopics();let list=getFiltered(),head=ui.topic==='all'?'Todos os flashcards':topicsById.get(Number(ui.topic))?.title||'Flashcards';$('listTitle').textContent=head;$('listSub').textContent=`${list.length} ${list.length===1?'resultado':'resultados'}${ui.search?' para a busca':''}`;renderControls();renderCards(list);restoreFocus(focusBefore);updateFilterCues();renderFilterState(list);}
 const prefersReduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
@@ -1463,7 +1465,13 @@ qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{cognitiveSession=n
  if(ui.mode==='fsrs'||ui.mode==='focus')focusFSRSQuestion();}));
 $('startReviewBtn').addEventListener('click',()=>document.querySelector('[data-mode="fsrs"]').click());
 $('startFocusBtn').addEventListener('click',()=>{$('contentMap').open=false;ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;openAnswers.clear();ui.showAll=false;render();focusFSRSQuestion();});
-$('focusSidebarToggle').addEventListener('click',()=>{ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();});
+$('focusSidebarToggle').addEventListener('click',()=>{
+ if(window.matchMedia('(max-width:850px)').matches){
+  setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('focusSidebarToggle'));
+  return;
+ }
+ ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();
+});
 let searchTimer;function applySearch(){ui.search=norm($('searchBox').value.trim());ui.limit=22;ui.focusId=null;render();}
 $('searchBox').addEventListener('input',e=>{if(e.isComposing)return;clearTimeout(searchTimer);searchTimer=setTimeout(applySearch,120);});
 $('searchBox').addEventListener('compositionstart',()=>clearTimeout(searchTimer));
@@ -1501,6 +1509,10 @@ function setMobileTopicsOpen(open,trigger){
  sidebar.classList.toggle('mobile-open',open);
  $('mobileTopics').setAttribute('aria-expanded',String(open));
  $('quickTopicsBtn').setAttribute('aria-expanded',String(open));
+ if(!$('focusSidebarToggle').hidden&&window.matchMedia('(max-width:850px)').matches){
+  $('focusSidebarToggle').textContent=open?'Ocultar temas':'Mostrar temas';
+  $('focusSidebarToggle').setAttribute('aria-expanded',String(open));
+ }
  if(!open)return;
  const rail=$('topicList'),selected=rail.querySelector('.topic-btn.active');
  if(selected){
@@ -1508,7 +1520,7 @@ function setMobileTopicsOpen(open,trigger){
   rail.scrollLeft=Math.max(0,left-12);
  }
  sidebar.scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});
- if(trigger===$('quickTopicsBtn'))$('topicJump').focus({preventScroll:true});
+ if(trigger===$('quickTopicsBtn')||trigger===$('focusSidebarToggle'))$('topicJump').focus({preventScroll:true});
 }
 $('mobileTopics').addEventListener('click',()=>setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('mobileTopics')));
 $('quickTopicsBtn').addEventListener('click',()=>setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('quickTopicsBtn')));
