@@ -1,9 +1,9 @@
 import {test,expect} from '@playwright/test';
 
 test('hemato-oncologia: sete temas, níveis 1–3 e perguntas atômicas',async({page})=>{
- await page.goto('./');
- const result=await page.locator('#sourceData').evaluate(node=>{
-  const d=JSON.parse(node.textContent);
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
+ const result=await page.evaluate(()=>{
+  const d=window.CM8Source;
   const ids=[20,26,27,28,29,30,31];
   const groups=ids.map(id=>{
    const cards=d.cards.filter(c=>c.topic===id);

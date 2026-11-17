@@ -3,8 +3,8 @@ import {test,expect} from '@playwright/test';
 test('manual counters and topic exploration remain visible before flashcards',async({page})=>{
  await page.goto('./');
  const guide=page.locator('#studyGuide'),explorer=page.locator('#studyOverview');
- await expect(guide.locator('summary')).toContainText('Marcações manuais');
- await expect(explorer.locator(':scope > summary')).toContainText('Explorar temas, estatísticas e práticas');
+ await expect(guide.locator('summary')).toContainText('Estatísticas e guia');
+ await expect(explorer.locator(':scope > summary')).toContainText('Mapa e práticas');
  const order=await page.evaluate(()=>{
   const guide=document.querySelector('#studyGuide'),explorer=document.querySelector('#studyOverview'),filters=document.querySelector('.filters');
   return [guide,explorer].every(node=>Boolean(node.compareDocumentPosition(filters)&Node.DOCUMENT_POSITION_FOLLOWING));
@@ -24,7 +24,7 @@ test('manual counters and topic exploration remain visible before flashcards',as
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
 });
 
-test('disclosures retain keyboard access and safe expansion after reload',async({page})=>{
+test('disclosures retain keyboard access and start collapsed after reload',async({page})=>{
  await page.goto('./');
  const guide=page.locator('#studyGuide'),explorer=page.locator('#studyOverview');
  await guide.locator('summary').focus();
@@ -35,8 +35,8 @@ test('disclosures retain keyboard access and safe expansion after reload',async(
  await expect(explorer).toHaveAttribute('open','');
  await explorer.locator('#contentMap>summary').click();
  await page.reload();
- await expect(page.locator('#studyGuide')).toHaveAttribute('open','');
- await expect(page.locator('#studyOverview')).toHaveAttribute('open','');
+ await expect(page.locator('#studyGuide')).not.toHaveAttribute('open','');
+ await expect(page.locator('#studyOverview')).not.toHaveAttribute('open','');
  await expect(page.locator('#contentMap')).toHaveAttribute('open','');
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
 });
