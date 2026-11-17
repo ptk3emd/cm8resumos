@@ -1541,11 +1541,15 @@ function moveTopic(delta){
 $('prevTopic').addEventListener('click',()=>moveTopic(-1));
 $('nextTopic').addEventListener('click',()=>moveTopic(1));
 window.addEventListener('popstate',()=>{
- const previousTopic=ui.topic,previousMode=ui.mode;
+ // Hash-only history steps must not discard focusId, revealed answers or the list limit.
+ const params=new URL(location.href).searchParams;
+ const requestedTopic=params.get('topic'),requestedMode=params.get('mode');
+ const nextTopic=requestedTopic&&TOPICS.some(t=>String(t.id)===requestedTopic)?requestedTopic:'all';
+ const nextMode=NAV_MODES.has(requestedMode)?requestedMode:'list';
+ if(nextTopic===ui.topic&&nextMode===ui.mode)return;
  restoringNavigation=true;
  try{
   readNavigationState();
-  if(ui.topic===previousTopic&&ui.mode===previousMode)return; // In-card anchors do not reset reading.
   cognitiveSession=null;
   setMobileTopicsOpen(false);
   render();
