@@ -52,7 +52,7 @@ test('large counts, dark theme and reduced motion remain usable at narrow widths
  for(const width of [320,768,1440]){await page.setViewportSize({width,height:900});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();}
  expect(await page.locator('#nReadTotal').evaluate(e=>e.getAnimations().length)).toBe(0);
  await page.waitForTimeout(200);
- const ratios=await page.locator('#startFocusBtn,#quickTopicsBtn,.session-definition,.session-heading>span').evaluateAll(nodes=>{
+ const ratios=await page.locator('#startFocusBtn,#mobileTopics,.session-definition,.session-heading>span').evaluateAll(nodes=>{
   const rgb=s=>s.match(/[\d.]+/g).slice(0,3).map(Number),lum=c=>c.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
   return nodes.map(e=>{const foreground=lum(rgb(getComputedStyle(e).color)),background=lum(rgb(getComputedStyle(document.body).backgroundColor));return (Math.max(foreground,background)+.05)/(Math.min(foreground,background)+.05);});
  });expect(ratios.every(ratio=>ratio>=4.5)).toBeTruthy();

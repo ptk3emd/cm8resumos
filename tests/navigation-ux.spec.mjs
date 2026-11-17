@@ -70,7 +70,7 @@ test('answer outline hash navigation is not mistaken for topic history',async({p
 test('mobile quick entry opens the topic selector early and returns focus on Escape',async({page,isMobile})=>{
  test.skip(!isMobile,'The early topic picker is mobile-specific');
  await page.goto('./');
- const quick=page.locator('#quickTopicsBtn');
+ const quick=page.locator('#mobileTopics');
  await expect(quick).toBeVisible();
  await quick.click();
  await expect(page.locator('#sidebar')).toHaveClass(/mobile-open/);

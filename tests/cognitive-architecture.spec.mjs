@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import fs from 'node:fs/promises';
 import {createServer} from 'node:http';
-async function open(page){await page.goto('./');await page.locator('#studyOverview').evaluate(e=>e.open=true);await page.locator('#cognitiveTools summary').click();await page.locator('#cognitiveEnabled').check();await expect(page.locator('#cognitiveToday')).toContainText('revisados hoje');}
+async function open(page){await page.goto('./');await page.waitForFunction(()=>window.CM8Source);await page.locator('#studyOverview').evaluate(e=>e.open=true);await page.locator('#cognitiveTools summary').click();await page.locator('#cognitiveEnabled').check();await expect(page.locator('#cognitiveToday')).toContainText('revisados hoje');}
 async function dump(page){return page.evaluate(()=>new Promise((resolve,reject)=>{const r=indexedDB.open('cm8-fsrs-v1');r.onsuccess=()=>{const db=r.result,tx=db.transaction('cards'),q=tx.objectStore('cards').getAll();q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error);tx.oncomplete=()=>db.close();};r.onerror=()=>reject(r.error);}));}
 async function seed(page,ids,reps=4){return page.evaluate(async({ids,reps})=>{
  const scheduler=await CM8FSRS.DefaultScheduler({version:'FSRS-7',desiredRetention:.9,enableFuzz:false}),now=new Date(),last=new Date(now-30*86400000);
@@ -12,7 +12,7 @@ async function seed(page,ids,reps=4){return page.evaluate(async({ids,reps})=>{
 test('cognitive: graph covers every hub, rejects cycles, and propagation caps S without D or fake reviews',async({page})=>{
  await open(page);
  const result=await page.evaluate(async()=>{
-  const data=JSON.parse(document.querySelector('#sourceData').textContent),state=CMNCognitive.migrate(data.cards);state.enabled=true;
+  const data=window.CM8Source,state=CMNCognitive.migrate(data.cards);state.enabled=true;
   const graph=CMNCognitive.graph(data.cards,state),s=await CM8FSRS.DefaultScheduler({version:'FSRS-7',desiredRetention:.9,enableFuzz:false}),last=new Date('2026-01-01'),rows=new Map();
   for(const id of ['26.1.2','26.1.3','26.1.4']){let c=s.review({card:s.newCard({cardId:id,now:last}),grade:4,now:last}).card;c={...c,stability:60,stabilityFast:10,difficulty:5};c.scheduledDays=s.nextInterval(c,.9,{card:c,grade:3,elapsedDays:0});c.dueAt=new Date(+last+c.scheduledDays*86400000);rows.set(id,{id,card:c,logs:[]});}
   const before=structuredClone([...rows.values()]),interval=(id,c)=>s.nextInterval(c,.9,{card:c,grade:3,elapsedDays:0});
@@ -27,7 +27,7 @@ test('cognitive: graph covers every hub, rejects cycles, and propagation caps S 
 test('cognitive: XML round trip preserves graph, confusables, variants and metrics; legacy remains valid',async({page})=>{
  await open(page);
  const r=await page.evaluate(()=>{
-  const data=JSON.parse(document.querySelector('#sourceData').textContent),ids=new Set(data.cards.map(c=>c.id)),state=CMNCognitive.migrate(data.cards);state.enabled=true;
+  const data=window.CM8Source,ids=new Set(data.cards.map(c=>c.id)),state=CMNCognitive.migrate(data.cards);state.enabled=true;
   state.events=[{id:'test-1',kind:'contrast',cardId:'26.1.1',topic:26,time:new Date().toISOString(),success:1,total:2,cycle:1,variant:0}];
   const xml=CMNProgressIO.encodeXML({'26.1.1':{star:true}},data.cards.length,state),decoded=CMNProgressIO.parse(xml,ids);
   let invalid=false;try{CMNProgressIO.parse(xml.replace('success="1"','success="99"'),ids);}catch{invalid=true;}
@@ -38,7 +38,7 @@ test('cognitive: XML round trip preserves graph, confusables, variants and metri
 });
 
 test('cognitive: pool partition is disjoint, complete and includes linked verbatim items',async({page})=>{
- await open(page);const x=await page.evaluate(()=>{const data=JSON.parse(document.querySelector('#sourceData').textContent),state=CMNCognitive.migrate(data.cards);state.enabled=true;const p=CMNCognitive.pools(data.cards,new Map(),state);return {A:p.A.length,B:p.B.length,n:data.cards.length,unique:new Set([...p.A,...p.B].map(c=>c.id)).size,linked:p.A.some(c=>c.id==='26.1.1'),transfer:p.B.some(c=>c.id==='26.1.3')};});
+ await open(page);const x=await page.evaluate(()=>{const data=window.CM8Source,state=CMNCognitive.migrate(data.cards);state.enabled=true;const p=CMNCognitive.pools(data.cards,new Map(),state);return {A:p.A.length,B:p.B.length,n:data.cards.length,unique:new Set([...p.A,...p.B].map(c=>c.id)).size,linked:p.A.some(c=>c.id==='26.1.1'),transfer:p.B.some(c=>c.id==='26.1.3')};});
  expect(x.A+x.B).toBe(x.n);expect(x.unique).toBe(x.n);expect(x.linked&&x.transfer).toBeTruthy();
  await page.locator('[data-mode=fsrs]').click();await page.locator('[data-pool=B]').click();await expect(page.locator('.study-card .chip').filter({hasText:/Essência|Transferência/})).toBeVisible();
  await page.locator('[data-pool=C]').click();await expect(page.locator('#listTitle')).toHaveText('Intervenções agendadas');await expect(page.locator('[data-session-index]')).toHaveCount(31);
@@ -96,18 +96,18 @@ test('cognitive: shared daily quota is enforced across two already revealed card
 });
 
 test('cognitive: next due refreshes without reload',async({page})=>{
- await page.clock.install();await page.goto('./');await page.locator('#searchBox').fill('1.1.1');await page.locator('[data-mode=fsrs]').click();await page.locator('[data-action=reveal]').first().click();await page.locator('[data-grade="1"]').click();await expect(page.locator('#fsrsSummary')).toContainText('0 vencidos');await page.clock.fastForward(65000);await expect(page.locator('#fsrsSummary')).toContainText('1 vencidos');
+ await page.clock.install();await page.goto('./');await page.waitForFunction(()=>window.CM8Source);await page.locator('#searchBox').fill('1.1.1');await page.locator('[data-mode=fsrs]').click();await page.locator('[data-action=reveal]').first().click();await page.locator('[data-grade="1"]').click();await expect(page.locator('#fsrsSummary')).toContainText('0 vencidos');await page.clock.fastForward(65000);await expect(page.locator('#fsrsSummary')).toContainText('1 vencidos');
 });
 
 test('cognitive: cached shell and practice work when the origin is unavailable',async({page,context},testInfo)=>{
  // A reachable loopback server lets WebKit dispatch the navigation to its worker.
  // The origin fails every request after installation, including the app assets.
  let unavailable=false;
- const types={'html':'text/html','js':'text/javascript','png':'image/png','webmanifest':'application/manifest+json'};
+ const types={'html':'text/html','js':'text/javascript','css':'text/css','json':'application/json','png':'image/png','webmanifest':'application/manifest+json'};
  const server=createServer(async(req,res)=>{
   if(unavailable){res.writeHead(503).end('Origin unavailable');return;}
-  const path=new URL(req.url,'http://localhost').pathname.slice(1)||'index.html';
-  if(!/^(?:assets\/)?[\w.-]+$/.test(path)){res.writeHead(404).end();return;}
+  const path=new URL(req.url,'http://localhost').pathname.replace(/^\/cm8resumos\//,'')||'index.html';
+  if(!/^(?:(?:assets|data)\/)?[\w.-]+$/.test(path)){res.writeHead(404).end();return;}
   try{
    const body=await fs.readFile(new URL('../'+path,import.meta.url));
    res.writeHead(200,{'Content-Type':types[path.split('.').at(-1)]||'application/octet-stream','Cache-Control':'no-store'}).end(body);
@@ -115,7 +115,7 @@ test('cognitive: cached shell and practice work when the origin is unavailable',
  });
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
  try{
-  const url='http://127.0.0.1:'+server.address().port+'/';
+  const url='http://127.0.0.1:'+server.address().port+'/cm8resumos/';
   await page.goto(url);
   await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
   unavailable=true;

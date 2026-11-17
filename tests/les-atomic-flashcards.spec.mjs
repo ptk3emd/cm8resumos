@@ -3,9 +3,9 @@ import {test,expect} from '@playwright/test';
 // The medically reviewed LES deck should remain short and study-focused.
 // Cases retain scenarios and two separate prompts per clinical vignette.
 test('LES: 17 atomic questions in each level, 10 supplementary notes, 10 case cards',async({page})=>{
- await page.goto('./');
- const r=await page.locator('#sourceData').evaluate(node=>{
-  const source=JSON.parse(node.textContent),cards=source.cards.filter(c=>c.topic===11);
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
+ const r=await page.evaluate(()=>{
+  const source=window.CM8Source,cards=source.cards.filter(c=>c.topic===11);
   const regular=cards.filter(c=>c.kind!=='case'),cases=cards.filter(c=>c.kind==='case');
   const levels=[1,2,3,4,5].map(level=>regular.filter(c=>c.level===level).length);
   const supplement=regular.filter(c=>c.level===0);
@@ -22,8 +22,8 @@ test('LES: 17 atomic questions in each level, 10 supplementary notes, 10 case ca
 });
 
 test('LES: classification is not a clinical diagnosis; full-house is not pathognomonic',async({page})=>{
- await page.goto('./');
- const cards=await page.locator('#sourceData').evaluate(el=>JSON.parse(el.textContent).cards);
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
+ const cards=await page.evaluate(()=>window.CM8Source.cards);
  const find=(id)=>cards.find(c=>c.id===id);
  expect(find('11.1.2').answer).toContain('FAN ≥1:80');
  expect(find('11.2.2').answer).toContain('não é patognomônico');

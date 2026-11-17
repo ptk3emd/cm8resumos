@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 
 test('1206 cards and 31 topics, no horizontal document overflow',async({page},testInfo)=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await expect(page.locator('#nTotal')).toHaveText('1206');
  await expect(page.locator('#listSub')).toContainText('1206 resultados');
  await expect(page.locator('#topicList .topic-btn')).toHaveCount(32);
@@ -11,7 +11,7 @@ test('1206 cards and 31 topics, no horizontal document overflow',async({page},te
 });
 
 test('topic navigation and mobile controls',async({page,isMobile})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  if(isMobile){
   const open=page.locator('#mobileTopics');
   await open.click();
@@ -31,7 +31,7 @@ test('topic navigation and mobile controls',async({page,isMobile})=>{
 });
 
 test('studied/review, secondary menu, source disclosure and focus mode',async({page,isMobile})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  const first=page.locator('.study-card').first();
  await expect(first.locator('.audit-status')).toContainText('Triagem estrutural');
  await first.locator('.audit-info summary').click();
@@ -60,7 +60,7 @@ test('studied/review, secondary menu, source disclosure and focus mode',async({p
 });
 
 test('XML export/import and legacy JSON import preserve state',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  const legacy={format:'cmn-flashcards-progresso',version:1,cards:{'1.1.1':{status:'done',star:true}}};
  await page.locator('#importFile').setInputFiles({name:'progresso-antigo.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
  await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
@@ -81,7 +81,7 @@ test('XML export/import and legacy JSON import preserve state',async({page})=>{
 });
 
 test('invalid XML is rejected before overwriting existing progress',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('.study-card [data-action="done"]').first().click();
  await expect(page.locator('#nDone')).toHaveText('1');
  const invalid='<?xml version="1.0" encoding="UTF-8"?><cmn-progress format="cmn-flashcards-progresso" schema-version="1" exported-at="2026-11-15T00:00:00.000Z" card-count="970"><card id="1.1.1" status="invalid"/></cmn-progress>';
@@ -92,7 +92,7 @@ test('invalid XML is rejected before overwriting existing progress',async({page}
 });
 
 test('conservative content formatting and classifying numbered lists',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  if(await page.locator('#mobileTopics').isVisible())await page.locator('#mobileTopics').click();
  await page.locator('#topicList [data-topic="1"]').click();
  await page.locator('#moreBtn').click();
@@ -106,7 +106,7 @@ test('conservative content formatting and classifying numbered lists',async({pag
 
 test('PWA manifests correct relative scope and offline shell on Chromium',async({page,context,browserName})=>{
  test.skip(browserName!=='chromium','Offline is verified on Chromium; engine emulation does not replace physical iOS Safari');
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  const manifest=await page.request.get('./manifest.webmanifest');
  expect(manifest.ok()).toBeTruthy();
  const data=await manifest.json();
@@ -124,7 +124,7 @@ test('PWA manifests correct relative scope and offline shell on Chromium',async(
 
 
 test('overdrive: a long clinical answer exposes semantic sections and a functional outline',async({page,isMobile})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('4.2.5');
  await expect(page.locator('#card-4-2-5')).toBeVisible();
  await page.locator('#card-4-2-5 [data-action="reveal"]').first().click();
@@ -142,7 +142,7 @@ test('overdrive: a long clinical answer exposes semantic sections and a function
 });
 
 test('overdrive: numbered medical classifications use native HTML ol/li',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('2.5.3');
  await expect(page.locator('#card-2-5-3')).toBeVisible();
  await page.locator('#card-2-5-3 [data-action="reveal"]').first().click();
@@ -154,7 +154,7 @@ test('overdrive: numbered medical classifications use native HTML ol/li',async({
 });
 
 test('overdrive: clinical formula is HTML with true superscripts, never raw LaTeX',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('7.4.3');
  await expect(page.locator('#card-7-4-3')).toBeVisible();
  await page.locator('#card-7-4-3 [data-action="reveal"]').first().click();
@@ -166,7 +166,7 @@ test('overdrive: clinical formula is HTML with true superscripts, never raw LaTe
 });
 
 test('overdrive: case scenario and study question have correct native HTML structure',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('1.CAS.01.R');
  await expect(page.locator('#card-1-CAS-01-R')).toBeVisible();
  const card=page.locator('#card-1-CAS-01-R');
@@ -178,9 +178,9 @@ test('overdrive: case scenario and study question have correct native HTML struc
 });
 
 test('overdrive: all cards have unique IDs and the clinical audit count reflects focused replacement',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  const result=await page.evaluate(()=>{
-  const data=JSON.parse(document.querySelector('#sourceData').textContent);
+  const data=window.CM8Source;
   const statuses={};for(const card of data.cards.filter(card=>!card.splitFrom))statuses[card.audit?.status]=(statuses[card.audit?.status]||0)+1;
   return{cards:data.cards.length,themes:data.themes.length,uniqueIds:new Set(data.cards.map(c=>c.id)).size,cases:data.cards.filter(c=>c.kind==='case').length,statuses};
  });
@@ -189,7 +189,7 @@ test('overdrive: all cards have unique IDs and the clinical audit count reflects
 
 
 test('polish: visual answer map references every original clinical section',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('4.2.5');
  const card=page.locator('#card-4-2-5');
  await expect(card).toBeVisible();
@@ -206,7 +206,7 @@ test('polish: visual answer map references every original clinical section',asyn
 });
 
 test('polish: explicit mechanism and management labels get matching visual roles',async({page})=>{
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('18.C.3');
  const card=page.locator('#card-18-C-3');
  await expect(card).toBeVisible();
@@ -219,7 +219,7 @@ test('polish: explicit mechanism and management labels get matching visual roles
 
 test('polish: mobile answer navigation has touch target and no page overflow',async({page,isMobile})=>{
  test.skip(!isMobile,'Only emulated mobile runs');
- await page.goto('./');
+ await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  await page.locator('#searchBox').fill('4.2.5');
  const card=page.locator('#card-4-2-5');
  await card.locator('[data-action="reveal"]').click();
