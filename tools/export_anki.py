@@ -131,7 +131,7 @@ def main():
             fields=[
                 to_html(c_id),
                 to_html(t["title"]),
-                to_html("Caso clínico" if c["level"] == 0 else f'Nível {c["level"]}'),
+                to_html("Caso clínico" if c.get("kind") == "case" else f'Nível {c["level"]}'),
                 to_html(c.get("priority") or ""),
                 to_html(c["question"]),
                 to_html(c["answer"]),
