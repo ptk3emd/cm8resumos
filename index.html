@@ -967,6 +967,53 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  .map-cell .map-name {display:block;-webkit-line-clamp:unset;}
  .cognitive-metrics dl {grid-template-columns:minmax(0,1fr);}
 }
+
+/* UI/UX Pro Max · Navigation / Impeccable adapt + clarify + harden.
+   Navigation is native, compact and readable; no added runtime dependency. */
+.topic-jump{display:none}
+.topic-pager{display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:0}
+.topic-pager button{display:grid;place-items:center;min-width:44px;min-height:44px;padding:8px 12px;background:var(--page);color:var(--ink);border:1px solid var(--stroke-strong);border-radius:8px;font:inherit;font-size:18px}
+.topic-pager button:not(:disabled):hover{background:var(--subtle)}
+.topic-pager button:disabled{opacity:.4;cursor:not-allowed}
+.topic-pager button:focus-visible,.topic-jump select:focus-visible{outline:2px dashed var(--focus-ring);outline-offset:3px}
+.topic-pager .topic-position{min-width:94px;text-align:center;font-size:12px;font-weight:600;line-height:1.4;color:var(--muted)}
+@media(max-width:850px){
+ .sidebar.mobile-open .topic-jump{display:grid;gap:6px;margin:4px 12px 12px}
+ .topic-jump span{font-size:13px;font-weight:600;line-height:1.35;color:var(--muted)}
+ .topic-jump select{display:block;appearance:auto;width:100%;min-height:48px;max-width:100%;border-radius:8px;border:1px solid var(--stroke-strong);background:var(--page);color:var(--ink);font:inherit;font-size:16px;padding:8px 12px}
+ .sidebar.mobile-open .topic-list{scroll-padding-inline:12px}
+ .sidebar.mobile-open .topic-btn.active{outline:2px solid var(--blue);outline-offset:-2px}
+}
+@media(max-width:640px){
+ .topic-pager{order:2;width:100%;justify-content:space-between}
+ .topic-pager .topic-position{flex:1;text-align:center}
+ .list-head>.list-actions{order:3;width:100%;justify-content:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+ .topic-pager button,.topic-jump select{transition:none}
+}
+
+
+/* Navigation usability: visible topic entry, correct scroll targets, consistent FSRS selection. */
+#listTitle{scroll-margin-top:100px}
+#cardsContainer .question{scroll-margin-top:100px}
+.hero .study-start #quickTopicsBtn{display:none}
+@media(max-width:850px){
+ #listTitle,#cardsContainer .question{scroll-margin-top:16px}
+ .hero .study-start #quickTopicsBtn{display:inline-flex}
+}
+@media(max-width:390px){
+ .hero .study-start #quickTopicsBtn{flex:1 1 auto}
+}
+
+
+/* Keep the first flashcard near the fold with three equal mobile study actions. */
+@media(max-width:640px){
+ .hero .study-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .hero .study-start button{min-width:0;min-height:44px;padding:9px 5px;font-size:12px;line-height:1.25;text-align:center;white-space:normal}
+ .hero .study-start #quickTopicsBtn{display:inline-flex;align-items:center;justify-content:center}
+}
+
 </style>
 </head>
 <body>
@@ -980,10 +1027,10 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  </div>
 </div></header>
 <div class="main-shell">
-<aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="sidebar-count" id="topicCount">31 temas</span></div><label class="topic-filter"><span class="sr-only">Filtrar lista de temas</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="topicFilter" type="search" placeholder="Filtrar temas" autocomplete="off"></label><p class="topic-filter-empty" id="topicFilterEmpty" hidden>Nenhum tema com esse nome.</p><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside>
+<aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="sidebar-count" id="topicCount">31 temas</span></div><label class="topic-filter"><span class="sr-only">Filtrar lista de temas</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="topicFilter" type="search" placeholder="Filtrar temas" autocomplete="off"></label><label class="topic-jump" for="topicJump"><span>Ir diretamente para um tema</span><select id="topicJump" aria-label="Escolher tema"><option value="all">Todos os temas</option></select></label><p class="topic-filter-empty" id="topicFilterEmpty" hidden>Nenhum tema com esse nome.</p><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside>
 <main class="workspace" id="workspace">
  <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1206 flashcards em 31 temas. Escolha uma revisão ou estude um cartão por vez.</p>
-<div class="study-start" id="studyStart"><button type="button" id="startReviewBtn" disabled>Revisar agora</button><button type="button" id="startFocusBtn" class="study-secondary">Iniciar em Foco</button></div>
+<div class="study-start" id="studyStart"><button type="button" id="startReviewBtn" disabled>Revisar agora</button><button type="button" id="startFocusBtn" class="study-secondary">Iniciar em Foco</button><button type="button" id="quickTopicsBtn" class="study-secondary" aria-controls="sidebar" aria-expanded="false">Escolher tema</button></div>
 <p id="reviewStartSummary" role="status">Carregando a fila de revisão…</p>
 <p class="study-backup-hint">Salvo neste navegador. Use Exportar para fazer backup.</p></div><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>marcado como estudado</span></div><div class="progress-track" role="progressbar" aria-label="Proporção de cartões marcados manualmente como estudados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1206 marcados como estudados</div></div></section>
   <div class="storage-alert" id="storageAlert" role="alert" hidden>O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div>
@@ -1011,7 +1058,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  <section id="cognitivePools" class="cognitive-pools" hidden aria-label="Escolher fila diária"><button type="button" class="subtle-btn" data-pool="all">Todas as revisões</button><button type="button" class="subtle-btn" data-pool="A">A · Literal</button><button type="button" class="subtle-btn" data-pool="B">B · Essência e transferência</button><button type="button" class="subtle-btn" data-pool="C">C · Intervenções</button><p>Cartões novos compartilham a mesma cota diária. Intervenções não consomem notas FSRS.</p></section>
  <section id="fsrsSettings" class="fsrs-settings" hidden aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><details class="fsrs-backup"><summary class="subtle-btn">Backup FSRS</summary><div class="fsrs-backup-actions"><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico</button><button type="button" id="fsrsImportButton" class="subtle-btn">Importar histórico</button><input type="file" id="fsrsImport" accept=".json,application/json" hidden></div></details></section>
  <div class="fsrs-feedback" id="fsrsFeedback" hidden><p id="fsrsFeedbackText" tabindex="-1" role="status" aria-live="polite"></p><button type="button" id="fsrsUndoBtn" class="subtle-btn">Desfazer</button></div>
- <section aria-labelledby="listTitle"><div class="list-head"><div><h2 class="list-title" id="listTitle" tabindex="-1">Todos os flashcards</h2><div class="list-sub" id="listSub" aria-live="polite">1206 resultados</div></div><div class="list-actions"><button type="button" id="focusSidebarToggle" class="subtle-btn focus-sidebar-toggle" hidden aria-expanded="false" aria-controls="sidebar">Mostrar temas</button><button id="shuffleBtn" class="subtle-btn" aria-pressed="false" title="Embaralhar ordem">⇄ Aleatório</button><button id="revealAllBtn" class="subtle-btn" title="Mostrar ou ocultar respostas visíveis">◉ Mostrar todas</button></div></div><div id="cardsContainer" class="cards"></div><div id="focusNav" class="focus-nav" hidden></div><div class="more-wrap" id="moreWrap" hidden><button class="more-btn" id="moreBtn">Carregar mais</button></div></section>
+ <section aria-labelledby="listTitle"><div class="list-head"><div><h2 class="list-title" id="listTitle" tabindex="-1">Todos os flashcards</h2><div class="list-sub" id="listSub" aria-live="polite">1206 resultados</div></div><nav class="topic-pager" id="topicPager" aria-label="Navegar entre temas" hidden><button id="prevTopic" type="button" aria-label="Tema anterior" title="Tema anterior">←</button><span class="topic-position" id="topicPosition" role="status" aria-live="polite" aria-atomic="true"></span><button id="nextTopic" type="button" aria-label="Próximo tema" title="Próximo tema">→</button></nav><div class="list-actions"><button type="button" id="focusSidebarToggle" class="subtle-btn focus-sidebar-toggle" hidden aria-expanded="false" aria-controls="sidebar">Mostrar temas</button><button id="shuffleBtn" class="subtle-btn" aria-pressed="false" title="Embaralhar ordem">⇄ Aleatório</button><button id="revealAllBtn" class="subtle-btn" title="Mostrar ou ocultar respostas visíveis">◉ Mostrar todas</button></div></div><div id="cardsContainer" class="cards"></div><div id="focusNav" class="focus-nav" hidden></div><div class="more-wrap" id="moreWrap" hidden><button class="more-btn" id="moreBtn">Carregar mais</button></div></section>
  <footer class="footer">Adaptado do PDF <strong>“Flashcards — 8º Período · CMN”</strong>. 92 cartões receberam revisão médica e reescrita direcionada; os demais passaram por triagem estrutural/pedagógica e ainda requerem validação clínica individual. O arquivo contém etiquetas de auditoria por cartão e mantém os IDs originais. Os 250 cartões adicionais são vinhetas didáticas sem referência de página no PDF. Os cartões originais mantêm suas marcações e avisos de auditoria.<div class="utility-row"><span>Offline depois da primeira visita online · sem cadastro</span><span id="offlineStatus" class="offline-status" role="status" aria-live="polite">Preparando uso offline…</span><span aria-hidden="true">·</span><button id="exportEdits">Exportar edições de texto</button><button id="importEditsButton">Importar edições de texto</button><input type="file" id="importEditsFile" accept=".json,application/json" hidden><button id="resetBtn">Apagar progresso salvo</button><button id="unhideBtn">Reexibir todos os cartões ocultos</button></div><div class="focus-tip">Atalhos no modo Foco (fora dos controles): <strong>←</strong> / <strong>→</strong> navegar, <strong>Espaço</strong> revelar, <strong>1</strong> estudar, <strong>2</strong> revisar, <strong>3</strong> favoritar.</div></footer>
 </main></div>
 <dialog id="textEditor" aria-labelledby="editorTitle">
@@ -1068,6 +1115,42 @@ function storageNotice(){ $('storageAlert').hidden=storageOK; }
 
 let marks=getSaved();
 let ui={topic:'all',level:'all',type:'all',audit:'all',status:'all',search:'',mode:'list',focusSidebarCollapsed:true,limit:22,shuffle:false,focusId:null,showAll:false};
+
+/* Navigation state belongs in the URL, not in the study progress backup. */
+const NAV_MODES=new Set(['list','focus','fsrs']);
+let restoringNavigation=false;
+function readNavigationState(){
+ const params=new URL(location.href).searchParams,topic=params.get('topic'),mode=params.get('mode');
+ ui.topic=topic&&TOPICS.some(t=>String(t.id)===topic)?topic:'all';
+ ui.mode=NAV_MODES.has(mode)?mode:'list';
+ ui.limit=22;ui.focusId=null;ui.showAll=false;
+}
+function writeNavigationState(){
+ const target=new URL(location.href);
+ const topic=target.searchParams.get('topic')||'all',mode=target.searchParams.get('mode')||'list';
+ if(topic===ui.topic&&mode===ui.mode)return;
+ target.searchParams.delete('topic');target.searchParams.delete('mode');
+ if(ui.topic!=='all')target.searchParams.set('topic',ui.topic);
+ if(ui.mode!=='list')target.searchParams.set('mode',ui.mode);
+ if(target.hash.startsWith('#answer-'))target.hash='';
+ history.pushState({cm8Navigation:true},'',target.pathname+target.search+target.hash);
+}
+function updateTopicPicker(){
+ const select=$('topicJump');
+ if(select.options.length!==TOPICS.length+1){
+  select.innerHTML='<option value="all">Todos os temas</option>'+TOPICS.map(t=>'<option value="'+t.id+'">'+safe(t.title)+'</option>').join('');
+ }
+ if(select.value!==ui.topic)select.value=ui.topic;
+}
+function renderTopicPager(){
+ const index=TOPICS.findIndex(t=>String(t.id)===ui.topic),visible=index>=0;
+ $('topicPager').hidden=!visible;
+ if(!visible)return;
+ $('topicPosition').textContent='Tema '+(index+1)+' de '+TOPICS.length;
+ $('prevTopic').disabled=index===0;
+ $('nextTopic').disabled=index===TOPICS.length-1;
+}
+
 let openAnswers=new Set();let shuffleOrder=new Map();let toastTimer;
 const mark=id=>marks[id]||{};const status=id=>mark(id).status||'todo';
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify({version:1,exportedAt:new Date().toISOString(),cards:marks,cognitive:cognitiveSnapshot()}));storageOK=true;storageNotice();return true;}
@@ -1102,7 +1185,7 @@ function renderTopics(){const stats=topicStats();let contents=`<button class="to
  const rail=$('topicList'),previousScroll=rail.scrollLeft;rail.innerHTML=contents;if(previousScroll)rail.scrollLeft=previousScroll;
  const grid=$('mapGrid');if(grid){const ps=grid.scrollLeft;grid.innerHTML=cells;if(ps)grid.scrollLeft=ps;}
  const complete=[...stats.values()].filter(r=>r.total&&r.done===r.total).length;$('mapHint').textContent=`${complete} de ${TOPICS.length} temas concluídos`;$('topicCount').textContent=`${TOPICS.length} temas`;
- applyTopicFilter();}
+ applyTopicFilter();updateTopicPicker();}
 function applyTopicFilter(){const q=norm($('topicFilter').value.trim());let shown=0;qsa('#topicList .topic-btn[data-name]').forEach(b=>{const ok=!q||b.dataset.name.includes(q)||b.dataset.topic===q.replace(/^0+/,'');b.hidden=!ok;if(ok)shown++;});$('topicFilterEmpty').hidden=shown>0;}
 const structuredAnswerCache=new Map();
 function answerLabelIndex(line){
@@ -1305,6 +1388,7 @@ function renderCardsInner(list){let focusBefore=rememberFocus();let container=$(
  $('focusNav').hidden=true;
  let shown=list.slice(0,ui.limit);container.innerHTML=shown.length?shown.map(cardHtml).join(''):emptyHtml();let rest=list.length-shown.length;$('moreWrap').hidden=rest<=0;if(rest>0)$('moreBtn').textContent=`Mostrar mais ${Math.min(22,rest)} cartões · ${rest} restantes`;restoreFocus(focusBefore);}
 function renderControls(){
+ renderTopicPager();
  if(ui.mode!=='fsrs')clearTimeout(fsrsRefreshTimer);
  $('fsrsSettings').hidden=ui.mode!=='fsrs'||!!cognitiveSession;$('cognitivePools').hidden=ui.mode!=='fsrs'||!cognitiveState.enabled;
  $('statusFilters').querySelector('[data-filter="hidden"]').hidden=ui.mode==='fsrs';
@@ -1316,10 +1400,12 @@ function renderControls(){
  document.querySelector('.main-shell').classList.toggle('focus-immersive',collapsed);
  $('focusSidebarToggle').hidden=!inSession;
  $('fsrsFeedback').hidden=ui.mode!=='fsrs'||!$('fsrsFeedbackText').textContent;
- $('focusSidebarToggle').textContent=collapsed?'Mostrar temas':'Ocultar temas';
- $('focusSidebarToggle').setAttribute('aria-expanded',String(!collapsed));
+ const mobileTopicsVisible=window.matchMedia('(max-width:850px)').matches;
+ const sidebarVisible=mobileTopicsVisible?$('sidebar').classList.contains('mobile-open'):!collapsed;
+ $('focusSidebarToggle').textContent=sidebarVisible?'Ocultar temas':'Mostrar temas';
+ $('focusSidebarToggle').setAttribute('aria-expanded',String(sidebarVisible));
  qsa('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter===ui.status);b.setAttribute('aria-pressed',b.dataset.filter===ui.status?'true':'false');});qsa('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===ui.mode);b.setAttribute('aria-pressed',b.dataset.mode===ui.mode?'true':'false');});$('shuffleBtn').classList.toggle('active',ui.shuffle);$('shuffleBtn').setAttribute('aria-pressed',String(ui.shuffle));$('revealAllBtn').textContent=ui.showAll?'◉ Ocultar respostas':'◉ Mostrar respostas';$('revealAllBtn').setAttribute('aria-pressed',String(ui.showAll));}
-function render(){renderCognitive();if(cognitiveSession){renderStats();renderTopics();renderControls();renderIntervention();return;}if(ui.mode==='fsrs'){renderStats();renderTopics();renderControls();renderFSRS();updateFilterCues();return;}const focusBefore=rememberFocus();renderStats();renderTopics();let list=getFiltered(),head=ui.topic==='all'?'Todos os flashcards':topicsById.get(Number(ui.topic))?.title||'Flashcards';$('listTitle').textContent=head;$('listSub').textContent=`${list.length} ${list.length===1?'resultado':'resultados'}${ui.search?' para a busca':''}`;renderControls();renderCards(list);restoreFocus(focusBefore);updateFilterCues();renderFilterState(list);}
+function render(){if(!restoringNavigation)writeNavigationState();renderCognitive();if(cognitiveSession){renderStats();renderTopics();renderControls();renderIntervention();return;}if(ui.mode==='fsrs'){renderStats();renderTopics();renderControls();renderFSRS();updateFilterCues();renderFilterState(getFiltered());return;}const focusBefore=rememberFocus();renderStats();renderTopics();let list=getFiltered(),head=ui.topic==='all'?'Todos os flashcards':topicsById.get(Number(ui.topic))?.title||'Flashcards';$('listTitle').textContent=head;$('listSub').textContent=`${list.length} ${list.length===1?'resultado':'resultados'}${ui.search?' para a busca':''}`;renderControls();renderCards(list);restoreFocus(focusBefore);updateFilterCues();renderFilterState(list);}
 const prefersReduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
 function jump(delta){const list=getFiltered();if(!list.length)return;const i=list.findIndex(c=>c.id===ui.focusId),j=Math.min(Math.max(i+delta,0),list.length-1);if(i===j)return;
  ui.focusId=list[j].id;ui.showAll=false;renderCards(list);
@@ -1364,8 +1450,8 @@ function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let a
  case'grade':gradeFSRS(id,Number(b.dataset.grade));break;
  case'prev':jump(-1);break;case'next':jump(1);break;case'clearFilters':clearFilters();break;}
 }
-$('topicList').addEventListener('click',ev=>{let b=ev.target.closest('[data-topic]');if(!b)return;ui.topic=b.dataset.topic;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();if(window.matchMedia('(max-width:850px)').matches){$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}});
-function selectTopic(id){ui.topic=id;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
+$('topicList').addEventListener('click',ev=>{const button=ev.target.closest('[data-topic]');if(button)selectTopic(button.dataset.topic);});
+function selectTopic(id){if(id!=='all'&&!TOPICS.some(t=>String(t.id)===String(id)))return;ui.topic=String(id);ui.limit=22;ui.focusId=null;ui.showAll=false;setMobileTopicsOpen(false);render();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
 $('mapGrid').addEventListener('click',ev=>{const b=ev.target.closest('[data-topic]');if(b)selectTopic(b.dataset.topic);});
 try{const v=localStorage.getItem('cm8.mapOpen');if(v==='1')$('contentMap').open=true;}catch(e){}
 $('contentMap').addEventListener('toggle',()=>{try{localStorage.setItem('cm8.mapOpen',$('contentMap').open?'1':'0');}catch(e){}});
@@ -1387,7 +1473,13 @@ qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{cognitiveSession=n
  if(ui.mode==='fsrs'||ui.mode==='focus')focusFSRSQuestion();}));
 $('startReviewBtn').addEventListener('click',()=>document.querySelector('[data-mode="fsrs"]').click());
 $('startFocusBtn').addEventListener('click',()=>{$('contentMap').open=false;ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;openAnswers.clear();ui.showAll=false;render();focusFSRSQuestion();});
-$('focusSidebarToggle').addEventListener('click',()=>{ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();});
+$('focusSidebarToggle').addEventListener('click',()=>{
+ if(window.matchMedia('(max-width:850px)').matches){
+  setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('focusSidebarToggle'));
+  return;
+ }
+ ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();
+});
 let searchTimer;function applySearch(){ui.search=norm($('searchBox').value.trim());ui.limit=22;ui.focusId=null;render();}
 $('searchBox').addEventListener('input',e=>{if(e.isComposing)return;clearTimeout(searchTimer);searchTimer=setTimeout(applySearch,120);});
 $('searchBox').addEventListener('compositionstart',()=>clearTimeout(searchTimer));
@@ -1418,10 +1510,72 @@ $('mobileFilters').addEventListener('click',()=>{
 });
 $('statusFilters').addEventListener('scroll',updateFilterCues,{passive:true});
 window.addEventListener('resize',updateFilterCues);
-$('mobileTopics').addEventListener('click',()=>{const open=$('sidebar').classList.toggle('mobile-open');$('mobileTopics').setAttribute('aria-expanded',String(open));if(open){const rail=$('topicList');const selected=rail.querySelector('.topic-btn.active');if(selected){const left=selected.offsetLeft-rail.offsetLeft;rail.scrollLeft=Math.max(0,left-12);}$('sidebar').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}});
+let lastMobileTopicsTrigger=$('mobileTopics');
+function setMobileTopicsOpen(open,trigger){
+ if(trigger)lastMobileTopicsTrigger=trigger;
+ const sidebar=$('sidebar');
+ sidebar.classList.toggle('mobile-open',open);
+ $('mobileTopics').setAttribute('aria-expanded',String(open));
+ $('quickTopicsBtn').setAttribute('aria-expanded',String(open));
+ if(!$('focusSidebarToggle').hidden&&window.matchMedia('(max-width:850px)').matches){
+  $('focusSidebarToggle').textContent=open?'Ocultar temas':'Mostrar temas';
+  $('focusSidebarToggle').setAttribute('aria-expanded',String(open));
+ }
+ if(!open)return;
+ const rail=$('topicList'),selected=rail.querySelector('.topic-btn.active');
+ if(selected){
+  const left=selected.offsetLeft-rail.offsetLeft;
+  rail.scrollLeft=Math.max(0,left-12);
+ }
+ sidebar.scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});
+ if(trigger===$('quickTopicsBtn')||trigger===$('focusSidebarToggle'))$('topicJump').focus({preventScroll:true});
+}
+$('mobileTopics').addEventListener('click',()=>setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('mobileTopics')));
+$('quickTopicsBtn').addEventListener('click',()=>setMobileTopicsOpen(!$('sidebar').classList.contains('mobile-open'),$('quickTopicsBtn')));
 const scrollTopics=direction=>{const rail=$('topicList');rail.scrollBy({left:direction*Math.min(rail.clientWidth*.8,260),behavior:prefersReduced()?'auto':'smooth'});};
 $('topicsPrev').addEventListener('click',()=>scrollTopics(-1));
 $('topicsNext').addEventListener('click',()=>scrollTopics(1));
+
+$('topicJump').addEventListener('change',event=>selectTopic(event.target.value));
+function moveTopic(delta){
+ const index=TOPICS.findIndex(t=>String(t.id)===ui.topic);
+ const target=TOPICS[index+delta];
+ if(!target)return;
+ selectTopic(String(target.id));
+ // Retain the pager for repeated keyboard navigation; at the boundary move to the usable arrow.
+ const current=$(delta>0?'nextTopic':'prevTopic');
+ (current.disabled?$(delta>0?'prevTopic':'nextTopic'):current).focus({preventScroll:true});
+}
+$('prevTopic').addEventListener('click',()=>moveTopic(-1));
+$('nextTopic').addEventListener('click',()=>moveTopic(1));
+window.addEventListener('popstate',()=>{
+ // Hash-only history steps must not discard focusId, revealed answers or the list limit.
+ const params=new URL(location.href).searchParams;
+ const requestedTopic=params.get('topic'),requestedMode=params.get('mode');
+ const nextTopic=requestedTopic&&TOPICS.some(t=>String(t.id)===requestedTopic)?requestedTopic:'all';
+ const nextMode=NAV_MODES.has(requestedMode)?requestedMode:'list';
+ if(nextTopic===ui.topic&&nextMode===ui.mode)return;
+ restoringNavigation=true;
+ try{
+  readNavigationState();
+  cognitiveSession=null;
+  setMobileTopicsOpen(false);
+  render();
+  $('listTitle').focus({preventScroll:true});
+  $('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});
+ }finally{restoringNavigation=false;}
+});
+document.addEventListener('keydown',event=>{
+ if(event.key!=='Escape'||document.querySelector('dialog[open]'))return;
+ const topics=$('sidebar').classList.contains('mobile-open');
+ const filters=$('advancedFilters').classList.contains('mobile-open');
+ if(!topics&&!filters)return;
+ event.preventDefault();
+ if(topics)setMobileTopicsOpen(false);
+ if(filters){$('advancedFilters').classList.remove('mobile-open');$('mobileFilters').setAttribute('aria-expanded','false');}
+ (topics?lastMobileTopicsTrigger:$('mobileFilters')).focus({preventScroll:true});
+});
+
 async function exportProgress(){try{
  if(fsrsReady)replaceFSRSRecords(await readFSRSRecords());
  const xml=window.CMNProgressIO.encodeXML(marks,TOTAL,cognitiveSnapshot());
@@ -1584,7 +1738,7 @@ function renderFSRS({keepCard=false}={}){
  clearTimeout(fsrsRefreshTimer);
  fsrsRefreshTimer=setTimeout(refreshFSRS,Math.max(1,refreshAt-Date.now()));
  $('fsrsSummary').textContent=due.length+' vencidos · '+newCards.length+' novos disponíveis';
- $('listSub').textContent=queue.length+' cartões disponíveis agora';
+ $('listSub').textContent=(ui.topic==='all'?'':topicsById.get(Number(ui.topic))?.title+' · ')+queue.length+' cartões disponíveis agora';
  if(keepCard&&container.querySelector('.study-card'))return;
  if(!queue.length){
   let title='Revisões em dia',detail='Os cartões desta seleção estão agendados para depois.';
@@ -2048,7 +2202,7 @@ $('cardsContainer').addEventListener('click',event=>{
 });
 window.addEventListener('storage',event=>{if(event.key!==STORE_KEY)return;try{const saved=JSON.parse(event.newValue||'{}').cognitive;if(saved){cognitiveState=CMNCognitive.validate(saved,ALL_IDS);cognitivePool='all';if(!cognitiveSession){openAnswers.clear();render();}else renderCognitive();}}catch{notify('Não foi possível atualizar as práticas de outra aba.');}});
 
-render();storageNotice();
+restoringNavigation=true;readNavigationState();render();restoringNavigation=false;storageNotice();
 initFSRS();
 })();
 

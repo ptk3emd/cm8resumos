@@ -59,7 +59,10 @@ test('metric action explains experimental opt-in without enabling it silently',a
 
 test('undo restores an existing review with its complete previous log',async({page})=>{
  await start(page);await grade(page);await expect.poll(async()=>(await rows(page)).length).toBe(1);const before=await rows(page);
- await page.clock.setFixedTime(new Date(before[0].card.dueAt));await page.reload();await page.locator('#startReviewBtn').click();await expect(page.locator('.meta-id')).toHaveText(before[0].id);
+ await page.clock.setFixedTime(new Date(before[0].card.dueAt));await page.reload();
+ // Deep links now preserve FSRS mode after reload; no hidden list-mode CTA click is needed.
+ await expect(page.locator('[data-mode="fsrs"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('.meta-id')).toHaveText(before[0].id);
  await grade(page);await expect.poll(async()=>(await rows(page)).find(row=>row.id===before[0].id).logs.length).toBe(2);
  await page.locator('#fsrsUndoBtn').click();await expect(page.locator('#fsrsFeedbackText')).toContainText('Avaliação desfeita');expect(await rows(page)).toEqual(before);
 });
