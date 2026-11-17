@@ -137,3 +137,33 @@ test('mobile status rail has working overflow controls and keeps active choice v
  await prev.click();
  await expect.poll(()=>rail.evaluate(e=>e.scrollLeft)).toBeLessThan(beforeBack);
 });
+
+test('polish preserves a compact first viewport and 44px disclosure targets',async({page,isMobile})=>{
+ await page.goto('./');
+ const measurement=async()=>page.evaluate(()=>{
+  const guide=document.querySelector('#studyGuide>summary');
+  const overview=document.querySelector('#studyOverview>summary');
+  return {
+   firstCardTop:document.querySelector('#cardsContainer .study-card').getBoundingClientRect().top,
+   horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
+   guideHeight:guide.getBoundingClientRect().height,
+   overviewHeight:overview.getBoundingClientRect().height,
+   guideVisible:getComputedStyle(guide).display!=='none',
+   explorerVisible:getComputedStyle(overview).display!=='none'
+  };
+ });
+ const initial=await measurement();
+ expect(initial.horizontalOverflow).toBe(false);
+ expect(initial.guideHeight).toBeGreaterThanOrEqual(44);
+ expect(initial.overviewHeight).toBeGreaterThanOrEqual(44);
+ expect(initial.guideVisible&&initial.explorerVisible).toBeTruthy();
+ if(isMobile)expect(initial.firstCardTop).toBeLessThan(1100);
+
+ for(const width of [320,768,1280]){
+  await page.setViewportSize({width,height:800});
+  const current=await measurement();
+  expect(current.horizontalOverflow,`overflow at ${width}px`).toBe(false);
+  expect(current.guideHeight,`guide at ${width}px`).toBeGreaterThanOrEqual(44);
+  expect(current.overviewHeight,`explorer at ${width}px`).toBeGreaterThanOrEqual(44);
+ }
+});

@@ -1015,16 +1015,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 }
 
 
-/* UX polish: guide, late advanced tools and accessible dark-mode text roles. */
-.stat-guide{max-width:max-content;margin-top:8px}
-.stat-guide summary{color:var(--muted);font-size:13px;font-weight:600;padding:0 4px;text-underline-offset:3px}
-.stat-guide[open]{max-width:72ch;padding:0 0 8px}
-.stat-guide dl{display:grid;grid-template-columns:minmax(140px,1fr) minmax(0,2fr);gap:8px 14px;margin:12px 0 0}
-.stat-guide dt{color:var(--ink);font-weight:650}
-.stat-guide dd{margin:0;color:var(--muted);line-height:1.5}
-.study-overview{margin:28px auto 14px;padding:10px 0;border-top:1px solid var(--stroke);border-bottom:1px solid var(--stroke)}
-.study-overview>summary{color:var(--muted);font-size:13px;font-weight:600}
-.study-overview[open]{padding-bottom:14px}
+/* Compact study disclosures share the existing reading-system typography. */
 #cardsContainer .question{scroll-margin-top:100px}
 :root[data-theme="dark"]{
  --muted:#d1cbc4;
@@ -1063,50 +1054,70 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  .filter-pills{scroll-padding-inline:44px}
 }
 
-/* Impeccable overdrive + harden: restore the two discovery surfaces before study. */
-/* No gradients, hover-only actions or extra client-side dependencies. */
-.stat-guide{display:block;max-width:none;width:100%;margin:16px 0 0;background:var(--subtle);border:1px solid var(--stroke-strong);border-radius:10px}
+/* Impeccable polish: intentional, compact navigation without nested card chrome.
+   Retains existing color tokens and native disclosure behavior. */
+.stat-guide,.study-overview{--panel-detail-space:12px;box-sizing:border-box;min-width:0}
+.stat-guide{display:block;max-width:none;width:100%;margin:8px 0 0;background:var(--subtle);border:1px solid var(--stroke);border-radius:8px}
 .stat-guide[open]{max-width:none;padding:0}
-.stat-guide>summary,.study-overview>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;color:var(--ink);text-decoration:none}
+.stat-guide>summary,.study-overview>summary{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ list-style:none;cursor:pointer;text-decoration:none;color:var(--ink)
+}
 .stat-guide>summary::-webkit-details-marker,.study-overview>summary::-webkit-details-marker{display:none}
-.stat-guide>summary{min-height:60px;padding:10px 16px;font-size:14px}
-.stat-guide>summary::after,.study-overview>summary::after{content:"";width:9px;height:9px;flex:0 0 9px;margin-right:4px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .18s ease}
+.stat-guide>summary{min-height:52px;padding:8px 12px;font-size:14px}
+.stat-guide>summary::after,.study-overview>summary::after{
+ content:"";width:9px;height:9px;flex:0 0 9px;margin-right:3px;
+ border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);
+ transform:rotate(45deg);transition:transform .16s ease
+}
 .stat-guide[open]>summary::after,.study-overview[open]>summary::after{transform:rotate(225deg)}
 .guide-head,.overview-heading{display:flex;flex-direction:column;gap:2px;min-width:0}
-.guide-title,.overview-title{display:block;font-size:15px;font-weight:670;line-height:1.4;letter-spacing:-.012em;color:var(--ink)}
-.guide-subtitle,.overview-subtitle{display:block;font-size:13px;line-height:1.5;color:var(--muted);font-weight:400}
-.guide-content{border-top:1px solid var(--stroke);padding:12px 16px 16px}
-.guide-intro{font-size:14px;color:var(--muted);line-height:1.55;margin:0 0 12px}
-.stat-guide dl.guide-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;font-size:14px}
-.guide-item{min-width:0;padding:12px;background:var(--panel);border:1px solid var(--stroke);border-radius:8px}
-.stat-guide .guide-item dt{font-size:14px;line-height:1.5;color:var(--ink);font-weight:650;margin:0 0 4px}
+.guide-title,.overview-title{display:block;color:var(--ink);font-size:15px;font-weight:650;line-height:1.4;letter-spacing:-.012em;overflow-wrap:break-word}
+.guide-subtitle,.overview-subtitle{display:block;color:var(--muted);font-size:13px;line-height:1.4;font-weight:400}
+.guide-content{padding:12px 16px 14px;border-top:1px solid var(--stroke)}
+.guide-intro{max-width:70ch;margin:0 0 8px;color:var(--muted);font-size:14px;line-height:1.55}
+.stat-guide dl.guide-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;margin:0;font-size:14px}
+.guide-item{min-width:0;padding:12px 0 8px;background:transparent;border-top:1px solid var(--stroke);border-radius:0}
+.stat-guide .guide-item dt{margin:0 0 4px;color:var(--ink);font-size:14px;font-weight:650;line-height:1.45}
 .stat-guide .guide-item dd{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
-.study-overview{display:block;max-width:none;margin:0 auto 20px;padding:0;border:1px solid var(--stroke-strong);border-radius:10px;background:var(--panel)}
+.study-overview{display:block;max-width:none;margin:0 auto 16px;padding:0;background:var(--panel);border:1px solid var(--stroke);border-radius:8px}
 .study-overview[open]{padding:0}
-.study-overview>summary{min-height:68px;padding:12px 16px;font-size:14px;font-weight:600}
+.study-overview>summary{min-height:56px;padding:9px 14px;font-size:14px;font-weight:600}
 .study-overview>summary:hover,.stat-guide>summary:hover{background:var(--subtle-hover)}
-.study-overview>summary:hover{border-radius:9px}
-.study-overview-body{border-top:1px solid var(--stroke);padding:4px 16px 12px}
-.study-overview-body>details{max-width:none;margin:0;padding:8px 0 10px;border:0;border-bottom:1px solid var(--stroke);background:transparent}
+.study-overview>summary:hover{border-radius:7px}
+.study-overview-body{padding:4px 16px 8px;border-top:1px solid var(--stroke)}
+.study-overview-body>details{max-width:none;margin:0;padding:4px 0 8px;border:0;border-bottom:1px solid var(--stroke);background:transparent}
 .study-overview-body>details:last-child{border-bottom:0;margin-bottom:0}
-.study-overview-body>.content-map>summary,.study-overview-body>.cognitive-tools>summary,.study-overview-body>.cognitive-metrics>summary{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;min-height:52px;padding:6px;border-radius:6px;font-size:14px;font-weight:650;line-height:1.5;color:var(--ink)}
+.study-overview-body>.content-map>summary,.study-overview-body>.cognitive-tools>summary,.study-overview-body>.cognitive-metrics>summary{
+ display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;
+ min-height:48px;padding:6px 4px;border-radius:5px;font-size:14px;font-weight:650;line-height:1.5;color:var(--ink)
+}
 .study-overview-body>details>summary:hover{background:var(--subtle)}
 .study-overview-body .tool-description{display:block;flex-basis:100%;font-size:13px;font-weight:400;color:var(--muted);line-height:1.4}
 .study-overview-body .map-hint{font-size:13px;color:var(--muted)}
 .study-overview-body .map-title{font-size:14px}
 .study-overview-body .map-grid{margin-top:12px}
-.stat-guide>summary:focus-visible,.study-overview>summary:focus-visible,.study-overview-body>details>summary:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
-:root[data-theme="dark"] .guide-item{background:var(--panel);border-color:var(--stroke)}
+.stat-guide>summary:focus-visible,.study-overview>summary:focus-visible,.study-overview-body>details>summary:focus-visible{
+ outline:2px solid var(--focus-ring);outline-offset:2px
+}
+.stat-guide[open]>summary,.study-overview[open]>summary{color:var(--ink)}
 :root[data-theme="dark"] .guide-subtitle,:root[data-theme="dark"] .overview-subtitle,:root[data-theme="dark"] .tool-description{color:var(--muted)}
 @media(max-width:640px){
- .stat-guide{margin-top:12px}
- .stat-guide>summary,.study-overview>summary{gap:10px;padding:12px;min-height:60px}
- .stat-guide dl.guide-items{grid-template-columns:1fr;gap:8px}
- .guide-content{padding:12px}
- .guide-item{padding:11px}
- .study-overview{margin:0 auto 16px}
- .study-overview-body{padding:4px 12px 10px}
- .study-overview-body>.content-map>summary,.study-overview-body>.cognitive-tools>summary,.study-overview-body>.cognitive-metrics>summary{min-height:56px}
+ .stat-grid{padding:8px 0 9px;margin-bottom:10px}
+ .stat-guide{margin-top:6px}
+ .stat-guide>summary,.study-overview>summary{gap:8px;min-height:44px;padding:7px 10px}
+ .guide-title,.overview-title{font-size:14px;line-height:1.35;letter-spacing:-.01em}
+ .guide-subtitle,.overview-subtitle{display:none}
+ .stat-guide dl.guide-items{grid-template-columns:1fr}
+ .guide-content{padding:10px 12px}
+ .guide-item{padding:10px 0 7px}
+ .study-overview{margin:0 auto 10px}
+ .study-overview-body{padding:4px 12px 8px}
+ .study-overview-body>.content-map>summary,.study-overview-body>.cognitive-tools>summary,.study-overview-body>.cognitive-metrics>summary{min-height:48px}
+}
+@media(max-width:360px){
+ .guide-title,.overview-title{font-size:13.5px}
+ .stat-guide>summary,.study-overview>summary{min-height:48px}
 }
 @media(prefers-reduced-motion:reduce){
  .stat-guide>summary::after,.study-overview>summary::after{transition:none}
@@ -1134,7 +1145,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
   <div class="storage-alert" id="storageAlert" role="alert" hidden>O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div>
    <section class="import-review" id="importReview" hidden aria-labelledby="importReviewTitle" role="status"><h2 id="importReviewTitle" tabindex="-1">Backup selecionado</h2><p id="importReviewText"></p><div class="import-review-actions"><button type="button" class="subtle-btn import-apply" id="confirmImportBtn">Substituir progresso</button><button type="button" class="subtle-btn" id="cancelImportBtn">Cancelar</button></div></section>
   <section class="stat-grid" aria-labelledby="statsTitle"><h2 class="sr-only" id="statsTitle">Marcações manuais de estudo</h2><div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row" aria-describedby="statHelp"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1206</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div><details class="stat-guide" id="studyGuide">
- <summary id="statHelp"><span class="guide-head"><span class="guide-title">Marcações manuais · como funcionam as contagens</span><span class="guide-subtitle">Estudado, leituras, FSRS e práticas são registros diferentes.</span></span></summary>
+ <summary id="statHelp"><span class="guide-head"><span class="guide-title">Marcações manuais · contagens</span><span class="guide-subtitle">Estudado, leituras, FSRS e práticas são registros diferentes.</span></span></summary>
  <div class="guide-content">
   <p class="guide-intro">O painel acima mostra apenas as marcações manuais da biblioteca. Nenhuma delas equivale a uma revisão agendada pelo FSRS.</p>
   <dl class="guide-items">
