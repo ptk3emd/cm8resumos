@@ -1123,6 +1123,37 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  .stat-guide>summary::after,.study-overview>summary::after{transition:none}
 }
 
+
+/* Session statistics: activity first; manual organization remains a separate disclosure. */
+:root[data-theme="dark"] .hero .study-start .study-secondary {color:var(--ink);background:var(--page);}
+.session-heading {display:flex;align-items:baseline;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;margin-bottom:16px;}
+.session-heading h2 {margin:0;font-size:18px;font-weight:650;line-height:1.35;letter-spacing:-.02em;}
+.session-heading>span {font-size:12px;color:var(--muted);}
+.session-ledger {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:0;}
+.session-metric {min-width:0;}
+.session-metric dt {color:var(--ink);font-size:14px;font-weight:600;line-height:1.4;}
+.session-metric dd {margin:4px 0 0;overflow:hidden;}
+.session-number {display:inline-block;font-size:38px;line-height:1.15;font-weight:650;letter-spacing:-.03em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
+.session-definition {margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.45;}
+.session-today {display:flex;flex-wrap:wrap;gap:4px 24px;margin:12px 0;color:var(--muted);font-size:13px;line-height:1.5;}
+.session-today strong {color:var(--ink);font-weight:650;font-variant-numeric:tabular-nums;}
+.stat-grid {padding-block:20px 12px;margin-bottom:12px;}
+.guide-content .stack-bar {margin:4px 0 8px;}
+.guide-content .stat-row {margin-bottom:12px;gap:4px;}
+.guide-content .stat-row button.stat {border:0;padding:8px;min-width:0;min-height:64px;}
+.guide-content .stat .stat-label {font-size:13px;white-space:normal;overflow-wrap:anywhere;}
+.guide-content .stat .number {font-size:20px;}
+@media(max-width:640px){
+ .stat-grid {padding-block:12px 8px;margin-bottom:10px;}
+ .session-heading {margin-bottom:12px;gap:2px 12px;}
+ .session-heading h2 {font-size:16px;}
+ .session-ledger {gap:16px;}
+ .session-number {font-size:32px;}
+ .session-definition {font-size:12px;}
+ .session-today {gap:4px 12px;margin-block:10px;font-size:12px;}
+ .guide-content .stat-row {grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media print {.stat-grid {display:none!important;}}
 </style>
 </head>
 <body>
@@ -1144,14 +1175,23 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 <p class="study-backup-hint">Salvo neste navegador. Use Exportar para fazer backup.</p></div><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>marcado como estudado</span></div><div class="progress-track" role="progressbar" aria-label="Proporção de cartões marcados manualmente como estudados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1206 marcados como estudados</div></div></section>
   <div class="storage-alert" id="storageAlert" role="alert" hidden>O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div>
    <section class="import-review" id="importReview" hidden aria-labelledby="importReviewTitle" role="status"><h2 id="importReviewTitle" tabindex="-1">Backup selecionado</h2><p id="importReviewText"></p><div class="import-review-actions"><button type="button" class="subtle-btn import-apply" id="confirmImportBtn">Substituir progresso</button><button type="button" class="subtle-btn" id="cancelImportBtn">Cancelar</button></div></section>
-  <section class="stat-grid" aria-labelledby="statsTitle"><h2 class="sr-only" id="statsTitle">Marcações manuais de estudo</h2><div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row" aria-describedby="statHelp"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1206</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div><details class="stat-guide" id="studyGuide">
+  <section class="stat-grid" aria-labelledby="statsTitle">
+ <div class="session-heading"><h2 id="statsTitle">Atividade de estudo</h2><span>Acumulado · todos os temas</span></div>
+ <dl class="session-ledger">
+  <div class="session-metric"><dt>Leituras registradas</dt><dd><span id="nReadTotal" class="session-number">0</span></dd><p class="session-definition">Soma dos registros manuais.</p></div>
+  <div class="session-metric" id="fsrsActivityMetric" aria-busy="true"><dt>Flashcards FSRS</dt><dd><span id="nFSRSCards" class="session-number">—</span></dd><p class="session-definition" id="fsrsActivityDefinition">Carregando histórico…</p></div>
+ </dl>
+ <p class="session-today"><span><strong id="nFSRSToday">—</strong> <span id="sessionTodayLabel">cartões FSRS hoje</span></span><span><strong id="nFSRSReviews">—</strong> <span id="sessionReviewsLabel">avaliações no total</span></span></p>
+ <p class="sr-only" id="sessionStatsStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+ <details class="stat-guide" id="studyGuide">
  <summary id="statHelp"><span class="guide-head"><span class="guide-title">Marcações manuais · contagens</span><span class="guide-subtitle">Estudado, leituras, FSRS e práticas são registros diferentes.</span></span></summary>
  <div class="guide-content">
-  <p class="guide-intro">O painel acima mostra apenas as marcações manuais da biblioteca. Nenhuma delas equivale a uma revisão agendada pelo FSRS.</p>
+ <div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row" aria-describedby="statHelp"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1206</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div>
+  <p class="guide-intro">Os filtros acima mostram as marcações manuais da biblioteca. Leituras e cartões FSRS são contados separadamente no painel de atividade.</p>
   <dl class="guide-items">
    <div class="guide-item"><dt>Estudado / Revisar</dt><dd>São marcações manuais para organizar os cartões. Não dão nota nem alteram o agendamento FSRS.</dd></div>
-   <div class="guide-item"><dt>Registrar leitura</dt><dd>Acrescenta uma leitura ao contador individual do cartão. É independente de “Estudado”, de “Revisar” e de revelar a resposta.</dd></div>
-   <div class="guide-item"><dt>Revisão FSRS</dt><dd>Revele a resposta, tente lembrar e avalie sua recordação. Só essa avaliação agenda a próxima revisão.</dd></div>
+   <div class="guide-item"><dt>Registrar leitura</dt><dd>Acrescenta uma leitura ao contador individual do cartão e ao total de leituras. É independente de “Estudado”, de “Revisar” e de revelar a resposta.</dd></div>
+   <div class="guide-item"><dt>Revisão FSRS</dt><dd>Revele a resposta, tente lembrar e avalie sua recordação. Só essa avaliação agenda a próxima revisão. O total de flashcards FSRS conta cada cartão uma vez; o total de avaliações inclui as repetições, com qualquer nota.</dd></div>
    <div class="guide-item"><dt>Práticas cognitivas</dt><dd>Exercícios opcionais de contraste, essência e transferência têm resultados próprios, não somados às leituras ou marcações manuais.</dd></div>
   </dl>
  </div>
@@ -1849,6 +1889,52 @@ pwaStatus();
 const fsrsRecords=new Map();
 let fsrsDB=null,fsrsReady=false,fsrsUnavailable=false,fsrsBusy=false,fsrsScheduler=null;
 let fsrsUndo=null;
+let sessionStatsTimer,sessionStatsAnnouncementTimer,lastSessionStats=null,sessionStatsVisible=false,sessionFSRSSummary=null;
+const sessionNumberFormat=new Intl.NumberFormat('pt-BR');
+if(typeof IntersectionObserver==='function')new IntersectionObserver(entries=>{sessionStatsVisible=entries[0]?.isIntersecting===true;}).observe($('statsTitle').closest('section'));
+function setSessionNumber(id,value){
+ const el=$(id),text=value===null?'—':sessionNumberFormat.format(value),previous=el.textContent;
+ if(previous===text)return;
+ el.textContent=text;
+ if(lastSessionStats&&sessionStatsVisible&&document.visibilityState==='visible'&&!prefersReduced()&&typeof el.animate==='function'){
+  (el.getAnimations?.()||[]).forEach(animation=>animation.cancel());
+  el.animate([{opacity:.4,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'cubic-bezier(.16,1,.3,1)'});
+ }
+}
+function renderSessionStats({historyChanged=false}={}){
+ const reads=window.CMNProgressIO?.getReadCounts()||{},today=fsrsDay(new Date());
+ let readings=0;
+ for(const [id,count] of Object.entries(reads))if(ALL_IDS.has(id))readings+=count;
+ // Reading clicks reuse the FSRS summary; only history/date changes rescan review logs.
+ if(historyChanged||!sessionFSRSSummary||sessionFSRSSummary.today!==today||sessionFSRSSummary.ready!==fsrsReady){
+ let reviewedCards=0,reviews=0,reviewedToday=0;
+ for(const row of fsrsRecords.values()){
+  if(!ALL_IDS.has(row.id))continue;
+  const logs=(row.logs||[]).filter(log=>[1,2,3,4].includes(log.rating)&&Number.isFinite(Date.parse(log.reviewTime)));
+  if(logs.length)reviewedCards++;
+  reviews+=logs.length;
+  if(logs.some(log=>fsrsDay(log.reviewTime)===today))reviewedToday++;
+ }
+ sessionFSRSSummary={today,ready:fsrsReady,reviewedCards,reviews,reviewedToday};
+ }
+ const summary=sessionFSRSSummary;
+ const current={readings,reviewedCards:fsrsReady?summary.reviewedCards:null,reviews:fsrsReady?summary.reviews:null,reviewedToday:fsrsReady?summary.reviewedToday:null};
+ setSessionNumber('nReadTotal',current.readings);setSessionNumber('nFSRSCards',current.reviewedCards);
+ setSessionNumber('nFSRSReviews',current.reviews);setSessionNumber('nFSRSToday',current.reviewedToday);
+ $('sessionTodayLabel').textContent=current.reviewedToday===1?'cartão FSRS hoje':'cartões FSRS hoje';
+ $('sessionReviewsLabel').textContent=current.reviews===1?'avaliação no total':'avaliações no total';
+ $('fsrsActivityMetric').setAttribute('aria-busy',String(!fsrsReady&&!fsrsUnavailable));
+ $('fsrsActivityDefinition').textContent=fsrsReady?'Cartões distintos já avaliados.':fsrsUnavailable?'Histórico indisponível. Recarregue para tentar novamente.':'Carregando histórico…';
+ if(lastSessionStats&&JSON.stringify(current)!==JSON.stringify(lastSessionStats)){
+  clearTimeout(sessionStatsAnnouncementTimer);
+  sessionStatsAnnouncementTimer=setTimeout(()=>{$('sessionStatsStatus').textContent=sessionNumberFormat.format(current.readings)+' leituras registradas. '+(current.reviewedCards===null?'Histórico FSRS ainda não disponível.':sessionNumberFormat.format(current.reviewedCards)+' flashcards avaliados no FSRS; '+sessionNumberFormat.format(current.reviewedToday)+' hoje.');},180);
+ }
+ lastSessionStats=current;
+ clearTimeout(sessionStatsTimer);
+ const now=new Date(),midnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+ sessionStatsTimer=setTimeout(renderSessionStats,Math.max(1,+midnight-Date.now()+100));
+}
+window.addEventListener('cmn:read-counts-changed',renderSessionStats);
 const FSRS_RETENTION=0.90;
 const FSRS_DEFAULT_DAILY=20;
 let fsrsRefreshTimer;
@@ -2090,7 +2176,7 @@ async function initFSRS(){
   await new Promise((resolve,reject)=>{const request=fsrsDB.transaction('cards').objectStore('cards').getAll();request.onsuccess=()=>{for(const record of request.result)if(ALL_IDS.has(record.id))fsrsRecords.set(record.id,record);resolve();};request.onerror=()=>reject(request.error);});
   fsrsReady=true;renderCognitive();if(ui.mode==='fsrs'){render();if(document.activeElement===$('listTitle'))focusFSRSQuestion();}
  }catch{
-  fsrsUnavailable=true;
+  fsrsUnavailable=true;renderCognitive();
   $('fsrsSummary').textContent='Armazenamento indisponível';
   $('fsrsExport').disabled=true;
   $('fsrsImportButton').disabled=true;
@@ -2275,6 +2361,7 @@ function reviewPresentation(c){const m=cognitiveState.metadata[c.id];if(!cogniti
 function traceBadge(id){const m=cognitiveState.metadata[id];if(!cognitiveState.enabled)return '';return '<span class="chip" title="'+cognitionHelp[m.traceType]+'">'+cognitionLabels[m.traceType]+(cognitiveState.enabled?' · '+Math.round(retentionFor(id)*100)+'%':'')+'</span>'+(m.anchor?'<span class="chip" title="Âncora: pode propagar estabilidade quando a camada experimental está ativa">Âncora</span>':'');}
 function cognitiveRatingEvent(id,grade,now,reps){const m=cognitiveState.metadata[id];if(!cognitiveState.enabled||!['gist','transfer'].includes(m.traceType))return null;return {id:'rating:'+id+':'+now.toISOString()+':'+reps,kind:m.traceType,cardId:id,topic:byId.get(id).topic,time:now.toISOString(),success:grade>=3?1:0,total:1,cycle:0,variant:m.traceType==='transfer'?variantIndex(id):0};}
 function renderCognitive(){
+ renderSessionStats({historyChanged:true});
  $('cognitiveEnabled').checked=cognitiveState.enabled;
  const snapshot=cognitiveSnapshot(),metrics=CMNCognitive.metrics(snapshot.events),labels={contrast:'Discriminação',transfer:'Transferência',gist:'Recuperação da essência'};
  const definitions={contrast:'Acertos ao distinguir conceitos em uma prática de contraste.',transfer:'Avaliações bem-sucedidas ao aplicar o conteúdo a outro cenário, com a camada experimental ativa.',gist:'Avaliações bem-sucedidas da ideia central, com a camada experimental ativa.'};
@@ -2285,7 +2372,7 @@ function renderCognitive(){
  const interventions=snapshot.events.filter(e=>['contrast','context'].includes(e.kind)&&fsrsDay(e.time)===today).length;
  $('cognitiveToday').textContent=reviewed+' '+(reviewed===1?'cartão revisado':'cartões revisados')+' hoje no FSRS · '+interventions+' '+(interventions===1?'intervenção':'intervenções')+' hoje';
  $('startReviewBtn').disabled=!fsrsReady;
- if(fsrsReady){const queue=fsrsQueue();$('reviewStartSummary').textContent='Hoje: '+reviewed+' '+(reviewed===1?'revisão':'revisões')+' FSRS · Nesta seleção: '+queue.due.length+' vencidos e '+queue.newCards.length+' novos.';}
+ if(fsrsReady){const queue=fsrsQueue();$('reviewStartSummary').textContent='Nesta seleção: '+queue.due.length+' vencidos e '+queue.newCards.length+' novos para revisar.';}
  else $('reviewStartSummary').textContent=fsrsUnavailable?'Histórico indisponível. Você pode estudar em Foco.':'Carregando a fila de revisão…';
  const eligible=getFiltered().filter(c=>!mark(c.id).hidden),due=eligible.filter(c=>fsrsRecords.has(c.id)&&new Date(fsrsRecords.get(c.id).card.dueAt)<=new Date()),pools=CMNCognitive.pools(due,fsrsRecords,cognitiveState),sessions=CMNCognitive.sessions(eligible,fsrsRecords,snapshot);
  $('cognitivePools').querySelector('[data-pool="A"]').textContent='A · Literal ('+pools.A.length+' vencidos)';
