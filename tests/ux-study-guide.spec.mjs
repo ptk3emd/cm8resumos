@@ -1,19 +1,43 @@
 import {test,expect} from '@playwright/test';
 
-test('study guide explains independent manual status, reads and FSRS without obstructing cards',async({page})=>{
+test('manual counters and topic exploration remain visible before flashcards',async({page})=>{
  await page.goto('./');
- const guide=page.locator('#studyGuide');
- await expect(guide.locator('summary')).toHaveText('Guia rápido de estudo');
+ const guide=page.locator('#studyGuide'),explorer=page.locator('#studyOverview');
+ await expect(guide.locator('summary')).toContainText('Marcações manuais');
+ await expect(explorer.locator(':scope > summary')).toContainText('Explorar temas, estatísticas e práticas');
+ const order=await page.evaluate(()=>{
+  const guide=document.querySelector('#studyGuide'),explorer=document.querySelector('#studyOverview'),filters=document.querySelector('.filters');
+  return [guide,explorer].every(node=>Boolean(node.compareDocumentPosition(filters)&Node.DOCUMENT_POSITION_FOLLOWING));
+ });
+ expect(order).toBe(true);
  await guide.locator('summary').click();
  await expect(guide).toHaveAttribute('open','');
- await expect(guide).toContainText('independente de “Estudado”');
+ await expect(guide).toContainText('contador individual do cartão');
  await expect(guide).toContainText('Só essa avaliação agenda a próxima revisão');
- const positioned=await page.evaluate(()=>{
-  const cards=document.querySelector('#cardsContainer'),advanced=document.querySelector('#studyOverview');
-  return !!(cards.compareDocumentPosition(advanced)&Node.DOCUMENT_POSITION_FOLLOWING);
- });
- expect(positioned).toBe(true);
- await expect(page.locator('#studyOverview>summary')).toHaveText('Ferramentas avançadas');
+ await explorer.locator(':scope > summary').click();
+ await expect(explorer).toHaveAttribute('open','');
+ await expect(explorer.locator('#contentMap>summary')).toBeVisible();
+ await expect(explorer.locator('#cognitiveTools>summary')).toBeVisible();
+ await expect(explorer.locator('.cognitive-metrics>summary')).toBeVisible();
+ await explorer.locator('#contentMap>summary').click();
+ await expect(page.locator('#mapGrid .map-cell').first()).toBeVisible();
+ await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
+});
+
+test('disclosures retain keyboard access and safe expansion after reload',async({page})=>{
+ await page.goto('./');
+ const guide=page.locator('#studyGuide'),explorer=page.locator('#studyOverview');
+ await guide.locator('summary').focus();
+ await page.keyboard.press('Enter');
+ await expect(guide).toHaveAttribute('open','');
+ await explorer.locator(':scope > summary').focus();
+ await page.keyboard.press('Enter');
+ await expect(explorer).toHaveAttribute('open','');
+ await explorer.locator('#contentMap>summary').click();
+ await page.reload();
+ await expect(page.locator('#studyGuide')).toHaveAttribute('open','');
+ await expect(page.locator('#studyOverview')).toHaveAttribute('open','');
+ await expect(page.locator('#contentMap')).toHaveAttribute('open','');
  await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
 });
 
