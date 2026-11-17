@@ -65,3 +65,37 @@ test('answer outline hash navigation is not mistaken for topic history',async({p
  await expect(page).toHaveURL(/#answer-4-2-5-1$/);
  await expect(page.locator('#card-4-2-5')).toBeVisible();
 });
+
+
+test('mobile quick entry opens the topic selector early and returns focus on Escape',async({page,isMobile})=>{
+ test.skip(!isMobile,'The early topic picker is mobile-specific');
+ await page.goto('./');
+ const quick=page.locator('#quickTopicsBtn');
+ await expect(quick).toBeVisible();
+ await quick.click();
+ await expect(page.locator('#sidebar')).toHaveClass(/mobile-open/);
+ await expect(quick).toHaveAttribute('aria-expanded','true');
+ await expect(page.locator('#mobileTopics')).toHaveAttribute('aria-expanded','true');
+ await expect(page.locator('#topicJump')).toBeFocused();
+ await page.keyboard.press('Escape');
+ await expect(quick).toHaveAttribute('aria-expanded','false');
+ await expect(quick).toBeFocused();
+ await expect(page.locator('#sidebar')).not.toBeVisible();
+});
+
+test('FSRS keeps topic context, active filter chip and topic pager synchronized',async({page})=>{
+ await page.goto('./?topic=1&mode=fsrs');
+ await expect(page.locator('#startReviewBtn')).toBeEnabled();
+ await expect(page.locator('[data-mode="fsrs"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#topicPager')).toBeVisible();
+ await expect(page.locator('#topicPosition')).toHaveText('Tema 1 de 31');
+ await expect(page.locator('#activeFilters [data-clear="topic"]')).toBeVisible();
+ const name=await page.locator('#topicList [data-topic="1"] .topic-name').textContent();
+ await expect(page.locator('#listSub')).toContainText(name.trim());
+ await page.locator('#nextTopic').click();
+ await expect(page).toHaveURL(/topic=2&mode=fsrs/);
+ await expect(page.locator('#topicPosition')).toHaveText('Tema 2 de 31');
+ await expect(page.locator('#activeFilters [data-clear="topic"]')).toBeVisible();
+ await page.goBack();
+ await expect(page.locator('#topicPosition')).toHaveText('Tema 1 de 31');
+});
