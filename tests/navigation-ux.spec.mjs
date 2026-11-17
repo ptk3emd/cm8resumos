@@ -99,3 +99,21 @@ test('FSRS keeps topic context, active filter chip and topic pager synchronized'
  await page.goBack();
  await expect(page.locator('#topicPosition')).toHaveText('Tema 1 de 31');
 });
+
+
+test('topic pager remains keyboard-operable for successive themes',async({page})=>{
+ await page.goto('./?topic=2');
+ const next=page.locator('#nextTopic');
+ await next.focus();
+ await page.keyboard.press('Enter');
+ await expect(page.locator('#topicPosition')).toHaveText('Tema 3 de 31');
+ await expect(next).toBeFocused();
+ await page.keyboard.press('Enter');
+ await expect(page.locator('#topicPosition')).toHaveText('Tema 4 de 31');
+ await expect(next).toBeFocused();
+ const prev=page.locator('#prevTopic');
+ await prev.focus();
+ await page.keyboard.press('Enter');
+ await expect(page.locator('#topicPosition')).toHaveText('Tema 3 de 31');
+ await expect(prev).toBeFocused();
+});
