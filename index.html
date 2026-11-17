@@ -1038,7 +1038,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 }
 :root[data-theme="dark"] :is(.stat-guide summary,.study-overview>summary,.content-map summary,.cognitive-tools summary,.cognitive-metrics summary){color:var(--ink)}
 :root[data-theme="dark"] :is(.search-input,.field-select,.topic-jump select){background:var(--panel);color:var(--ink);border-color:var(--stroke-strong)}
-:root[data-theme="dark"] :is(.search-input::placeholder){color:var(--muted);opacity:1}
+:root[data-theme="dark"] .search-input::placeholder{color:var(--muted);opacity:1}
 :root[data-theme="dark"] :is(.filter-chip,.subtle-btn.active){background:var(--blue-soft);color:var(--blue-soft-ink)}
 :root[data-theme="dark"] :is(.topic-pager button,.focus-arrows button,.topbtn,.more-btn){background:var(--panel);color:var(--ink)}
 :root[data-theme="dark"] .stat-guide dd{color:var(--muted)}
@@ -1046,6 +1046,21 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  .stat-guide dl{grid-template-columns:1fr;gap:4px}
  .stat-guide dd{margin-bottom:7px}
  .study-overview{margin-top:20px}
+}
+
+
+/* Discoverable, keyboard-accessible horizontal status navigation on mobile. */
+.filter-scroll-prev{display:none}
+@media(max-width:850px){
+ .filter-scroll-cue:not([hidden]),.filter-scroll-prev:not([hidden]){
+  display:grid;place-items:center;position:absolute;top:0;bottom:0;
+  min-width:44px;min-height:44px;padding:0;
+  color:var(--ink);background:var(--panel);border:1px solid var(--stroke-strong);
+  border-radius:8px;font:inherit;font-size:18px;z-index:2;cursor:pointer;
+ }
+ .filter-scroll-cue:not([hidden]){right:0}
+ .filter-scroll-prev:not([hidden]){left:0}
+ .filter-pills{scroll-padding-inline:44px}
 }
 
 </style>
@@ -1083,7 +1098,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
      </div>
     </div>
    <p class="search-status" id="searchStatus" role="status" aria-live="polite"></p><div class="active-filters" id="activeFilters" hidden aria-label="Filtros ativos"></div><div class="divider"></div>
-   <div class="filter-second"><div class="pill-scroller"><div class="filter-pills" id="statusFilters" role="group" aria-label="Filtrar situação" aria-describedby="filterSwipeHint"><button class="pill active" data-filter="all" aria-pressed="true">Todos</button><button class="pill" data-filter="todo" aria-pressed="false">Não estudados</button><button class="pill" data-filter="review" aria-pressed="false">Revisar manualmente</button><button class="pill" data-filter="done" aria-pressed="false">Estudados</button><button class="pill" data-filter="star" aria-pressed="false">★ Favoritos</button><button class="pill" data-filter="hidden" aria-pressed="false">Ocultos</button></div><span class="filter-scroll-cue" id="filterScrollCue" aria-hidden="true">→</span></div><span class="sr-only" id="filterSwipeHint">No celular, deslize horizontalmente para acessar todos os estados, incluindo Favoritos e Ocultos.</span><div class="mode-switch" aria-label="Modo de visualização"><button class="mode-btn active" data-mode="list" aria-pressed="true">Lista</button><button class="mode-btn" data-mode="focus" aria-pressed="false">Foco</button><button class="mode-btn" data-mode="fsrs" aria-pressed="false">Revisão FSRS</button></div></div>
+   <div class="filter-second"><div class="pill-scroller"><div class="filter-pills" id="statusFilters" role="group" aria-label="Filtrar situação" aria-describedby="filterSwipeHint"><button class="pill active" data-filter="all" aria-pressed="true">Todos</button><button class="pill" data-filter="todo" aria-pressed="false">Não estudados</button><button class="pill" data-filter="review" aria-pressed="false">Revisar manualmente</button><button class="pill" data-filter="done" aria-pressed="false">Estudados</button><button class="pill" data-filter="star" aria-pressed="false">★ Favoritos</button><button class="pill" data-filter="hidden" aria-pressed="false">Ocultos</button></div><button type="button" id="filterScrollPrev" class="filter-scroll-prev" aria-label="Mostrar filtros anteriores" title="Filtros anteriores" hidden>←</button><button type="button" class="filter-scroll-cue" id="filterScrollCue" aria-label="Mostrar mais filtros" title="Mais filtros" hidden>→</button></div><span class="sr-only" id="filterSwipeHint">No celular, deslize horizontalmente para acessar todos os estados, incluindo Favoritos e Ocultos.</span><div class="mode-switch" aria-label="Modo de visualização"><button class="mode-btn active" data-mode="list" aria-pressed="true">Lista</button><button class="mode-btn" data-mode="focus" aria-pressed="false">Foco</button><button class="mode-btn" data-mode="fsrs" aria-pressed="false">Revisão FSRS</button></div></div>
  </section>
  <section id="cognitivePools" class="cognitive-pools" hidden aria-label="Escolher fila diária"><button type="button" class="subtle-btn" data-pool="all">Todas as revisões</button><button type="button" class="subtle-btn" data-pool="A">A · Literal</button><button type="button" class="subtle-btn" data-pool="B">B · Essência e transferência</button><button type="button" class="subtle-btn" data-pool="C">C · Intervenções</button><p>Cartões novos compartilham a mesma cota diária. Intervenções não consomem notas FSRS.</p></section>
  <section id="fsrsSettings" class="fsrs-settings" hidden aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><details class="fsrs-backup"><summary class="subtle-btn">Backup FSRS</summary><div class="fsrs-backup-actions"><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico</button><button type="button" id="fsrsImportButton" class="subtle-btn">Importar histórico</button><input type="file" id="fsrsImport" accept=".json,application/json" hidden></div></details></section>
@@ -1503,7 +1518,17 @@ $('activeFilters').addEventListener('click',ev=>{const b=ev.target.closest('[dat
  if(k==='all'){clearFilters();$('searchBox').focus();return;}
  if(k==='topic')ui.topic='all';else if(k==='status')ui.status='all';else if(k==='level'){ui.level='all';$('levelSelect').value='all';}else if(k==='type'){ui.type='all';$('typeSelect').value='all';}else if(k==='audit'){ui.audit='all';$('auditSelect').value='all';}else if(k==='search'){clearTimeout(searchTimer);$('searchBox').value='';ui.search='';}
  ui.limit=22;ui.focusId=null;render();($('activeFilters').querySelector('.filter-chip')||$('searchBox')).focus();});
-$('statusFilters').addEventListener('click',ev=>{let b=ev.target.closest('[data-filter]');if(!b)return;ui.status=b.dataset.filter;ui.limit=22;ui.focusId=null;render();});
+$('statusFilters').addEventListener('click',ev=>{
+ const b=ev.target.closest('[data-filter]');if(!b)return;
+ ui.status=b.dataset.filter;ui.limit=22;ui.focusId=null;render();
+ const rail=$('statusFilters'),active=Array.from(rail.querySelectorAll('[data-filter]')).find(el=>el.dataset.filter===ui.status);
+ if(!active)return;
+ const x=active.offsetLeft-rail.offsetLeft;
+ if(x<rail.scrollLeft+8)rail.scrollTo({left:Math.max(0,x-12),behavior:'auto'});
+ else if(x+active.offsetWidth>rail.scrollLeft+rail.clientWidth-8)
+  rail.scrollTo({left:x+active.offsetWidth-rail.clientWidth+12,behavior:'auto'});
+ updateFilterCues();
+});
 qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{cognitiveSession=null;ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;
  if(ui.mode==='fsrs')openAnswers.clear();
  if(ui.mode==='fsrs'||ui.mode==='focus')$('contentMap').open=false;
@@ -1542,7 +1567,9 @@ function labelSelectCounts(){const nNew=CARDS.filter(c=>c.new).length,a={};for(c
 function renderPillCounts(){if(!labelSelectCounts.done){labelSelectCounts();labelSelectCounts.done=1;}const t=totals(),counts={todo:t.todo,review:t.review,done:t.done,star:t.stars,hidden:t.hidden};qsa('#statusFilters [data-filter]').forEach(b=>{if(!b.dataset.label)b.dataset.label=b.textContent.replace('★','').trim();const n=counts[b.dataset.filter];let el=b.querySelector('.pill-count');if(n==null){el?.remove();return;}if(!el){el=document.createElement('span');el.className='pill-count';b.append(el);}el.textContent=n;});}
 function updateFilterCues(){renderPillCounts();
  const pill=$('statusFilters'),cue=$('filterScrollCue');
- cue.hidden=pill.scrollWidth<=pill.clientWidth+2||pill.scrollLeft+pill.clientWidth>=pill.scrollWidth-3;
+ const overflow=pill.scrollWidth>pill.clientWidth+2;
+ $('filterScrollPrev').hidden=!overflow||pill.scrollLeft<=3;
+ cue.hidden=!overflow||pill.scrollLeft+pill.clientWidth>=pill.scrollWidth-3;
  const selected=[ui.level,ui.type,ui.audit].filter(v=>v!=='all').length;
  $('mobileFilters').textContent=selected?`Mais filtros (${selected})`:'Mais filtros';
 }
@@ -1551,6 +1578,11 @@ $('mobileFilters').addEventListener('click',()=>{
  $('mobileFilters').setAttribute('aria-expanded',String(open));
  updateFilterCues();
 });
+function scrollStatusRail(direction){const rail=$('statusFilters');
+ rail.scrollBy({left:direction*Math.min(rail.clientWidth*.75,240),behavior:prefersReduced()?'auto':'smooth'});
+}
+$('filterScrollPrev').addEventListener('click',()=>scrollStatusRail(-1));
+$('filterScrollCue').addEventListener('click',()=>scrollStatusRail(1));
 $('statusFilters').addEventListener('scroll',updateFilterCues,{passive:true});
 window.addEventListener('resize',updateFilterCues);
 let lastMobileTopicsTrigger=$('mobileTopics');
