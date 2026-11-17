@@ -49,3 +49,14 @@ O PR #25 ocultou excessivamente duas áreas que deveriam ter sido **reformuladas
 - Nos telefones, a descrição secundária dos resumos é omitida visualmente, mas o texto de ajuda continua disponível dentro do painel. Os próprios títulos e indicadores de expansão permanecem visíveis.
 - Correção de regressão verificada no CI anterior: o primeiro flashcard chegava a **1182 px (Android Chromium)** e **1175 px (iOS WebKit)**, ultrapassando o limite de 1100 px. Os painéis foram compactados sem reduzir alvos interativos abaixo de 44px; o teste existente `study-refinements.spec.mjs` continua exigindo a mesma altura máxima.
 - Nova verificação Playwright mede ausência de overflow horizontal em 320/768/1280 px, altura dos resumos e posição do primeiro cartão nos perfis móveis. Validar novamente no CI do PR antes do merge.
+
+
+## Painel de sessão · Impeccable layout / overdrive
+
+- **Leituras registradas** soma os contadores válidos dos cartões desta biblioteca, incluindo outros temas e cartões ocultos. Revelar respostas e marcar Estudado não aumenta o total.
+- **Flashcards FSRS** conta cartões distintos com ao menos uma avaliação registrada. Repetir um cartão aumenta **avaliações no total**, mas não duplica o cartão. Qualquer nota conta como avaliação; o indicador não afirma domínio do conteúdo.
+- **Cartões FSRS hoje** usa o dia local do navegador e conta cada cartão uma vez nesse dia. O painel atualiza ao virar a data; totais acumulados permanecem.
+- Os totais são globais e não mudam com filtros da biblioteca. Leituras não possuem datas históricas; o painel não inventa leituras por dia.
+- O painel distingue histórico FSRS carregando/indisponível de zero avaliações. Importação, desfazer e alterações em outra aba atualizam as contagens.
+- Os cinco filtros e contadores manuais ficam dentro da chamada visível **Marcações manuais · contagens**, separados da atividade registrada. O guia e a exploração continuam antes dos filtros e cartões, com abertura nativa e persistente.
+- As atualizações mantêm o valor final correto imediatamente e usam uma transição breve somente quando o painel está visível; movimento reduzido desativa o efeito. Cliques de leitura reutilizam o resumo FSRS em memória, sem percorrer o histórico inteiro novamente.

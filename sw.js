@@ -1,5 +1,5 @@
 /* CM8: app shell offline. This path is scoped to /cm8resumos/ on GitHub Pages. */
-const CACHE_NAME='cm8resumos-shell-2026-11-17-discovery-polish-v6';
+const CACHE_NAME='cm8resumos-shell-2026-11-17-session-statistics-v7';
 const PREFIX='cm8resumos-shell-';
 const SHELL=['./','./index.html','./manifest.webmanifest','./assets/progress-io.js','./assets/cognitive.js','./assets/icon-192.png','./assets/icon-512.png'];
 self.addEventListener('install',event=>{

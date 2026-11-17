@@ -134,7 +134,9 @@ function updateReadUI(id){
   const output=card.querySelector('.cmn-read-number');
   if(output)output.textContent=String(reads[idForCard(card)]||0);
  });
+ global.dispatchEvent(new Event('cmn:read-counts-changed'));
 }
+global.addEventListener('storage',event=>{if(event.key===READ_KEY||event.key===null)updateReadUI();});
 function incrementRead(id){
  if(!id||!/^[0-9A-Z.]+$/.test(id))return;
  const reads=getReads(),n=reads[id]||0;
