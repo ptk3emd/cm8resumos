@@ -1281,10 +1281,66 @@ let openAnswers=new Set();let shuffleOrder=new Map();let toastTimer;
 const mark=id=>marks[id]||{};const status=id=>mark(id).status||'todo';
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify({version:1,exportedAt:new Date().toISOString(),cards:marks,cognitive:cognitiveSnapshot()}));storageOK=true;storageNotice();return true;}
  catch{storageOK=false;storageNotice();notify('Progresso não salvo. Use “Exportar progresso agora” para não perder suas marcações.',5500);return false;}}
-function setMark(id,field,value){if(!ALL_IDS.has(id))return;const next={...mark(id),[field]:value};if(next.status==='todo')delete next.status;if(!next.star)delete next.star;if(!next.hidden)delete next.hidden;
- if(Object.keys(next).length)marks[id]=next;else delete marks[id];save();render();
+// A manual status click must not scroll away while the list and sidebar are rebuilt.
+// Use the clicked control as the geometric anchor; if a filter removes its card,
+// move predictably to the next visible card (or the previous/empty state).
+let markViewportEpoch=0;
+function rememberMarkViewport(id,trigger){
+ const card=document.getElementById('card-'+id.replaceAll('.','-'));
+ if(!card)return null;
+ const cards=Array.from($('cardsContainer').querySelectorAll('.study-card')),index=cards.indexOf(card);
+ const active=trigger&&card.contains(trigger)?trigger:
+  (card.contains(document.activeElement)&&document.activeElement.dataset?.id===id?document.activeElement:null);
+ const rect=card.getBoundingClientRect();
+ return{id,action:active?.dataset.action||null,controlTop:active?.getBoundingClientRect().top??null,
+  cardTop:rect.top,previousId:index>0?cards[index-1]?.id:null,
+  nextId:index>=0?cards[index+1]?.id:null,mode:ui.mode,topic:ui.topic,status:ui.status};
+}
+function restoreMarkViewport(snapshot,refocus=true){
+ if(!snapshot)return;
+ const cardFor=domId=>domId?document.getElementById(domId):null;
+ const own=cardFor('card-'+snapshot.id.replaceAll('.','-'));
+ const next=cardFor(snapshot.nextId),previous=cardFor(snapshot.previousId);
+ const targetCard=own||next||previous;
+ let target=targetCard;
+ let desiredTop=own?snapshot.cardTop:Math.max(12,Math.min(120,snapshot.cardTop));
+ if(own&&snapshot.action){
+  const action=Array.from(own.querySelectorAll('[data-action]')).find(el=>el.dataset.action===snapshot.action&&el.dataset.id===snapshot.id);
+  if(action&&snapshot.controlTop!=null){target=action;desiredTop=snapshot.controlTop;}
+ }
+ if(!target){target=$('cardsContainer').querySelector('.empty')||$('listTitle');desiredTop=16;}
+ // Focus can trigger a deferred scroll in WebKit, so do it before compensation.
+ if(refocus){
+  if(!own){
+   const focus=targetCard?.querySelector('.question')||$('cardsContainer').querySelector('.empty button')||$('listTitle');
+   focus?.focus({preventScroll:true});
+  }else if(snapshot.action&&target!==own){
+   target.focus({preventScroll:true});
+  }
+ }
+ const root=document.documentElement,oldBehavior=root.style.scrollBehavior;
+ root.style.scrollBehavior='auto';
+ try{
+  const offset=target.getBoundingClientRect().top-desiredTop;
+  if(Math.abs(offset)>1)window.scrollTo(0,Math.max(0,window.scrollY+offset));
+ }finally{root.style.scrollBehavior=oldBehavior;}
+}
+function setMark(id,field,value,trigger){if(!ALL_IDS.has(id))return;
+ const viewport=rememberMarkViewport(id,trigger),epoch=++markViewportEpoch;
+ const next={...mark(id),[field]:value};if(next.status==='todo')delete next.status;if(!next.star)delete next.star;if(!next.hidden)delete next.hidden;
+ if(Object.keys(next).length)marks[id]=next;else delete marks[id];
+ save();render();restoreMarkViewport(viewport);
+ // WebKit may apply scroll anchoring after the click handler. Reconcile after paint,
+ // but do not restore a stale position if another mark or navigation has occurred.
+ if(viewport)requestAnimationFrame(()=>{
+  const current=()=>epoch===markViewportEpoch&&viewport.mode===ui.mode&&viewport.topic===ui.topic&&viewport.status===ui.status;
+  if(!current())return;
+  restoreMarkViewport(viewport,false);
+  requestAnimationFrame(()=>{if(current())restoreMarkViewport(viewport,false);});
+ });
  const action=field==='status'?(value==='review'?'review':'done'):field==='star'?'star':field==='hidden'?'hide':'';
- if(action){const btn=Array.from($('cardsContainer').querySelectorAll('[data-action]')).find(el=>el.dataset.action===action&&el.dataset.id===id);if(btn){btn.classList.add('action-ack');btn.addEventListener('animationend',()=>btn.classList.remove('action-ack'),{once:true});}}}
+ if(action){const btn=Array.from($('cardsContainer').querySelectorAll('[data-action]')).find(el=>el.dataset.action===action&&el.dataset.id===id);if(btn){btn.classList.add('action-ack');btn.addEventListener('animationend',()=>btn.classList.remove('action-ack'),{once:true});}}
+}
 function notify(message,duration=3000){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),duration);}
 function totals(){let done=0,review=0,hidden=0,stars=0;for(const c of CARDS){let m=mark(c.id);if(m.status==='done')done++;else if(m.status==='review')review++;if(m.hidden)hidden++;if(m.star)stars++;}return{done,review,hidden,stars,todo:TOTAL-done-review};}
 function getFiltered(){let list=CARDS.filter(c=>{
@@ -1570,10 +1626,10 @@ function fallbackCopy(text){return new Promise((resolve,reject)=>{const previous
 function copyText(text){if(navigator.clipboard?.writeText&&window.isSecureContext)return navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));return fallbackCopy(text);}
 function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let action=b.dataset.action,id=b.dataset.id,m=mark(id);
  switch(action){case'reveal':if(ui.showAll){ui.showAll=false;openAnswers=new Set([id]);}else if(openAnswers.has(id))openAnswers.delete(id);else openAnswers.add(id);if(ui.mode==='fsrs'){renderFSRS();$('cardsContainer').querySelector('.answer-box')?.focus();}else renderCards(getFiltered());if(openAnswers.has(id))document.getElementById('card-'+id.replaceAll('.','-'))?.querySelector('.answer-box')?.classList.add('is-revealing');break;
- case'done':setMark(id,'status',status(id)==='done'?'todo':'done');break;
- case'review':setMark(id,'status',status(id)==='review'?'todo':'review');break;
- case'star':setMark(id,'star',!m.star);break;
- case'hide':setMark(id,'hidden',!m.hidden);notify(m.hidden?'Cartão reexibido.':'Cartão ocultado. Use o filtro “Ocultos” para recuperá-lo.');break;
+ case'done':setMark(id,'status',status(id)==='done'?'todo':'done',b);break;
+ case'review':setMark(id,'status',status(id)==='review'?'todo':'review',b);break;
+ case'star':setMark(id,'star',!m.star,b);break;
+ case'hide':setMark(id,'hidden',!m.hidden,b);notify(m.hidden?'Cartão reexibido.':'Cartão ocultado. Use o filtro “Ocultos” para recuperá-lo.');break;
  case'edit':openTextEditor(id);break;
  case'copy':{let c=displayText(byId.get(id));copyText(`${c.id} — ${c.scenario?c.scenario+"\n\n":""}${c.question}\n\n${c.answer}`).then(()=>notify('Cartão copiado: pergunta e resposta.')).catch(()=>notify('Não foi possível copiar neste navegador.'));break;}
  case'grade':gradeFSRS(id,Number(b.dataset.grade));break;
