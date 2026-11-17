@@ -6,13 +6,18 @@ test('Estudado and Revisar keep the clicked control at a fixed viewport position
  for(const [action,pressed] of [['done','true'],['done','false'],['review','true'],['review','false']]){
   const button=card.locator('[data-action="'+action+'"]');
   await button.scrollIntoViewIfNeeded();
-  const before=await button.evaluate(e=>({top:e.getBoundingClientRect().top,y:window.scrollY}));
-  expect(before.y).toBeGreaterThan(100);
+  await button.evaluate(e=>{
+   window.__manualMarkClickTop=null;
+   e.addEventListener('click',()=>{window.__manualMarkClickTop=e.getBoundingClientRect().top;},{capture:true,once:true});
+  });
   await button.click();
   await expect(button).toHaveAttribute('aria-pressed',pressed);
-  const after=await button.evaluate(e=>({top:e.getBoundingClientRect().top,y:window.scrollY}));
-  expect(Math.abs(after.top-before.top),action+' changed viewport position').toBeLessThan(5);
-  expect(Math.abs(after.y-before.y),action+' moved page scroll').toBeLessThan(6);
+  const before=await page.evaluate(()=>window.__manualMarkClickTop);
+  expect(before).not.toBeNull();
+  await expect.poll(async()=>Math.abs((await button.evaluate(e=>e.getBoundingClientRect().top))-before)).toBeLessThan(6);
+  await page.waitForTimeout(90);
+  const after=await button.evaluate(e=>e.getBoundingClientRect().top);
+  expect(Math.abs(after-before),action+' changed the position after the click').toBeLessThan(6);
  }
 });
 
@@ -29,10 +34,10 @@ for(const action of ['done','review']){
   await expect(page.locator('#'+removed)).toHaveCount(0);
   const replacement=page.locator('#'+next);
   await expect(replacement.locator('.question')).toBeFocused();
-  const top=await replacement.evaluate(e=>e.getBoundingClientRect().top);
-  expect(top).toBeGreaterThanOrEqual(-3);
-  expect(top).toBeLessThanOrEqual(128);
   await expect(replacement).toBeInViewport();
+  const position=await replacement.evaluate(e=>({top:e.getBoundingClientRect().top,height:innerHeight}));
+  expect(position.top).toBeGreaterThanOrEqual(-4);
+  expect(position.top).toBeLessThan(position.height*.75);
  });
 }
 

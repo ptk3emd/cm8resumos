@@ -1284,6 +1284,7 @@ function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify({version:1,exp
 // A manual status click must not scroll away while the list and sidebar are rebuilt.
 // Use the clicked control as the geometric anchor; if a filter removes its card,
 // move predictably to the next visible card (or the previous/empty state).
+let markViewportEpoch=0;
 function rememberMarkViewport(id,trigger){
  const card=document.getElementById('card-'+id.replaceAll('.','-'));
  if(!card)return null;
@@ -1293,9 +1294,9 @@ function rememberMarkViewport(id,trigger){
  const rect=card.getBoundingClientRect();
  return{id,action:active?.dataset.action||null,controlTop:active?.getBoundingClientRect().top??null,
   cardTop:rect.top,previousId:index>0?cards[index-1]?.id:null,
-  nextId:index>=0?cards[index+1]?.id:null};
+  nextId:index>=0?cards[index+1]?.id:null,mode:ui.mode,topic:ui.topic,status:ui.status};
 }
-function restoreMarkViewport(snapshot){
+function restoreMarkViewport(snapshot,refocus=true){
  if(!snapshot)return;
  const cardFor=domId=>domId?document.getElementById(domId):null;
  const own=cardFor('card-'+snapshot.id.replaceAll('.','-'));
@@ -1308,24 +1309,35 @@ function restoreMarkViewport(snapshot){
   if(action&&snapshot.controlTop!=null){target=action;desiredTop=snapshot.controlTop;}
  }
  if(!target){target=$('cardsContainer').querySelector('.empty')||$('listTitle');desiredTop=16;}
+ // Focus can trigger a deferred scroll in WebKit, so do it before compensation.
+ if(refocus){
+  if(!own){
+   const focus=targetCard?.querySelector('.question')||$('cardsContainer').querySelector('.empty button')||$('listTitle');
+   focus?.focus({preventScroll:true});
+  }else if(snapshot.action&&target!==own){
+   target.focus({preventScroll:true});
+  }
+ }
  const root=document.documentElement,oldBehavior=root.style.scrollBehavior;
  root.style.scrollBehavior='auto';
  try{
   const offset=target.getBoundingClientRect().top-desiredTop;
   if(Math.abs(offset)>1)window.scrollTo(0,Math.max(0,window.scrollY+offset));
  }finally{root.style.scrollBehavior=oldBehavior;}
- if(!own){
-  const focus=targetCard?.querySelector('.question')||$('cardsContainer').querySelector('.empty button')||$('listTitle');
-  focus?.focus({preventScroll:true});
- }else if(snapshot.action&&target!==own){
-  target.focus({preventScroll:true});
- }
 }
 function setMark(id,field,value,trigger){if(!ALL_IDS.has(id))return;
- const viewport=rememberMarkViewport(id,trigger);
+ const viewport=rememberMarkViewport(id,trigger),epoch=++markViewportEpoch;
  const next={...mark(id),[field]:value};if(next.status==='todo')delete next.status;if(!next.star)delete next.star;if(!next.hidden)delete next.hidden;
  if(Object.keys(next).length)marks[id]=next;else delete marks[id];
  save();render();restoreMarkViewport(viewport);
+ // WebKit may apply scroll anchoring after the click handler. Reconcile after paint,
+ // but do not restore a stale position if another mark or navigation has occurred.
+ if(viewport)requestAnimationFrame(()=>{
+  const current=()=>epoch===markViewportEpoch&&viewport.mode===ui.mode&&viewport.topic===ui.topic&&viewport.status===ui.status;
+  if(!current())return;
+  restoreMarkViewport(viewport,false);
+  requestAnimationFrame(()=>{if(current())restoreMarkViewport(viewport,false);});
+ });
  const action=field==='status'?(value==='review'?'review':'done'):field==='star'?'star':field==='hidden'?'hide':'';
  if(action){const btn=Array.from($('cardsContainer').querySelectorAll('[data-action]')).find(el=>el.dataset.action===action&&el.dataset.id===id);if(btn){btn.classList.add('action-ack');btn.addEventListener('animationend',()=>btn.classList.remove('action-ack'),{once:true});}}
 }
