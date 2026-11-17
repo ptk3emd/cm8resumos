@@ -100,7 +100,7 @@ a:hover { text-decoration:underline; }
 .topbar-inner { max-width:var(--max);min-height:72px;margin:auto;padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px; }
 .brand { display:flex;align-items:center;gap:12px;min-width:0; }
 .brand-mark { width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;background:var(--ink);color:var(--page);font-size:16px;letter-spacing:-.04em;font-weight:700; }
-.brand-sub { font:500 11px/1.4 var(--mono);letter-spacing:.015em;color:var(--quiet);margin-bottom:1px; }
+.brand-sub { font:500 12px/1.4 var(--mono);letter-spacing:.015em;color:var(--quiet);margin-bottom:1px; }
 .brand-title { font-size:16px;line-height:1.35;letter-spacing:-.025em;font-weight:650; }
 .top-actions { display:flex;align-items:center;justify-content:flex-end;gap:8px; }
 .topbtn { min-height:44px;border:1px solid var(--stroke);border-radius:8px;padding:9px 13px;background:var(--panel);color:var(--ink);font-size:13px;font-weight:550;white-space:nowrap; }
@@ -112,7 +112,7 @@ a:hover { text-decoration:underline; }
 .sidebar { position:sticky;top:99px;max-height:calc(100vh - 120px);overflow:auto;scrollbar-color:var(--stroke-strong) transparent;scrollbar-width:thin;padding:0 8px 12px 0;overscroll-behavior:contain; }
 .sidebar-head { padding:0 10px 14px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--stroke);margin-bottom:10px; }
 .sidebar-title { font-size:15px;letter-spacing:-.012em;font-weight:650; }
-.eyebrow { font-size:11px;line-height:1.2;letter-spacing:.025em;font-weight:500;color:var(--quiet); }
+.eyebrow { font-size:12px;line-height:1.2;letter-spacing:.025em;font-weight:500;color:var(--quiet); }
 .topic-list { display:grid;gap:3px; }
 .topic-btn { border:0;display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;align-items:start;text-align:left;border-radius:7px;background:transparent;padding:10px;color:var(--ink);min-height:44px;width:100%; }
 .topic-btn:hover { background:var(--subtle); }
@@ -121,7 +121,7 @@ a:hover { text-decoration:underline; }
 .topic-btn.active .topic-num { color:var(--ink); }
 .topic-name { display:block;font-size:13px;line-height:1.42;font-weight:500;letter-spacing:-.006em;text-wrap:pretty; }
 .topic-btn.active .topic-name { font-weight:650; }
-.topic-small { display:block;margin-top:4px;font-size:11px;line-height:1.45;color:var(--quiet); }
+.topic-small { display:block;margin-top:4px;font-size:12px;line-height:1.45;color:var(--quiet); }
 .mini-meter { height:2px;margin-top:9px;background:var(--stroke);border-radius:0;overflow:hidden; }
 .mini-meter>i { display:block;height:100%;background:var(--blue); }
 .topic-all { margin-bottom:8px; }
@@ -131,13 +131,13 @@ a:hover { text-decoration:underline; }
 
 /* Intro and progress: no card/background decoration. */
 .hero { display:grid;grid-template-columns:minmax(0,1fr) 156px;align-items:end;gap:32px;padding:8px 0 30px;border-bottom:1px solid var(--stroke); }
-.hero-kicker { margin-bottom:14px;font:500 11px/1.3 var(--mono);letter-spacing:.045em;color:var(--quiet); }
-.hero h1 { margin:0 0 12px;font-size:clamp(31px,3.6vw,40px);line-height:1.12;letter-spacing:-.052em;font-weight:700;max-width:23ch;text-wrap:balance; }
+.hero-kicker { margin-bottom:14px;font:500 12px/1.3 var(--mono);letter-spacing:.045em;color:var(--quiet); }
+.hero h1 { margin:0 0 12px;font-size:clamp(31px,3.6vw,40px);line-height:1.12;letter-spacing:-.035em;font-weight:700;max-width:23ch;text-wrap:balance; }
 .hero p { max-width:64ch;margin:0;font-size:15px;line-height:1.66;color:var(--muted); }
 .hero-summary { min-width:0;display:grid;gap:11px;align-self:end;padding:0 0 3px; }
 .hero-progress { display:flex;justify-content:space-between;align-items:baseline;gap:8px; }
-.hero-progress strong { font-size:29px;line-height:1.1;letter-spacing:-.045em;font-weight:650;font-variant-numeric:tabular-nums; }
-.hero-progress span { font-size:11px;line-height:1.4;color:var(--quiet);max-width:73px; }
+.hero-progress strong { font-size:29px;line-height:1.1;letter-spacing:-.03em;font-weight:650;font-variant-numeric:tabular-nums; }
+.hero-progress span { font-size:12px;line-height:1.4;color:var(--quiet);max-width:73px; }
 .progress-track { height:5px;border-radius:2px;background:var(--subtle-hover);overflow:hidden; }
 .progress-fill { height:100%;background:var(--success);width:0;transition:width .18s ease; }
 .hero-foot { font-size:12px;line-height:1.4;color:var(--quiet); }
@@ -190,7 +190,7 @@ a:hover { text-decoration:underline; }
 .meta-line { display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:17px; }
 .meta-chips { display:flex;align-items:center;flex-wrap:wrap;gap:7px; }
 .meta-id { font:600 12px/1.4 var(--mono);letter-spacing:.012em;color:var(--quiet); }
-.chip { display:inline-block;border:1px solid var(--stroke);background:var(--subtle);border-radius:4px;padding:3px 7px;color:var(--muted);font-size:11px;line-height:1.4;font-weight:500; }
+.chip { display:inline-block;border:1px solid var(--stroke);background:var(--subtle);border-radius:4px;padding:3px 7px;color:var(--muted);font-size:12px;line-height:1.4;font-weight:500; }
 .chip-new { color:var(--blue-soft-ink);background:var(--blue-soft);border-color:transparent; }
 .status-chip { font-size:12px;font-weight:600; }
 .status-chip.done { color:var(--success); }
@@ -203,7 +203,7 @@ a:hover { text-decoration:underline; }
 .hidden-copy { color:var(--muted);font-size:14px;line-height:1.55; }
 .answer-box { padding:23px 0 0;border-top:1px solid var(--stroke);background:transparent;overflow-wrap:anywhere; }
 .answer-box:focus-visible,.question:focus-visible { outline:2px dashed var(--blue);outline-offset:3px; }
-.answer-title { margin-bottom:12px;font-size:11px;letter-spacing:.035em;font-weight:700;text-transform:uppercase;color:var(--quiet); }
+.answer-title { margin-bottom:12px;font-size:12px;letter-spacing:.035em;font-weight:700;text-transform:uppercase;color:var(--quiet); }
 .answer-copy { max-width:70ch;font-size:17px;line-height:1.77;letter-spacing:-.003em;font-weight:400;color:var(--ink); }
 .answer-copy p { margin:0 0 12px; }
 .answer-copy p:last-child { margin-bottom:0; }
@@ -263,7 +263,7 @@ a:hover { text-decoration:underline; }
   .brand { gap:9px; }
   .brand-mark { width:36px;height:36px;font-size:14px; }
   .brand-title { font-size:14px; }
-  .brand-sub { font-size:11px; }
+  .brand-sub { font-size:12px; }
   .top-actions { gap:5px; }
   .topbtn { padding:8px 10px;font-size:12px; }
   .topbtn .optional { display:none; }
@@ -273,7 +273,7 @@ a:hover { text-decoration:underline; }
   .hero-summary { grid-template-columns:auto 1fr auto;gap:12px;align-items:center; }
   .hero-progress strong { font-size:22px; }
   .hero-progress span { display:none; }
-  .hero-foot { font-size:11px;text-align:right; }
+  .hero-foot { font-size:12px;text-align:right; }
   .stat-grid { gap:0;padding:18px 0;margin-bottom:22px; }
   .stat { padding:0 8px; }
   .stat .number { font-size:19px; }
@@ -465,7 +465,7 @@ a:hover { text-decoration:underline; }
 .answer-copy .answer-point-body .answer-paragraph:last-child { margin-bottom:0; }
 .answer-copy .answer-point-body .answer-subheading { margin:9px 0 6px; }
 .answer-box .answer-title { margin-bottom:16px; }
-.case-question .case-vignette-label,.case-question .case-prompt-label { display:block; color:var(--quiet); text-transform:uppercase; letter-spacing:.06em; font-size:11px; line-height:1.4; font-weight:700; }
+.case-question .case-vignette-label,.case-question .case-prompt-label { display:block; color:var(--quiet); text-transform:uppercase; letter-spacing:.06em; font-size:12px; line-height:1.4; font-weight:700; }
 .case-question .case-vignette { margin:5px 0 0; padding:0 0 16px; border-bottom:1px solid var(--stroke); line-height:1.65; }
 .case-question .case-prompt-label { margin-top:15px; }
 .case-question .case-prompt { margin-top:5px; }
@@ -473,7 +473,7 @@ a:hover { text-decoration:underline; }
   .answer-copy { font-size:16px; line-height:1.68; }
   .answer-copy .answer-points { gap:14px; margin:13px 0 17px; }
   .answer-copy .answer-point { grid-template-columns:26px minmax(0,1fr); gap:9px; }
-  .answer-copy .answer-point-index { min-width:26px; height:26px; font-size:11px; }
+  .answer-copy .answer-point-index { min-width:26px; height:26px; font-size:12px; }
   .answer-copy .answer-paragraph { margin-bottom:12px; }
   .case-question .case-vignette { line-height:1.58; }
 }
@@ -483,7 +483,7 @@ a:hover { text-decoration:underline; }
 
 
 /* Clinical review status: visible and explicit, never a false certification. */
-.audit-status { display:inline-flex;align-items:center;padding:3px 7px;border:1px solid var(--stroke);border-radius:5px;background:var(--subtle);color:var(--muted);font-size:11px;line-height:1.4;font-weight:650; }
+.audit-status { display:inline-flex;align-items:center;padding:3px 7px;border:1px solid var(--stroke);border-radius:5px;background:var(--subtle);color:var(--muted);font-size:12px;line-height:1.4;font-weight:650; }
 .audit-status.audit-corrigido { background:var(--success-bg);color:var(--success);border-color:transparent; }
 .audit-status.audit-revisar { background:var(--warning-bg);color:var(--warning);border-color:transparent; }
 .audit-status.audit-novo { background:var(--blue-soft);color:var(--blue-soft-ink);border-color:transparent; }
@@ -574,7 +574,7 @@ a:hover { text-decoration:underline; }
 }
 .answer-subheading-text {min-inline-size:0}
 .answer-section-number {
- flex:none;font:650 11px/1.4 var(--mono);letter-spacing:0;
+ flex:none;font:650 12px/1.4 var(--mono);letter-spacing:0;
  color:var(--muted);font-variant-numeric:tabular-nums;
 }
 .answer-copy .answer-points {
@@ -590,7 +590,7 @@ a:hover { text-decoration:underline; }
  display:flex;align-items:center;justify-content:center;
  min-inline-size:32px;min-block-size:32px;padding:4px 3px;margin-block-start:.08em;
  border:1px solid var(--stroke);border-radius:7px;background:var(--subtle);
- color:var(--muted);font:650 11px/1.1 var(--mono);letter-spacing:0;
+ color:var(--muted);font:650 12px/1.1 var(--mono);letter-spacing:0;
  font-variant-numeric:tabular-nums;
 }
 .answer-copy .answer-point-body {min-inline-size:0}
@@ -602,7 +602,7 @@ a:hover { text-decoration:underline; }
 }
 .answer-outline-title {
  display:block;margin:0 0 .8em;color:var(--quiet);
- font-size:11px;line-height:1.4;font-weight:700;
+ font-size:12px;line-height:1.4;font-weight:700;
  letter-spacing:.055em;text-transform:uppercase;
 }
 .answer-outline-links {
@@ -624,7 +624,7 @@ a:hover { text-decoration:underline; }
 .answer-outline-links a:hover {background:var(--subtle);border-color:var(--stroke-strong)}
 .answer-outline-links a:focus-visible {outline:2px dashed var(--blue);outline-offset:2px}
 .answer-outline-node {
- flex:none;font:650 11px/1.4 var(--mono);letter-spacing:0;
+ flex:none;font:650 12px/1.4 var(--mono);letter-spacing:0;
  font-variant-numeric:tabular-nums;color:var(--muted);
  border-block-end:2px solid var(--link-accent);padding-block-end:2px;
 }
@@ -639,7 +639,7 @@ a:hover { text-decoration:underline; }
  .answer-copy .answer-section {margin:1.25em 0;padding:1em 0 0 12px}
  .answer-copy .answer-subheading {font-size:15px;gap:8px}
  .answer-copy .answer-point {grid-template-columns:28px minmax(0,1fr);gap:9px}
- .answer-copy .answer-point-index {min-inline-size:28px;min-block-size:28px;font-size:10px}
+ .answer-copy .answer-point-index {min-inline-size:28px;min-block-size:28px;font-size:12px}
  .answer-copy .answer-points {gap:.9em;margin:1em 0 1.25em}
  .answer-outline-links {grid-template-columns:minmax(0,1fr);gap:5px}
  .answer-outline-links a {min-block-size:44px;padding:8px 10px}
@@ -861,19 +861,19 @@ button.stat[aria-pressed="true"] .number { text-decoration:underline;text-decora
 .map-cell { position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:6px;min-height:92px;padding:10px 11px 11px;border:1px solid var(--stroke);border-radius:8px;background:var(--panel);color:var(--ink);text-align:left;font:inherit;overflow:hidden; }
 .map-cell:hover { border-color:var(--stroke-strong);background:var(--subtle); }
 .map-cell[aria-current="true"] { border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue); }
-.map-cell .map-num { display:flex;justify-content:space-between;font:500 11px/1.3 var(--mono);color:var(--quiet);font-variant-numeric:tabular-nums; }
+.map-cell .map-num { display:flex;justify-content:space-between;font:500 12px/1.3 var(--mono);color:var(--quiet);font-variant-numeric:tabular-nums; }
 .map-cell .map-name { font-size:12.5px;line-height:1.35;font-weight:550;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden; }
 .map-bar { display:flex;height:4px;border-radius:2px;background:var(--subtle-hover);overflow:hidden; }
 .map-bar i { background:var(--success); } .map-bar b { background:var(--warning); }
 .map-cell.is-complete .map-num span:last-child { color:var(--success);font-weight:650; }
-.map-legend { display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11.5px;color:var(--quiet); }
+.map-legend { display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--quiet); }
 .map-legend span { display:inline-flex;align-items:center;gap:6px; }
 .lg { width:10px;height:4px;border-radius:2px;display:inline-block; }
 .lg-done { background:var(--success); } .lg-review { background:var(--warning); } .lg-todo { background:var(--subtle-hover);box-shadow:inset 0 0 0 1px var(--stroke-strong); }
 .search-input { padding-right:76px; }
 .search-input::-webkit-search-cancel-button { -webkit-appearance:none;appearance:none; }
 .search-input:focus { border-color:var(--blue); }
-.search-kbd { position:absolute;right:12px;top:50%;transform:translateY(-50%);min-width:22px;padding:1px 6px;border:1px solid var(--stroke-strong);border-radius:5px;font:500 11px/1.5 var(--mono);color:var(--quiet);text-align:center;pointer-events:none; }
+.search-kbd { position:absolute;right:12px;top:50%;transform:translateY(-50%);min-width:22px;padding:1px 6px;border:1px solid var(--stroke-strong);border-radius:5px;font:500 12px/1.5 var(--mono);color:var(--quiet);text-align:center;pointer-events:none; }
 .search-wrap:focus-within .search-kbd,.search-wrap.has-value .search-kbd { display:none; }
 .search-clear { position:absolute;right:2px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:7px;background:transparent;color:var(--muted); }
 .search-clear:hover { color:var(--ink);background:var(--subtle); }
@@ -927,6 +927,46 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 .intervention summary {min-height:44px;cursor:pointer}
 .fsrs-grade-row button {white-space:normal;overflow-wrap:anywhere}
 @media(max-width:640px){.cognitive-tools,.cognitive-metrics,.cognitive-pools,.intervention {padding:12px}.cognitive-actions button {flex:1 1 140px}.cognitive-tools select {width:100%}}
+
+/* Study refinements: task first, readable metadata and recoverable reviews. */
+.topbtn {min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
+.brand>div:last-child {min-width:0;}
+.hero {gap:24px;padding-bottom:20px;}
+.hero h1 {font-size:clamp(26px,3vw,34px);}
+.hero .study-start {margin-block:12px 8px;}
+.hero .study-start .study-secondary {background:var(--page);color:var(--ink);border-color:var(--stroke-strong);}
+.hero .study-start .study-secondary:hover {background:var(--subtle);}
+.hero #reviewStartSummary {font-size:14px;line-height:1.5;}
+.study-overview {max-width:var(--read);margin:0 auto 12px;border-bottom:1px solid var(--stroke);}
+.study-overview>summary {min-height:44px;align-content:center;cursor:pointer;font-size:14px;font-weight:600;}
+.study-overview[open] {padding-bottom:12px;}
+.study-overview .cognitive-metrics {margin-bottom:0;}
+.stat-help {margin:12px 0 0;font-size:14px;color:var(--muted);}
+.stat-guide summary {min-height:44px;align-content:center;cursor:pointer;font-size:14px;}
+.stat-guide dl {margin:0;font-size:14px;}
+.stat-guide dt {font-weight:650;}.stat-guide dd {margin:0 0 10px;color:var(--muted);}
+.cognitive-tools {max-width:var(--read);margin:0 auto 12px;}
+.content-map {margin-bottom:12px;padding-bottom:8px;}
+.cognitive-metrics {margin-bottom:16px;}
+.cognitive-metrics summary {min-height:44px;align-content:center;cursor:pointer;}
+.cognitive-metrics dd {margin:0;}
+.cognitive-metrics .metric-help {font-size:14px;line-height:1.5;color:var(--muted);margin:6px 0;}
+.cognitive-metrics .subtle-btn {white-space:normal;}
+.fsrs-feedback {max-width:var(--read);margin:12px auto;padding:12px 0;border-block:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.fsrs-feedback p {margin:0;color:var(--muted);font-size:14px;flex:1 1 220px;}
+.fsrs-feedback button {min-width:88px;}
+@media(max-width:640px){
+ .topbar-inner {gap:12px;}.top-actions {flex:none;gap:4px;}
+ .topbtn {padding:8px;}.brand-title {overflow-wrap:break-word;}
+ .hero {grid-template-columns:minmax(0,1fr);gap:12px;}
+ .hero h1 {max-width:none;margin-bottom:8px;}
+ .hero-summary {grid-template-columns:auto minmax(0,1fr) auto;gap:12px;}
+ .hero-foot {font-size:12px;max-width:24ch;}
+ .brand-sub {display:none;}
+ .stat .stat-label {font-size:13px;}
+ .map-cell .map-name {display:block;-webkit-line-clamp:unset;}
+ .cognitive-metrics dl {grid-template-columns:minmax(0,1fr);}
+}
 </style>
 </head>
 <body>
@@ -942,14 +982,18 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 <div class="main-shell">
 <aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="sidebar-count" id="topicCount">31 temas</span></div><label class="topic-filter"><span class="sr-only">Filtrar lista de temas</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="topicFilter" type="search" placeholder="Filtrar temas" autocomplete="off"></label><p class="topic-filter-empty" id="topicFilterEmpty" hidden>Nenhum tema com esse nome.</p><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside>
 <main class="workspace" id="workspace">
- <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1206 flashcards em 31 temas, incluindo 240 cartões clínicos para reconhecimento e conduta. Os 720 anteriores e seus avisos de auditoria foram preservados.</p>
-<div class="study-start" id="studyStart"><p>Escolha um tema ou comece com um cartão de cada vez.</p><button type="button" id="startFocusBtn">Iniciar em Foco</button></div>
-<p class="study-backup-hint">Seu progresso fica neste navegador. Exporte XML para transferi-lo a outro dispositivo.</p></div><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>do material estudado</span></div><div class="progress-track" role="progressbar" aria-label="Progresso total" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1206 flashcards</div></div></section>
+ <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1206 flashcards em 31 temas. Escolha uma revisão ou estude um cartão por vez.</p>
+<div class="study-start" id="studyStart"><button type="button" id="startReviewBtn" disabled>Revisar agora</button><button type="button" id="startFocusBtn" class="study-secondary">Iniciar em Foco</button></div>
+<p id="reviewStartSummary" role="status">Carregando a fila de revisão…</p>
+<p class="study-backup-hint">Salvo neste navegador. Use Exportar para fazer backup.</p></div><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>marcado como estudado</span></div><div class="progress-track" role="progressbar" aria-label="Proporção de cartões marcados manualmente como estudados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1206 marcados como estudados</div></div></section>
   <div class="storage-alert" id="storageAlert" role="alert" hidden>O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div>
    <section class="import-review" id="importReview" hidden aria-labelledby="importReviewTitle" role="status"><h2 id="importReviewTitle" tabindex="-1">Backup selecionado</h2><p id="importReviewText"></p><div class="import-review-actions"><button type="button" class="subtle-btn import-apply" id="confirmImportBtn">Substituir progresso</button><button type="button" class="subtle-btn" id="cancelImportBtn">Cancelar</button></div></section>
-  <section class="stat-grid" aria-labelledby="statsTitle"><h2 class="sr-only" id="statsTitle">Resumo de estudo</h2><div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1206</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div></section>
-  <details class="content-map" id="contentMap" open><summary><span class="map-title">Mapa de conteúdos</span><span class="map-hint" id="mapHint">31 temas · toque para estudar</span><svg class="map-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><details class="cognitive-tools" id="cognitiveTools"><summary>Práticas cognitivas · experimental</summary><label><input type="checkbox" id="cognitiveEnabled"> Ativar arquitetura cognitiva experimental</label><p>Metas por tipo e bônus de relação alteram o agendamento. Sem validação de eficácia; desligue para usar a política FSRS padrão nas próximas avaliações.</p><label>Tema da prática <select id="cognitiveTopic"></select></label><div class="cognitive-actions"><button type="button" class="subtle-btn" data-practice="contrast">Contraste deliberado</button><button type="button" class="subtle-btn" data-practice="transfer">Transferência</button><button type="button" class="subtle-btn" data-practice="context">Estudo contextual</button></div><div id="cognitiveLinks"></div></details><div class="map-grid" id="mapGrid" role="list"></div><div class="map-legend" aria-hidden="true"><span><i class="lg lg-done"></i>Estudado</span><span><i class="lg lg-review"></i>Revisar</span><span><i class="lg lg-todo"></i>Não estudado</span></div></details>
- <details class="cognitive-metrics"><summary>Qualidade cognitiva</summary><p>Resultados das práticas, separados da retenção estimada pelo FSRS. “Estudados” acima são marcações manuais.</p><dl id="cognitiveMetrics"></dl><p id="cognitiveToday" role="status"></p></details>
+  <section class="stat-grid" aria-labelledby="statsTitle"><h2 class="sr-only" id="statsTitle">Marcações manuais de estudo</h2><div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row" aria-describedby="statHelp"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1206</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div><details class="stat-guide"><summary id="statHelp">Marcações manuais · como as contagens funcionam</summary><dl><dt>Marcações manuais</dt><dd>Use Estudado ou Revisar em cada cartão para organizar a biblioteca; esses botões não agendam revisões.</dd><dt>Revisões FSRS</dt><dd>Revele a resposta e avalie sua lembrança em Revisão FSRS. A nota registra a revisão e agenda a próxima.</dd><dt>Leituras</dt><dd>Use Registrar leitura no cartão para contar suas leituras. Revelar a resposta não aumenta essa contagem.</dd><dt>Práticas cognitivas</dt><dd>Contraste, essência e transferência têm resultados próprios, disponíveis em Qualidade cognitiva.</dd></dl></details></section>
+ <details id="studyOverview" class="study-overview"><summary>Explorar temas, estatísticas e práticas</summary>
+  <details class="content-map" id="contentMap"><summary><span class="map-title">Mapa de conteúdos</span><span class="map-hint" id="mapHint">31 temas · toque para estudar</span><svg class="map-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="map-grid" id="mapGrid" role="list"></div><div class="map-legend" aria-hidden="true"><span><i class="lg lg-done"></i>Estudado</span><span><i class="lg lg-review"></i>Revisar</span><span><i class="lg lg-todo"></i>Não estudado</span></div></details>
+<details class="cognitive-tools" id="cognitiveTools"><summary>Práticas cognitivas · experimental</summary><label><input type="checkbox" id="cognitiveEnabled"> Ativar práticas cognitivas experimentais</label><p>Revisões literais, de essência e de transferência usam metas diferentes; relações entre cartões podem alterar seus intervalos. A eficácia desta camada não foi validada. Desative para voltar à política FSRS padrão nas próximas avaliações.</p><label>Tema da prática <select id="cognitiveTopic"></select></label><div class="cognitive-actions"><button type="button" class="subtle-btn" data-practice="contrast">Contraste deliberado</button><button type="button" class="subtle-btn" data-practice="transfer">Transferência</button><button type="button" class="subtle-btn" data-practice="context">Estudo contextual</button></div><div id="cognitiveLinks"></div></details>
+ <details class="cognitive-metrics"><summary>Qualidade cognitiva</summary><p>Resultados das práticas de contraste, essência e transferência. Não medem as marcações manuais nem todas as revisões FSRS.</p><p id="cognitiveStateHint"></p><dl id="cognitiveMetrics"></dl><p id="cognitiveToday" role="status"></p></details>
+</details>
  <section class="filters" aria-label="Filtros de estudo">
    <div class="filter-first">
     <button class="subtle-btn mobile-topic-btn" id="mobileTopics" aria-expanded="false" aria-controls="sidebar">☰ Temas</button>
@@ -966,6 +1010,7 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
  </section>
  <section id="cognitivePools" class="cognitive-pools" hidden aria-label="Escolher fila diária"><button type="button" class="subtle-btn" data-pool="all">Todas as revisões</button><button type="button" class="subtle-btn" data-pool="A">A · Literal</button><button type="button" class="subtle-btn" data-pool="B">B · Essência e transferência</button><button type="button" class="subtle-btn" data-pool="C">C · Intervenções</button><p>Cartões novos compartilham a mesma cota diária. Intervenções não consomem notas FSRS.</p></section>
  <section id="fsrsSettings" class="fsrs-settings" hidden aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><details class="fsrs-backup"><summary class="subtle-btn">Backup FSRS</summary><div class="fsrs-backup-actions"><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico</button><button type="button" id="fsrsImportButton" class="subtle-btn">Importar histórico</button><input type="file" id="fsrsImport" accept=".json,application/json" hidden></div></details></section>
+ <div class="fsrs-feedback" id="fsrsFeedback" hidden><p id="fsrsFeedbackText" tabindex="-1" role="status" aria-live="polite"></p><button type="button" id="fsrsUndoBtn" class="subtle-btn">Desfazer</button></div>
  <section aria-labelledby="listTitle"><div class="list-head"><div><h2 class="list-title" id="listTitle" tabindex="-1">Todos os flashcards</h2><div class="list-sub" id="listSub" aria-live="polite">1206 resultados</div></div><div class="list-actions"><button type="button" id="focusSidebarToggle" class="subtle-btn focus-sidebar-toggle" hidden aria-expanded="false" aria-controls="sidebar">Mostrar temas</button><button id="shuffleBtn" class="subtle-btn" aria-pressed="false" title="Embaralhar ordem">⇄ Aleatório</button><button id="revealAllBtn" class="subtle-btn" title="Mostrar ou ocultar respostas visíveis">◉ Mostrar todas</button></div></div><div id="cardsContainer" class="cards"></div><div id="focusNav" class="focus-nav" hidden></div><div class="more-wrap" id="moreWrap" hidden><button class="more-btn" id="moreBtn">Carregar mais</button></div></section>
  <footer class="footer">Adaptado do PDF <strong>“Flashcards — 8º Período · CMN”</strong>. 92 cartões receberam revisão médica e reescrita direcionada; os demais passaram por triagem estrutural/pedagógica e ainda requerem validação clínica individual. O arquivo contém etiquetas de auditoria por cartão e mantém os IDs originais. Os 250 cartões adicionais são vinhetas didáticas sem referência de página no PDF. Os cartões originais mantêm suas marcações e avisos de auditoria.<div class="utility-row"><span>Offline depois da primeira visita online · sem cadastro</span><span id="offlineStatus" class="offline-status" role="status" aria-live="polite">Preparando uso offline…</span><span aria-hidden="true">·</span><button id="exportEdits">Exportar edições de texto</button><button id="importEditsButton">Importar edições de texto</button><input type="file" id="importEditsFile" accept=".json,application/json" hidden><button id="resetBtn">Apagar progresso salvo</button><button id="unhideBtn">Reexibir todos os cartões ocultos</button></div><div class="focus-tip">Atalhos no modo Foco (fora dos controles): <strong>←</strong> / <strong>→</strong> navegar, <strong>Espaço</strong> revelar, <strong>1</strong> estudar, <strong>2</strong> revisar, <strong>3</strong> favoritar.</div></footer>
 </main></div>
@@ -1045,7 +1090,7 @@ function getFiltered(){let list=CARDS.filter(c=>{
  return true;});
  if(ui.shuffle){list=list.slice().sort((a,b)=>(shuffleOrder.get(a.id)||0)-(shuffleOrder.get(b.id)||0));}
  return list;}
-function renderStats(){let t=totals();$('studyStart').hidden=Object.keys(marks).length>0||ui.mode==='focus';$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;$('nStar').textContent=t.stars;$('segDone').style.width=(t.done/TOTAL*100)+'%';$('segReview').style.width=(t.review/TOTAL*100)+'%';qsa('[data-jump]').forEach(b=>b.setAttribute('aria-pressed',String(ui.mode!=='fsrs'&&b.dataset.jump!=='all'&&ui.status===b.dataset.jump)));let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} estudados · ${t.hidden} ocultos`;}
+function renderStats(){let t=totals();$('studyStart').hidden=ui.mode!=='list';$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;$('nStar').textContent=t.stars;$('segDone').style.width=(t.done/TOTAL*100)+'%';$('segReview').style.width=(t.review/TOTAL*100)+'%';qsa('[data-jump]').forEach(b=>b.setAttribute('aria-pressed',String(ui.mode!=='fsrs'&&b.dataset.jump!=='all'&&ui.status===b.dataset.jump)));let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} marcados como estudados · ${t.hidden} ocultos`;}
 const ICON_CHECK='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
 function topicStats(){const map=new Map(TOPICS.map(t=>[t.id,{total:0,done:0,review:0}]));for(const c of CARDS){const r=map.get(c.topic);if(!r)continue;r.total++;const s=status(c.id);if(s==='done')r.done++;else if(s==='review')r.review++;}return map;}
 function renderTopics(){const stats=topicStats();let contents=`<button class="topic-btn topic-all ${ui.topic==='all'?'active':''}" data-topic="all" aria-current="${ui.topic==='all'?'page':'false'}"><span class="topic-num">∑</span><span><span class="topic-name">Todos os temas</span><span class="topic-small">${TOTAL} flashcards disponíveis</span></span></button>`;
@@ -1266,9 +1311,11 @@ function renderControls(){
  $('statusFilters').setAttribute('aria-label','Filtrar marcações manuais');
  $('shuffleBtn').hidden=ui.mode==='fsrs';
  $('revealAllBtn').hidden=ui.mode==='fsrs';
- const collapsed=ui.mode==='focus'&&ui.focusSidebarCollapsed;
+ const inSession=ui.mode==='focus'||ui.mode==='fsrs';
+ const collapsed=inSession&&ui.focusSidebarCollapsed;
  document.querySelector('.main-shell').classList.toggle('focus-immersive',collapsed);
- $('focusSidebarToggle').hidden=ui.mode!=='focus';
+ $('focusSidebarToggle').hidden=!inSession;
+ $('fsrsFeedback').hidden=ui.mode!=='fsrs'||!$('fsrsFeedbackText').textContent;
  $('focusSidebarToggle').textContent=collapsed?'Mostrar temas':'Ocultar temas';
  $('focusSidebarToggle').setAttribute('aria-expanded',String(!collapsed));
  qsa('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter===ui.status);b.setAttribute('aria-pressed',b.dataset.filter===ui.status?'true':'false');});qsa('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===ui.mode);b.setAttribute('aria-pressed',b.dataset.mode===ui.mode?'true':'false');});$('shuffleBtn').classList.toggle('active',ui.shuffle);$('shuffleBtn').setAttribute('aria-pressed',String(ui.shuffle));$('revealAllBtn').textContent=ui.showAll?'◉ Ocultar respostas':'◉ Mostrar respostas';$('revealAllBtn').setAttribute('aria-pressed',String(ui.showAll));}
@@ -1320,7 +1367,7 @@ function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let a
 $('topicList').addEventListener('click',ev=>{let b=ev.target.closest('[data-topic]');if(!b)return;ui.topic=b.dataset.topic;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();if(window.matchMedia('(max-width:850px)').matches){$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}});
 function selectTopic(id){ui.topic=id;ui.limit=22;ui.focusId=null;ui.showAll=false;$('sidebar').classList.remove('mobile-open');$('mobileTopics').setAttribute('aria-expanded','false');render();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
 $('mapGrid').addEventListener('click',ev=>{const b=ev.target.closest('[data-topic]');if(b)selectTopic(b.dataset.topic);});
-try{const v=localStorage.getItem('cm8.mapOpen');if(v==='0')$('contentMap').open=false;}catch(e){}
+try{const v=localStorage.getItem('cm8.mapOpen');if(v==='1')$('contentMap').open=true;}catch(e){}
 $('contentMap').addEventListener('toggle',()=>{try{localStorage.setItem('cm8.mapOpen',$('contentMap').open?'1':'0');}catch(e){}});
 $('topicFilter').addEventListener('input',applyTopicFilter);
 $('topicFilter').addEventListener('keydown',e=>{if(e.key==='Enter'){const first=qsa('#topicList .topic-btn[data-name]').find(b=>!b.hidden);if(first){e.preventDefault();first.click();}}});
@@ -1335,9 +1382,11 @@ $('activeFilters').addEventListener('click',ev=>{const b=ev.target.closest('[dat
 $('statusFilters').addEventListener('click',ev=>{let b=ev.target.closest('[data-filter]');if(!b)return;ui.status=b.dataset.filter;ui.limit=22;ui.focusId=null;render();});
 qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{cognitiveSession=null;ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;
  if(ui.mode==='fsrs')openAnswers.clear();
+ if(ui.mode==='fsrs'||ui.mode==='focus')$('contentMap').open=false;
  render();
  if(ui.mode==='fsrs'||ui.mode==='focus')focusFSRSQuestion();}));
-$('startFocusBtn').addEventListener('click',()=>{ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;openAnswers.clear();ui.showAll=false;render();focusFSRSQuestion();});
+$('startReviewBtn').addEventListener('click',()=>document.querySelector('[data-mode="fsrs"]').click());
+$('startFocusBtn').addEventListener('click',()=>{$('contentMap').open=false;ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;openAnswers.clear();ui.showAll=false;render();focusFSRSQuestion();});
 $('focusSidebarToggle').addEventListener('click',()=>{ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();});
 let searchTimer;function applySearch(){ui.search=norm($('searchBox').value.trim());ui.limit=22;ui.focusId=null;render();}
 $('searchBox').addEventListener('input',e=>{if(e.isComposing)return;clearTimeout(searchTimer);searchTimer=setTimeout(applySearch,120);});
@@ -1474,6 +1523,7 @@ pwaStatus();
 /* Revisão espaçada: estado independente das marcações anteriores. */
 const fsrsRecords=new Map();
 let fsrsDB=null,fsrsReady=false,fsrsUnavailable=false,fsrsBusy=false,fsrsScheduler=null;
+let fsrsUndo=null;
 const FSRS_RETENTION=0.90;
 const FSRS_DEFAULT_DAILY=20;
 let fsrsRefreshTimer;
@@ -1573,12 +1623,15 @@ document.addEventListener('visibilitychange',()=>{
 });
 async function gradeFSRS(id,grade){
  if(fsrsBusy||ui.mode!=='fsrs'||id!==ui.focusId||!openAnswers.has(id)||![1,2,3,4].includes(grade)||!fsrsReady)return;
- fsrsBusy=true;
+ fsrsBusy=true;$('fsrsUndoBtn').disabled=true;
  const grading=$('cardsContainer').querySelector('.fsrs-grade-row');
  grading?.setAttribute('aria-busy','true');
  grading?.querySelectorAll('button').forEach(button=>{button.disabled=true;});
  try{
-  const now=new Date(),previous=fsrsRecords.get(id);let record,conflict=false,transactionError;
+  const now=new Date(),previous=fsrsRecords.get(id);let record,conflict=false,transactionError,undoEntries;
+  const gradeLabel=grading.querySelector('[data-grade="'+grade+'"]').firstChild.textContent.trim();
+  const selection={topic:ui.topic,level:ui.level,type:ui.type,audit:ui.audit,status:ui.status,search:ui.search,mode:'fsrs'};
+  const searchText=$('searchBox').value,pool=cognitivePool;
   await fsrsTransaction('readwrite',store=>{
    const request=store.getAll();request.onsuccess=()=>{
     try{
@@ -1593,7 +1646,9 @@ async function gradeFSRS(id,grade){
      const result=schedulerFor(id).review({card:fsrsCard(id),grade,now});
      const event=cognitiveRatingEvent(id,grade,now,result.card.reps);
      record={id,card:result.card,logs:[...(latest?.logs||[]),result.revlog],cognitiveEvents:CMNCognitive.mergeEvents(latest?.cognitiveEvents||[],event?[event]:[])};
-     for(const row of updates)store.put(row);store.put(record);
+     const changed=[...updates,record],before=new Map(rows.map(row=>[row.id,row]));
+     undoEntries=changed.map(row=>({id:row.id,before:before.has(row.id)?structuredClone(before.get(row.id)):null,after:structuredClone(row)}));
+     for(const row of changed)store.put(row);
     }catch(error){transactionError=error;request.transaction?.abort();store.transaction.abort();}
    };
   }).catch(error=>{throw transactionError||error;});
@@ -1603,17 +1658,57 @@ async function gradeFSRS(id,grade){
    if(ui.mode==='fsrs')focusFSRSQuestion();
    return;
   }
+  fsrsUndo={id,entries:undoEntries,selection,searchText,pool};
+  $('fsrsFeedbackText').textContent='Avaliado como '+gradeLabel+' · próxima revisão em '+fsrsIntervalWords(record.card.dueAt)+'.';
+  $('fsrsUndoBtn').hidden=false;
   replaceFSRSRecords(await readFSRSRecords());signalFSRS();openAnswers.delete(id);ui.focusId=null;fsrsBusy=false;render();
   if(ui.mode==='fsrs')focusFSRSQuestion();
  }catch{notify('Não foi possível salvar a revisão. Tente novamente.',5500);}
  finally{
-  fsrsBusy=false;
+  fsrsBusy=false;$('fsrsUndoBtn').disabled=false;
   if(grading?.isConnected){
    grading.removeAttribute('aria-busy');
    grading.querySelectorAll('button').forEach(button=>{button.disabled=false;});
   }
  }
 }
+function fsrsIntervalWords(due){
+ const [number,unit]=fsrsInterval(due).split(' '),singular=number==='1';
+ return number+' '+(unit==='d'?(singular?'dia':'dias'):unit==='h'?(singular?'hora':'horas'):(singular?'minuto':'minutos'));
+}
+async function undoFSRS(){
+ if(!fsrsUndo||fsrsBusy||!fsrsReady)return;
+ const undo=fsrsUndo;fsrsBusy=true;$('fsrsUndoBtn').disabled=true;
+ try{
+  let conflict=false,transactionError;
+  await fsrsTransaction('readwrite',store=>{
+   const request=store.getAll();request.onsuccess=()=>{
+    try{
+     const latest=new Map(request.result.map(row=>[row.id,row]));
+     // Compare every affected card before writing any: other tabs may have reviewed dependents.
+     conflict=undo.entries.some(entry=>JSON.stringify(latest.get(entry.id)||null)!==JSON.stringify(entry.after));
+     if(conflict)return;
+     for(const entry of undo.entries){if(entry.before)store.put(entry.before);else store.delete(entry.id);}
+    }catch(error){transactionError=error;store.transaction.abort();}
+   };
+  }).catch(error=>{throw transactionError||error;});
+  replaceFSRSRecords(await readFSRSRecords());
+  fsrsUndo=null;$('fsrsUndoBtn').hidden=true;
+  if(conflict){
+   $('fsrsFeedbackText').textContent='Não foi possível desfazer: o histórico de um cartão afetado mudou em outra aba ou operação. A fila foi atualizada.';
+  }else{
+   Object.assign(ui,undo.selection);cognitivePool=undo.pool;cognitiveSession=null;ui.focusId=undo.id;ui.showAll=false;
+   $('searchBox').value=undo.searchText;$('levelSelect').value=ui.level;$('typeSelect').value=ui.type;$('auditSelect').value=ui.audit;
+   openAnswers.add(undo.id);signalFSRS();
+   $('fsrsFeedbackText').textContent='Avaliação desfeita. O histórico e os intervalos anteriores foram restaurados.';
+  }
+  fsrsBusy=false;render();
+  if(!conflict){const answer=$('cardsContainer').querySelector('.answer-box');answer?.focus({preventScroll:true});}
+ }catch{
+  $('fsrsFeedbackText').textContent='Não foi possível desfazer a avaliação. Seu histórico foi mantido; tente novamente.';
+ }finally{fsrsBusy=false;$('fsrsUndoBtn').disabled=false;}
+}
+$('fsrsUndoBtn').addEventListener('click',undoFSRS);
 async function exportFSRS(){
  if(!fsrsReady||fsrsBusy)return;
  try{replaceFSRSRecords(await readFSRSRecords());
@@ -1658,7 +1753,7 @@ $('fsrsImport').addEventListener('change',async event=>{
   if(!confirm(`Substituir o histórico FSRS de ${fsrsRecords.size} cartões pelo histórico de ${records.size} cartões deste arquivo?`))return;
   await fsrsTransaction('readwrite',store=>{store.clear();for(const record of records.values())store.put(record);});
   fsrsRecords.clear();for(const [id,record] of records)fsrsRecords.set(id,record);
-  signalFSRS();openAnswers.clear();ui.focusId=null;fsrsBusy=false;render();notify('Histórico FSRS importado.');
+  fsrsUndo=null;$('fsrsFeedbackText').textContent='';signalFSRS();openAnswers.clear();ui.focusId=null;fsrsBusy=false;render();notify('Histórico FSRS importado.');
  }catch(error){notify(error.message||'Não foi possível importar o histórico FSRS.',5500);}
  finally{fsrsBusy=false;if(ui.mode==='fsrs')refreshFSRS();}
 });
@@ -1845,20 +1940,28 @@ $('importEditsFile').addEventListener('change',async event=>{
 const cognitiveSchedulers=Object.create(null);
 let cognitiveState=CMNCognitive.migrate(CARDS),cognitivePool='all',cognitiveSession=null;
 try{const saved=JSON.parse(localStorage.getItem(STORE_KEY)||'{}').cognitive;if(saved)cognitiveState=CMNCognitive.validate(saved,ALL_IDS);}catch{notify('Configuração cognitiva não carregada. O FSRS padrão permanece disponível.',6000);}
-const cognitionLabels={verbatim:'Verbatim',gist:'Gist',transfer:'Transferência'};
+const cognitionLabels={verbatim:'Literal',gist:'Essência',transfer:'Transferência'};
+const cognitionHelp={verbatim:'Recordar os fatos e detalhes do cartão.',gist:'Recuperar a ideia central e justificá-la.',transfer:'Aplicar o conhecimento a uma situação diferente.'};
 function cognitiveSnapshot(){return {...cognitiveState,events:CMNCognitive.mergeEvents(cognitiveState.events,...[...fsrsRecords.values()].map(row=>row.cognitiveEvents||[]))};}
 function retentionFor(id){return cognitiveState.enabled?CMNCognitive.RETENTION[cognitiveState.metadata[id]?.traceType||'verbatim']:.9;}
 function schedulerFor(id){const type=cognitiveState.metadata[id]?.traceType;return cognitiveState.enabled&&cognitiveSchedulers[type]?cognitiveSchedulers[type]:fsrsScheduler;}
 function variantIndex(id){const m=cognitiveState.metadata[id];return (fsrsRecords.get(id)?.card.reps||0)%Math.max(1,m.transferVariants.length);}
 function reviewPresentation(c){const m=cognitiveState.metadata[c.id];if(!cognitiveState.enabled||m.traceType!=='transfer'||!m.transferVariants.length)return c;const v=m.transferVariants[variantIndex(c.id)];return {...c,question:v.prompt,answer:v.answer,scenario:'',kind:'question',cognitiveVariant:true};}
-function traceBadge(id){const m=cognitiveState.metadata[id];return '<span class="chip">'+cognitionLabels[m.traceType]+(cognitiveState.enabled?' · '+Math.round(retentionFor(id)*100)+'%':'')+'</span>'+(m.anchor?'<span class="chip" title="Âncora: pode propagar estabilidade quando a camada experimental está ativa">Âncora</span>':'');}
+function traceBadge(id){const m=cognitiveState.metadata[id];if(!cognitiveState.enabled)return '';return '<span class="chip" title="'+cognitionHelp[m.traceType]+'">'+cognitionLabels[m.traceType]+(cognitiveState.enabled?' · '+Math.round(retentionFor(id)*100)+'%':'')+'</span>'+(m.anchor?'<span class="chip" title="Âncora: pode propagar estabilidade quando a camada experimental está ativa">Âncora</span>':'');}
 function cognitiveRatingEvent(id,grade,now,reps){const m=cognitiveState.metadata[id];if(!cognitiveState.enabled||!['gist','transfer'].includes(m.traceType))return null;return {id:'rating:'+id+':'+now.toISOString()+':'+reps,kind:m.traceType,cardId:id,topic:byId.get(id).topic,time:now.toISOString(),success:grade>=3?1:0,total:1,cycle:0,variant:m.traceType==='transfer'?variantIndex(id):0};}
 function renderCognitive(){
  $('cognitiveEnabled').checked=cognitiveState.enabled;
- const snapshot=cognitiveSnapshot(),metrics=CMNCognitive.metrics(snapshot.events),labels={contrast:'Discriminação',transfer:'Transferência',gist:'Recuperação do núcleo'};
- $('cognitiveMetrics').innerHTML=Object.entries(metrics).map(([kind,m])=>'<div><dt>'+labels[kind]+'</dt><dd>'+(m.total?Math.round(m.rate*100)+'% <small>('+m.success+'/'+m.total+')</small>':'Sem práticas')+'</dd></div>').join('');
+ const snapshot=cognitiveSnapshot(),metrics=CMNCognitive.metrics(snapshot.events),labels={contrast:'Discriminação',transfer:'Transferência',gist:'Recuperação da essência'};
+ const definitions={contrast:'Acertos ao distinguir conceitos em uma prática de contraste.',transfer:'Avaliações bem-sucedidas ao aplicar o conteúdo a outro cenário, com a camada experimental ativa.',gist:'Avaliações bem-sucedidas da ideia central, com a camada experimental ativa.'};
+ const actions={contrast:'Fazer contraste',transfer:'Praticar transferência',gist:'Revisar essência'};
+ $('cognitiveStateHint').textContent=cognitiveState.enabled?'Práticas experimentais ativas. Escolha o tema em Práticas cognitivas.':'A camada experimental está desativada. O FSRS padrão continua disponível; ative as práticas para registrar essência e transferência.';
+ $('cognitiveMetrics').innerHTML=Object.entries(metrics).map(([kind,m])=>'<div><dt>'+labels[kind]+'</dt><dd>'+(m.total?Math.round(m.rate*100)+'% <small>('+m.success+'/'+m.total+')</small>':'Sem práticas')+'</dd><p class="metric-help">'+definitions[kind]+'</p><button type="button" class="subtle-btn" data-metric-practice="'+kind+'">'+actions[kind]+'</button></div>').join('');
  const today=fsrsDay(new Date()),reviewed=[...fsrsRecords.values()].filter(row=>row.logs?.some(log=>fsrsDay(log.reviewTime)===today)).length;
- $('cognitiveToday').textContent=reviewed+' cartões revisados hoje no FSRS · '+snapshot.events.filter(e=>['contrast','context'].includes(e.kind)&&fsrsDay(e.time)===today).length+' intervenções hoje';
+ const interventions=snapshot.events.filter(e=>['contrast','context'].includes(e.kind)&&fsrsDay(e.time)===today).length;
+ $('cognitiveToday').textContent=reviewed+' '+(reviewed===1?'cartão revisado':'cartões revisados')+' hoje no FSRS · '+interventions+' '+(interventions===1?'intervenção':'intervenções')+' hoje';
+ $('startReviewBtn').disabled=!fsrsReady;
+ if(fsrsReady){const queue=fsrsQueue();$('reviewStartSummary').textContent='Hoje: '+reviewed+' '+(reviewed===1?'revisão':'revisões')+' FSRS · Nesta seleção: '+queue.due.length+' vencidos e '+queue.newCards.length+' novos.';}
+ else $('reviewStartSummary').textContent=fsrsUnavailable?'Histórico indisponível. Você pode estudar em Foco.':'Carregando a fila de revisão…';
  const eligible=getFiltered().filter(c=>!mark(c.id).hidden),due=eligible.filter(c=>fsrsRecords.has(c.id)&&new Date(fsrsRecords.get(c.id).card.dueAt)<=new Date()),pools=CMNCognitive.pools(due,fsrsRecords,cognitiveState),sessions=CMNCognitive.sessions(eligible,fsrsRecords,snapshot);
  $('cognitivePools').querySelector('[data-pool="A"]').textContent='A · Literal ('+pools.A.length+' vencidos)';
  $('cognitivePools').querySelector('[data-pool="B"]').textContent='B · Essência / transferência ('+pools.B.length+' vencidos)';
@@ -1875,12 +1978,18 @@ $('cognitiveTopic').innerHTML=TOPICS.map(t=>'<option value="'+t.id+'">'+safe(t.t
 $('cognitiveTopic').addEventListener('change',renderCognitiveLinks);
 $('cognitiveEnabled').addEventListener('change',()=>{cognitiveState.enabled=$('cognitiveEnabled').checked;cognitivePool='all';cognitiveSession=null;save();openAnswers.clear();ui.focusId=null;render();});
 $('cognitiveLinks').addEventListener('click',event=>{const button=event.target.closest('[data-linked-card]');if(!button)return;cognitiveSession=null;clearFilters();$('searchBox').value=button.dataset.linkedCard;applySearch();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({block:'start'});});
+$('cognitiveMetrics').addEventListener('click',event=>{
+ const button=event.target.closest('[data-metric-practice]');if(!button)return;
+ const kind=button.dataset.metricPractice;
+ if(kind!=='contrast'&&!cognitiveState.enabled){$('studyOverview').open=true;$('cognitiveTools').open=true;$('cognitiveEnabled').focus();$('cognitiveTools').scrollIntoView({block:'start'});notify('Ative as práticas experimentais e escolha um tema para registrar esta métrica.');return;}
+ startPractice(kind);
+});
 function startPractice(kind,scheduled){
  if(!fsrsReady){notify('Aguarde o carregamento do histórico.');return;}
  const topic=scheduled?.topic||Number($('cognitiveTopic').value),cards=CARDS.filter(c=>c.topic===topic&&!mark(c.id).hidden),snapshot=cognitiveSnapshot();
- if(kind==='transfer'){
-  const card=cards.find(c=>cognitiveState.metadata[c.id].traceType==='transfer'&&cognitiveState.metadata[c.id].transferVariants.length);
-  if(!card){notify('Este tema ainda não tem variações de transferência cadastradas.');return;}
+ if(kind==='transfer'||kind==='gist'){
+  const card=cards.find(c=>cognitiveState.metadata[c.id].traceType===kind&&(kind==='gist'||cognitiveState.metadata[c.id].transferVariants.length));
+  if(!card){notify(kind==='gist'?'Este tema ainda não tem cartões de essência.':'Este tema ainda não tem variações de transferência cadastradas.');return;}
   if(!cognitiveState.enabled){notify('Ative a arquitetura cognitiva no mapa para usar variações na revisão FSRS.');return;}
   // Scheduled practice only: never force an early FSRS review.
   cognitiveSession=null;ui.topic=String(topic);ui.mode='fsrs';ui.level=ui.type=ui.audit=ui.status='all';ui.search=norm(card.id);$('searchBox').value=card.id;for(const id of ['levelSelect','typeSelect','auditSelect'])$(id).value='all';cognitivePool='B';ui.focusId=null;render();focusFSRSQuestion();return;

@@ -147,7 +147,7 @@ function mountReadCounters(){
  if(!container||document.getElementById('cmn-read-styles'))return;
  const css=document.createElement('style');
  css.id='cmn-read-styles';
- css.textContent='.cmn-read-counter{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--border,#dce1e7);padding:10px 16px;color:var(--text-secondary,#536170);font-size:.85rem}.cmn-read-number{font-variant-numeric:tabular-nums}.cmn-read-button{min-height:44px;border:1px solid var(--border,#b7c3ce);border-radius:10px;background:transparent;color:inherit;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}.cmn-read-button:hover{background:rgba(120,130,140,.09)}.cmn-read-button:focus-visible{outline:3px solid #007aff;outline-offset:2px}';
+ css.textContent='.cmn-read-counter{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--stroke,rgba(0,0,0,.10));padding:10px 16px;color:var(--muted,#615d59);font-size:.85rem}.cmn-read-number{font-variant-numeric:tabular-nums}.cmn-read-button{min-height:44px;border:1px solid var(--stroke-strong,rgba(0,0,0,.16));border-radius:10px;background:transparent;color:inherit;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}.cmn-read-button:hover{background:rgba(120,130,140,.09)}.cmn-read-button:focus-visible{outline:3px solid var(--focus-ring,#005bab);outline-offset:2px}';
  document.head.append(css);
  function decorate(){
   container.querySelectorAll('.study-card[id^="card-"]').forEach(card=>{
