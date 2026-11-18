@@ -458,6 +458,7 @@ $('filterScrollPrev').addEventListener('click',()=>scrollStatusRail(-1));
 $('filterScrollCue').addEventListener('click',()=>scrollStatusRail(1));
 $('statusFilters').addEventListener('scroll',updateFilterCues,{passive:true});
 window.addEventListener('resize',updateFilterCues);
+if(typeof ResizeObserver==='function'){const ro=new ResizeObserver(()=>updateFilterCues());ro.observe($('statusFilters'));}
 let lastMobileTopicsTrigger=$('mobileTopics');
 function setMobileTopicsOpen(open,trigger){
  if(trigger)lastMobileTopicsTrigger=trigger;
