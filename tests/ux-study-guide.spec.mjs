@@ -80,6 +80,7 @@ test('dark mode keeps guide and functional controls legible with AA contrast',as
  await (await settingsFor(page)).locator('#themeBtn').click();
  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
  await page.locator('#levelSelect').selectOption('1');
+ await page.evaluate(()=>Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{}))));
  const contrasts=await page.evaluate(()=>{
   const rgb=str=>{const m=str.match(/rgba?\(([^)]+)\)/);if(!m)return null;return m[1].split(/[\s,\/]+/).filter(Boolean).slice(0,3).map(Number);};
   const luminance=c=>c.map(v=>{const x=v/255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;}).reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);

@@ -77,9 +77,11 @@ function getFiltered(){let list=CARDS.filter(c=>{
  if(ui.audit!=='all'&&c.audit?.status!==ui.audit)return false;
  if(ui.status==='hidden'){if(!m.hidden)return false;}
  else{if(m.hidden)return false; if(ui.status==='todo'&&s!=='todo')return false;if(ui.status==='review'&&s!=='review')return false;if(ui.status==='done'&&s!=='done')return false;if(ui.status==='star'&&!m.star)return false;}
- if(ui.search){const shown=displayText(c);let h=norm([c.id,shown.scenario,shown.question,shown.answer,topicsById.get(c.topic)?.title,topicsById.get(c.topic)?.area].join(' '));if(!h.includes(ui.search))return false;}
+ if(ui.search&&liveHits()){if(!ui.searchHits.has(c.id))return false;}
+ else if(ui.search){const shown=displayText(c);let h=norm([c.id,shown.scenario,shown.question,shown.answer,topicsById.get(c.topic)?.title,topicsById.get(c.topic)?.area].join(' '));if(!h.includes(ui.search))return false;}
  return true;});
  if(ui.shuffle){list=list.slice().sort((a,b)=>(shuffleOrder.get(a.id)||0)-(shuffleOrder.get(b.id)||0));}
+ else if(ui.search&&liveHits()){const H=ui.searchHits;list=list.slice().sort((a,b)=>H.get(a.id).rank-H.get(b.id).rank);}
  return list;}
 function renderStats(){let t=totals();$('studyStart').hidden=ui.mode!=='list';$('nTotal').textContent=TOTAL;$('nDone').textContent=t.done;$('nReview').textContent=t.review;$('nTodo').textContent=t.todo;$('nStar').textContent=t.stars;$('segDone').style.width=(t.done/TOTAL*100)+'%';$('segReview').style.width=(t.review/TOTAL*100)+'%';qsa('[data-jump]').forEach(b=>b.setAttribute('aria-pressed',String(ui.mode!=='fsrs'&&b.dataset.jump!=='all'&&ui.status===b.dataset.jump)));let pct=t.done/TOTAL*100,shown=(pct>0&&pct<1)?pct.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}):Math.round(pct).toLocaleString('pt-BR');$('heroPct').textContent=shown+'%';$('heroFill').style.width=pct+'%';$('heroProgressTrack').setAttribute('aria-valuenow',pct.toFixed(1));$('heroDetail').textContent=`${t.done} de ${TOTAL} marcados como estudados · ${t.hidden} ocultos`;}
 const ICON_CHECK='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -247,7 +249,7 @@ function auditInfoHtml(c){
   '<p>'+safe(notes[status]||'Consulte diretrizes clínicas atualizadas.')+'</p><p>'+sourceLink+'</p></div></details>';
 }
 function cardHtml(c){let m=mark(c.id),s=status(c.id),visible=ui.showAll||openAnswers.has(c.id),topic=topicsById.get(c.topic),ss=s==='done'?'✓ Estudado':s==='review'?'↻ Revisar':m.hidden?'◌ Oculto':'';
- return `<article class="study-card ${s==='done'?'is-done':s==='review'?'is-review':''}" id="card-${safe(c.id.replaceAll('.','-'))}" aria-label="Cartão de estudo ${safe(c.id)}"><div class="study-card-head"><div class="meta-line"><div class="meta-chips"><span class="meta-id">${safe(c.id)}</span><span class="chip">${c.new?'Complemento':'Nível '+c.level}</span>${c.new?'<span class="chip chip-new">NOVO</span>':''}${c.page!=null?`<span class="chip">p. ${safe(c.page)}</span>`:''}${auditState(c)}</div>${ss?`<span class="status-chip ${s==='done'?'done':s==='review'?'review':'hidden'}">${ss}</span>`:''}</div>${questionHtml(c)}<div class="theme-hint">${String(c.topic).padStart(2,'0')} · ${safe(topic.title)}</div></div>
+ return `<article class="study-card ${s==='done'?'is-done':s==='review'?'is-review':''}" id="card-${safe(c.id.replaceAll('.','-'))}" aria-label="Cartão de estudo ${safe(c.id)}"><div class="study-card-head"><div class="meta-line"><div class="meta-chips"><span class="meta-id">${safe(c.id)}</span><span class="chip">${c.new?'Complemento':'Nível '+c.level}</span>${c.new?'<span class="chip chip-new">NOVO</span>':''}${c.page!=null?`<span class="chip">p. ${safe(c.page)}</span>`:''}${auditState(c)}</div>${ss?`<span class="status-chip ${s==='done'?'done':s==='review'?'review':'hidden'}">${ss}</span>`:''}</div>${questionHtml(c)}<div class="theme-hint">${String(c.topic).padStart(2,'0')} · ${safe(topic.title)}</div>${searchBadge(c)}</div>
  <div class="answer-region">${visible?`<div class="answer-box" tabindex="-1" role="region" aria-label="Resposta do flashcard ${safe(c.id)}">${answerHtml(c.answer,c.id)}</div>`:`<div class="answer-hidden"><span class="hidden-copy">Tente responder antes de revelar a resposta.</span><button type="button" class="action action-primary reveal-btn" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="false">Revelar resposta</button></div>`}</div>
  ${auditInfoHtml(c)}
  <div class="action-row">${visible?`<button type="button" class="action" data-action="reveal" data-id="${safe(c.id)}" aria-expanded="true">◉ Ocultar resposta</button>`:''}<button type="button" class="action primary-mark ${s==='done'?'done':''}" data-action="done" data-id="${safe(c.id)}" aria-label="${s==='done'?'Desmarcar como estudado':'Marcar como estudado'}" aria-pressed="${s==='done'}">✓ Estudado</button><button type="button" class="action primary-mark ${s==='review'?'review':''}" data-action="review" data-id="${safe(c.id)}" aria-label="${s==='review'?'Retirar da revisão':'Marcar para revisar depois'}" aria-pressed="${s==='review'}">↻ Revisar</button><details class="more-actions"><summary aria-label="Mais ações do cartão ${safe(c.id)}">Mais ações</summary><div class="more-actions-menu">${editButton(c)}<button type="button" class="action ${m.star?'starred':''}" data-action="star" data-id="${safe(c.id)}" aria-label="${m.star?'Remover dos favoritos':'Adicionar aos favoritos'}" aria-pressed="${!!m.star}">${m.star?'★':'☆'} Favorito</button><button type="button" class="action secondary spacer-left" data-action="hide" data-id="${safe(c.id)}" aria-label="${m.hidden?'Reexibir cartão oculto':'Ocultar cartão da lista'}">${m.hidden?'◉ Reexibir':'◌ Ocultar cartão'}</button><button type="button" class="action secondary" data-action="copy" data-id="${safe(c.id)}" title="Copiar pergunta e resposta">⧉ Copiar</button></div></details></div></article>`;}
@@ -292,7 +294,7 @@ function restoreFocus(ref){
  }
  if(target){const menu=target.closest("details.more-actions");if(menu)menu.open=true;try{target.focus({preventScroll:true});}catch{target.focus();}}
 }
-function renderCards(list){renderCardsInner(list);if(ui.search&&ui.mode!=='fsrs')highlightHits($('cardsContainer'),ui.search);}
+function renderCards(list){renderCardsInner(list);if(ui.search&&ui.mode!=='fsrs')highlightTerms($('cardsContainer'));}
 function renderCardsInner(list){let focusBefore=rememberFocus();let container=$('cardsContainer');if(ui.mode==='focus'){if(!list.length){container.innerHTML=emptyHtml();$('focusNav').hidden=true;$('moreWrap').hidden=true;restoreFocus(focusBefore);return;}
  let idx=list.findIndex(c=>c.id===ui.focusId);if(idx<0){idx=0;ui.focusId=list[0].id;}
  container.innerHTML=cardHtml(list[idx]);$('focusNav').hidden=false;$('focusNav').innerHTML=`<span class="focus-counter">Cartão ${idx+1} de ${list.length}</span><div class="focus-arrows"><button data-action="prev" ${idx===0?'disabled':''} aria-label="Cartão anterior">← Anterior</button><button data-action="next" ${idx===list.length-1?'disabled':''} aria-label="Próximo cartão">Próximo →</button></div>`;$('moreWrap').hidden=true;restoreFocus(focusBefore);return;}
@@ -327,7 +329,7 @@ function jump(delta){const list=getFiltered();if(!list.length)return;const i=lis
 const LEVEL_LABEL=v=>v==='0'?'Complementos':'Nível '+v;
 function renderFilterState(list){
  const raw=$('searchBox').value.trim();$('searchClear').hidden=!raw;$('searchBox').closest('.search-wrap').classList.toggle('has-value',!!raw);
- $('searchStatus').textContent=ui.search?(list.length?`${list.length} ${list.length===1?'cartão encontrado':'cartões encontrados'} para “${raw}”`:`Nenhum cartão para “${raw}”. Tente outro termo ou limpe os filtros.`):'';
+ $('searchStatus').textContent=ui.search?(list.length?`${list.length} ${list.length===1?'cartão encontrado':'cartões encontrados'} para “${raw}”${liveHits()&&!ui.shuffle&&list.length>1?' · por relevância':''}`:`Nenhum cartão para “${raw}”. Confira a grafia, use menos palavras ou limpe os filtros.`):'';
  const chips=[];const X='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
  const add=(k,label)=>chips.push(`<button type="button" class="filter-chip" data-clear="${k}" aria-label="Remover filtro: ${safe(label)}">${safe(label)}${X}</button>`);
  if(ui.topic!=='all')add('topic',topicsById.get(Number(ui.topic))?.title||'Tema');
@@ -337,7 +339,7 @@ function renderFilterState(list){
  if(ui.audit!=='all')add('audit',$('auditSelect').selectedOptions[0]?.dataset.label||ui.audit);
  if(ui.search)add('search','Busca: '+raw);
  const box=$('activeFilters');box.hidden=chips.length===0;box.innerHTML=chips.join('')+(chips.length>1?'<button type="button" class="filter-reset" data-clear="all">Limpar tudo</button>':'');
- if(ui.search)highlightHits($('cardsContainer'),ui.search);
+ if(ui.search)highlightTerms($('cardsContainer'));
 }
 function highlightHits(root,q){if(!q||q.length<2)return;const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('.question,.answer-box,.case-vignette,.meta-id')&&!n.parentElement.closest('mark,button,script')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
  for(const n of nodes){const text=n.nodeValue;if(text.length<q.length)continue;
@@ -371,7 +373,9 @@ $('topicFilter').addEventListener('input',applyTopicFilter);
 $('topicFilter').addEventListener('keydown',e=>{if(e.key==='Enter'){const first=qsa('#topicList .topic-btn[data-name]').find(b=>!b.hidden);if(first){e.preventDefault();first.click();}}});
 qsa('[data-jump]').forEach(b=>b.addEventListener('click',()=>{if(pageKind!=='study'){location.href='./index.html?status='+encodeURIComponent(b.dataset.jump);return;}if(ui.mode==='fsrs')ui.mode='list';ui.status=b.dataset.jump;ui.limit=22;ui.focusId=null;render();$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}));
 $('searchClear').addEventListener('click',()=>{clearTimeout(searchTimer);$('searchBox').value='';applySearch();$('searchBox').focus();});
-$('searchBox').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('searchBox').value){e.preventDefault();$('searchClear').click();}});
+$('searchBox').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('searchBox').value){e.preventDefault();$('searchClear').click();}
+ else if((e.key==='ArrowDown'||e.key==='Enter')&&!e.isComposing&&$('searchBox').value.trim()){const q=$('cardsContainer').querySelector('.study-card .question');if(q){e.preventDefault();clearTimeout(searchTimer);q.focus();q.closest('.study-card')?.scrollIntoView({block:'nearest',behavior:prefersReduced()?'auto':'smooth'});}}});
+$('cardsContainer').addEventListener('keydown',e=>{if(!e.altKey||(e.key!=='ArrowDown'&&e.key!=='ArrowUp'))return;const card=e.target.closest?.('.study-card');if(!card)return;const cards=[...$('cardsContainer').querySelectorAll('.study-card')],i=cards.indexOf(card),next=cards[i+(e.key==='ArrowDown'?1:-1)];if(!next)return;e.preventDefault();const q=next.querySelector('.question');q?.focus({preventScroll:true});next.scrollIntoView({block:'nearest',behavior:prefersReduced()?'auto':'smooth'});});
 document.addEventListener('keydown',e=>{if(pageKind!=='study'||e.key!=='/'||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t.closest?.('input,textarea,select,[contenteditable="true"],dialog[open]'))return;e.preventDefault();$('searchBox').focus();$('searchBox').select();});
 $('activeFilters').addEventListener('click',ev=>{const b=ev.target.closest('[data-clear]');if(!b)return;const k=b.dataset.clear;
  if(k==='all'){clearFilters();$('searchBox').focus();return;}
@@ -402,8 +406,8 @@ $('focusSidebarToggle').addEventListener('click',()=>{
  }
  ui.focusSidebarCollapsed=!ui.focusSidebarCollapsed;renderControls();
 });
-let searchTimer;function applySearch(){ui.search=norm($('searchBox').value.trim());ui.limit=22;ui.focusId=null;render();}
-$('searchBox').addEventListener('input',e=>{if(e.isComposing)return;clearTimeout(searchTimer);searchTimer=setTimeout(applySearch,120);});
+let searchTimer;function applySearch(){runSearch();}
+$('searchBox').addEventListener('input',e=>{if(e.isComposing)return;clearTimeout(searchTimer);searchTimer=setTimeout(applySearch,40);});
 $('searchBox').addEventListener('compositionstart',()=>clearTimeout(searchTimer));
 $('searchBox').addEventListener('compositionend',()=>{clearTimeout(searchTimer);applySearch();});
 $('levelSelect').addEventListener('change',e=>{ui.level=e.target.value;ui.limit=22;ui.focusId=null;render();});
@@ -1205,7 +1209,27 @@ $('cardsContainer').addEventListener('click',event=>{
 });
 window.addEventListener('storage',event=>{if(event.key!==STORE_KEY)return;try{const saved=JSON.parse(event.newValue||'{}').cognitive;if(saved){cognitiveState=CMNCognitive.validate(saved,ALL_IDS);cognitivePool='all';if(!cognitiveSession){openAnswers.clear();render();}else renderCognitive();}}catch{notify('Não foi possível atualizar as práticas de outra aba.');}});
 
-restoringNavigation=true;readNavigationState();render();restoringNavigation=false;storageNotice();
+/* Busca instantânea: índice em Web Worker, ranking por relevância, reserva no thread principal. */
+function liveHits(){return ui.searchHits&&ui.searchHitsFor===ui.search?ui.searchHits:null;}
+function searchBadge(c){const SEARCH_FIELD_LABEL={question:'pergunta',scenario:'caso clínico',answer:'resposta',topic:'tema'};if(!ui.search||!liveHits())return '';const h=ui.searchHits.get(c.id);if(!h)return '';const where=h.fields.map(f=>SEARCH_FIELD_LABEL[f]).filter(Boolean);return `<p class="search-where">Encontrado em: ${where.length?safe(where.join(' · ')):'ID do cartão'}</p>`;}
+function searchEngine(){if(searchEngine.state)return searchEngine.state;const st={worker:null,version:0,sig:null,seq:0,index:null,docs:null};searchEngine.state=st;
+ try{if(typeof Worker==='function'&&typeof window.CMNSearch==='object'){st.worker=new Worker('./assets/search-worker.js');st.worker.onmessage=e=>onSearchMessage(e.data);st.worker.onerror=ev=>{ev?.preventDefault?.();dropSearchWorker();};}}catch(err){st.worker=null;}
+ return st;}
+function dropSearchWorker(){const st=searchEngine();try{st.worker?.terminate();}catch(err){}st.worker=null;st.sig=null;runSearch();}
+function searchDocs(){return CARDS.map(c=>{const d=displayText(c),t=topicsById.get(c.topic);return {id:c.id,question:d.question,scenario:d.scenario||'',answer:d.answer,topic:(t?.title||'')+' '+(t?.area||'')};});}
+function ensureSearchIndex(st){const sig=JSON.stringify(textEdits);if(sig===st.sig)return;st.sig=sig;st.version++;st.docs=searchDocs();st.index=null;if(st.worker)st.worker.postMessage({type:'build',docs:st.docs,version:st.version});}
+function runSearch(){const raw=$('searchBox').value.trim();
+ if(!raw||typeof window.CMNSearch!=='object'){ui.search=raw?norm(raw):'';ui.searchHits=null;ui.searchTerms=raw?[norm(raw)]:[];ui.limit=22;ui.focusId=null;render();return;}
+ const st=searchEngine(),seq=++st.seq;ensureSearchIndex(st);
+ if(st.worker){st.worker.postMessage({type:'query',q:raw,seq,version:st.version});return;}
+ if(!st.index)st.index=CMNSearch.build(st.docs);applySearchHits(seq,raw,CMNSearch.query(st.index,raw));}
+function onSearchMessage(m){const st=searchEngine();if(!m)return;if(m.type==='error'){dropSearchWorker();return;}if(m.type==='hits'&&m.version===st.version)applySearchHits(m.seq,$('searchBox').value.trim(),m.hits);}
+function applySearchHits(seq,raw,hits){const st=searchEngine();if(seq!==st.seq||raw!==$('searchBox').value.trim())return;
+ ui.search=norm(raw);ui.searchHitsFor=ui.search;ui.searchTerms=CMNSearch.terms(raw);ui.searchHits=new Map(hits.map((h,i)=>[h.id,{fields:h.fields,score:h.score,rank:i}]));ui.limit=22;ui.focusId=null;render();
+ document.dispatchEvent(new CustomEvent('cm8:search',{detail:{query:raw,count:hits.length}}));}
+function highlightTerms(root){const ts=(liveHits()&&ui.searchTerms&&ui.searchTerms.length?ui.searchTerms:[ui.search]).filter(t=>t&&t.length>=2).sort((a,b)=>b.length-a.length);for(const t of ts)highlightHits(root,t);}
+
+restoringNavigation=true;readNavigationState();render();restoringNavigation=false;if($('searchBox')?.value.trim())runSearch();storageNotice();
 initFSRS().then(()=>{const kind=new URL(location.href).searchParams.get('practice');if(pageKind==='study'&&['contrast','gist','transfer','context'].includes(kind)){if(kind!=='contrast'&&!cognitiveState.enabled){$('studyOverview').open=true;$('cognitiveTools').open=true;$('cognitiveEnabled').focus();}else startPractice(kind);}});
 }
 
@@ -1243,3 +1267,4 @@ function withViewTransition(update){const reduce=window.matchMedia?.('(prefers-r
  if(reduce||typeof document.startViewTransition!=='function'||document.hidden){update();return;}
  try{document.startViewTransition(update);}catch(err){update();}}
 (function netStatus(){const el=document.getElementById('netStatus');if(!el)return;const sync=()=>{el.hidden=navigator.onLine!==false;};window.addEventListener('online',sync);window.addEventListener('offline',sync);sync();})();
+
