@@ -121,6 +121,7 @@ test('mobile status rail has working overflow controls and keeps active choice v
 
 test('polish preserves a compact first viewport and 44px disclosure targets',async({page,isMobile})=>{
  await page.goto('./');
+ await expect(page.locator('#cardsContainer .study-card').first()).toBeVisible();
  const measurement=async()=>page.evaluate(()=>{
   const guide=document.querySelector('[data-page-link=stats]');
   const overview=document.querySelector('#studyOverview>summary');
