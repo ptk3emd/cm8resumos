@@ -1131,60 +1131,66 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 .brand-sub {font-family:var(--font);letter-spacing:normal;}
 .topbtn svg {flex:none;}
 
-/* ===== Mesa de estudo (bolder + overdrive + harden) ===== */
-.hero.today { display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"copy queue" "actions queue";align-items:end;column-gap:40px;row-gap:4px;padding:4px 0 28px;border-bottom:1px solid var(--stroke); }
-.today-copy { grid-area:copy;min-width:0; }
-.today-actions { grid-area:actions;min-width:0; }
-.hero.today h1 { font-size:clamp(34px,4.4vw,52px);line-height:1.02;letter-spacing:-.04em;font-weight:750;margin:0 0 8px; }
-.hero.today .today-copy>p:not(.net-status) { margin:0;color:var(--muted);font-size:15px; }
-.today-queue { grid-area:queue;display:grid;justify-items:end;gap:2px;min-width:168px;padding:16px 0 4px 28px;border-left:1px solid var(--stroke);font-variant-numeric:tabular-nums; }
-.today-label { font-size:12px;font-weight:600;color:var(--muted); }
-.today-num { font-size:clamp(48px,6vw,72px);line-height:.95;font-weight:750;letter-spacing:-.05em;color:var(--ink); }
-.today-queue[data-state="due"] .today-num { color:var(--warning); }
-.today-queue[data-state="clear"] .today-num { color:var(--success); }
-.today-queue[data-state="loading"] .today-num { color:var(--quiet); }
-.today-split { display:flex;gap:14px;font-size:12.5px;color:var(--muted);margin-top:6px;white-space:nowrap; }
-.today-split span { display:inline-flex;align-items:center;gap:6px; }
-.today-split b { color:var(--ink);font-weight:650; }
-.today-split i { width:8px;height:8px;border-radius:2px;display:inline-block; }
-.tq-due { background:var(--warning); } .tq-new { background:var(--blue); }
-.hero.today .study-start { margin:18px 0 6px; }
-.hero.today .study-start button { min-height:48px;padding:11px 20px;font-size:14.5px;border-radius:8px; }
-.hero.today .study-start button.study-secondary { background:var(--page);color:var(--ink);border-color:var(--stroke-strong); }
-.hero.today .study-start button.study-secondary:hover { background:var(--subtle); }
-:root[data-theme="dark"] .hero.today .study-start button.study-secondary { color:var(--ink); }
-#reviewStartSummary { margin:0;font-size:12.5px;color:var(--quiet); }
-.net-status { margin:10px 0 0;padding:8px 12px;border-radius:7px;background:var(--warning-bg);color:var(--warning);font-size:13px;font-weight:550;max-width:60ch; }
-/* Cards carry their state, not only a chip. */
-.study-card { transition:border-color .2s ease,box-shadow .2s ease; }
-.study-card.is-done { border-color:color-mix(in srgb,var(--success) 45%,var(--stroke-strong)); }
-.study-card.is-review { border-color:color-mix(in srgb,var(--warning) 50%,var(--stroke-strong)); }
-.study-card.is-done .study-card-head { box-shadow:inset 0 3px 0 var(--success); }
-.study-card.is-review .study-card-head { box-shadow:inset 0 3px 0 var(--warning); }
-.study-card .question { font-size:clamp(20px,2.3vw,25px);letter-spacing:-.022em; }
-/* Harden: long tokens, wide content and tiny screens. */
-.question,.answer-box,.case-vignette,.topic-name,.map-name,.list-title { overflow-wrap:anywhere; }
-.answer-box table,.answer-box pre { display:block;max-width:100%;overflow-x:auto; }
-.answer-box img { max-width:100%;height:auto; }
-/* Overdrive: same-document View Transitions between Lista / Foco / FSRS. */
-@view-transition { navigation:auto; }
-#cardsContainer { view-transition-name:study-cards; }
-.mode-switch { view-transition-name:mode-switch; }
-::view-transition-old(study-cards) { animation:vt-out .16s cubic-bezier(.4,0,1,1) both; }
-::view-transition-new(study-cards) { animation:vt-in .32s cubic-bezier(.16,1,.3,1) both; }
-@keyframes vt-out { to { opacity:0;transform:translateY(-6px) scale(.995);filter:blur(2px); } }
-@keyframes vt-in { from { opacity:0;transform:translateY(10px);filter:blur(3px); } }
-@media(prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important;} .study-card{transition:none;} }
-@media(max-width:850px){
- .hero.today { grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "queue" "actions";row-gap:14px;padding-bottom:20px; }
- .today-queue { justify-items:start;border-left:0;border-top:1px solid var(--stroke);padding:14px 0 0;grid-template-columns:auto 1fr;align-items:end;column-gap:16px; }
- .today-label { grid-column:1/-1; }
- .today-num { font-size:48px; }
- .today-split { flex-direction:column;gap:2px;margin:0 0 4px; }
- .hero.today .study-start { margin:0; }
- .hero.today .study-start button { flex:1 1 140px; }
+/* ===== Notion system — strict application of DESIGN.md ===== */
+@font-face{font-family:"Inter";font-style:normal;font-display:swap;font-weight:100 900;src:url("./inter-latin-wght-normal.woff2") format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"Inter";font-style:normal;font-display:swap;font-weight:100 900;src:url("./inter-latin-ext-wght-normal.woff2") format("woff2-variations");unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+:root{
+ --font:"Inter",-apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+ --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+ --ink:rgba(0,0,0,.95);--muted:#615d59;--quiet:#6f6a65;--subtle:#f6f5f4;--subtle-hover:#efeeec;
+ --stroke:rgba(0,0,0,.1);--stroke-strong:rgba(0,0,0,.14);
+ --blue:#0075de;--action-fill:#0075de;--blue-hover:#005bab;--focus-ring:#097fe8;--blue-soft:#f2f9ff;--blue-soft-ink:#0064bf;
+ --control-radius:4px;
+ --shadow-card:rgba(0,0,0,.04) 0 4px 18px,rgba(0,0,0,.027) 0 2.025px 7.84688px,rgba(0,0,0,.02) 0 .8px 2.925px,rgba(0,0,0,.01) 0 .175px 1.04062px;
 }
-
-/* Busca instantânea: onde o termo apareceu, sem revelar a resposta. */
-.search-where { margin:8px 0 0;font-size:12px;line-height:1.4;color:var(--blue-soft-ink);font-weight:550; }
-.search-where::before { content:"";display:inline-block;width:6px;height:6px;margin-right:7px;border-radius:50%;background:currentColor;vertical-align:1px; }
+:root[data-theme="dark"]{--ink:#f1f1ef;--subtle:#252524;--subtle-hover:#31302e;--stroke:rgba(255,255,255,.1);--stroke-strong:rgba(255,255,255,.16);--blue-soft:#1c2c3b;--blue-soft-ink:#8bc5fc;--shadow-card:none;}
+body{font-family:var(--font);font-feature-settings:"lnum" 1,"locl" 1;}
+::selection{background:rgba(0,117,222,.18);}
+/* Type scale: 700 for headings with compression at size, 400/500/600 elsewhere. */
+.hero h1,.page-intro h1{font-size:clamp(30px,3.4vw,40px);font-weight:700;line-height:1.1;letter-spacing:-.03em;margin:0 0 6px;}
+.hero p,.page-intro p{font-size:16px;color:var(--muted);}
+.list-title{font-weight:700;letter-spacing:-.022em;}
+.study-card .question{font-size:clamp(19px,2vw,22px);font-weight:700;line-height:1.3;letter-spacing:-.012em;}
+.page-section h2{font-size:22px;font-weight:700;letter-spacing:-.011em;}
+.sidebar-title,.map-title,.overview-title{font-weight:600;}
+.topic-btn.active .topic-name{font-weight:600;}
+/* Buttons: 4px radius, blue primary, translucent warm secondary. */
+.hero .study-start button,.study-start button{border-radius:4px;min-height:44px;padding:10px 16px;font-size:15px;font-weight:600;}
+.hero .study-start button.study-secondary,.study-start button.study-secondary{background:rgba(0,0,0,.05);border-color:transparent;color:var(--ink);}
+.hero .study-start button.study-secondary:hover{background:rgba(0,0,0,.08);}
+:root[data-theme="dark"] .hero .study-start button.study-secondary{background:rgba(255,255,255,.08);color:var(--ink);}
+:root[data-theme="dark"] .hero .study-start button.study-secondary:hover{background:rgba(255,255,255,.12);}
+.subtle-btn,.topbtn,.reveal-btn,.more-actions summary,.field-select,.search-input,.action-row button,.primary-mark{border-radius:4px;}
+.mode-switch{border-radius:6px;background:rgba(0,0,0,.05);border-color:transparent;padding:3px;}
+:root[data-theme="dark"] .mode-switch{background:rgba(255,255,255,.06);}
+.mode-switch .mode-btn{border-radius:4px;font-weight:500;color:var(--muted);}
+.mode-switch .mode-btn[aria-pressed="true"],.mode-btn.active{background:var(--page);color:var(--ink);font-weight:600;box-shadow:0 0 0 1px var(--stroke),rgba(0,0,0,.04) 0 1px 3px;}
+:root[data-theme="dark"] .mode-switch .mode-btn[aria-pressed="true"]{background:var(--subtle-hover);box-shadow:none;}
+.pill{border-radius:4px;font-weight:500;}
+.pill.active{font-weight:600;}
+/* Pills only for status and tags. */
+.chip,.audit-status,.status-chip,.filter-chip{border-radius:9999px;font-size:12px;font-weight:600;letter-spacing:.01em;}
+/* Cards: whisper border + soft layered shadow; state lives in the chip, not in decoration. */
+.study-card{border:1px solid var(--stroke);border-radius:12px;box-shadow:var(--shadow-card);}
+.study-card.is-done,.study-card.is-review{border-color:var(--stroke);}
+.study-card .study-card-head{box-shadow:none;}
+#reviewStartSummary{margin:8px 0 0;font-size:14px;color:var(--muted);}
+.net-status{margin:10px 0 0;padding:8px 12px;border-radius:4px;background:var(--warning-bg);color:var(--warning);font-size:14px;font-weight:500;max-width:60ch;}
+.search-where{display:inline-block;margin:10px 0 0;padding:4px 8px;border-radius:9999px;background:var(--blue-soft);color:var(--blue-soft-ink);font-size:12px;font-weight:600;letter-spacing:.01em;line-height:1.33;}
+.topic-num:empty{display:none;}
+.topic-all{grid-template-columns:minmax(0,1fr);}
+.brand-title{font-size:15px;font-weight:600;letter-spacing:-.01em;}
+.topic-num,.meta-id,.map-num,.stat .number,.today-num{font-variant-numeric:tabular-nums;}
+/* Harden: long tokens, wide content and tiny screens. */
+.question,.answer-box,.case-vignette,.topic-name,.map-name,.list-title{overflow-wrap:anywhere;}
+.answer-box table,.answer-box pre{display:block;max-width:100%;overflow-x:auto;}
+.answer-box img{max-width:100%;height:auto;}
+/* Mode changes cross-fade; no blur or travel. */
+@view-transition{navigation:auto;}
+#cardsContainer{view-transition-name:study-cards;}
+::view-transition-old(study-cards){animation:vt-fade-out .12s ease-out both;}
+::view-transition-new(study-cards){animation:vt-fade-in .2s ease-out both;}
+@keyframes vt-fade-out{to{opacity:0;}}
+@keyframes vt-fade-in{from{opacity:0;}}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important;}}
+@media(max-width:850px){.hero .study-start button{flex:1 1 140px;}}
