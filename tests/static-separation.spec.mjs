@@ -11,7 +11,7 @@ test('static entry has external CSS, JavaScript and byte-identical medical JSON'
  await page.goto('./');await expect(page.locator('#workspace')).toHaveAttribute('aria-busy','false');
  await expect(page.locator('.study-card')).toHaveCount(22);
  expect(errors).toEqual([]);
- const cachePaths=await page.evaluate(async()=>{await navigator.serviceWorker.ready;const names=await caches.keys();const cache=await caches.open(names.find(n=>n.includes('study-pages-v9')));return (await cache.keys()).map(r=>new URL(r.url).pathname);});
+ const cachePaths=await page.evaluate(async()=>{await navigator.serviceWorker.ready;const names=await caches.keys();const cache=await caches.open(names.find(n=>n.startsWith('cm8resumos-shell-')));return (await cache.keys()).map(r=>new URL(r.url).pathname);});
  for(const path of ['/assets/app.css','/assets/app.js','/assets/fsrs.js','/data/flashcards.json'])expect(cachePaths).toContain(path);
 });
 

@@ -388,11 +388,11 @@ $('statusFilters').addEventListener('click',ev=>{
   rail.scrollTo({left:x+active.offsetWidth-rail.clientWidth+12,behavior:'auto'});
  updateFilterCues();
 });
-qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>{cognitiveSession=null;ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;
+qsa('[data-mode]').forEach(b=>b.addEventListener('click',()=>withViewTransition(()=>{cognitiveSession=null;ui.mode=b.dataset.mode;ui.status='all';ui.focusId=null;ui.showAll=false;
  if(ui.mode==='fsrs')openAnswers.clear();
  if(ui.mode==='fsrs'||ui.mode==='focus'){for(const id of ['contentMap','studyGuide','studyOverview'])$(id).open=false;}
  render();
- if(ui.mode==='fsrs'||ui.mode==='focus')focusFSRSQuestion();}));
+ if(ui.mode==='fsrs'||ui.mode==='focus')focusFSRSQuestion();})));
 $('startReviewBtn').addEventListener('click',()=>document.querySelector('[data-mode="fsrs"]').click());
 $('startFocusBtn').addEventListener('click',()=>{for(const id of ['contentMap','studyGuide','studyOverview'])$(id).open=false;ui.mode='focus';ui.focusSidebarCollapsed=true;ui.focusId=null;openAnswers.clear();ui.showAll=false;render();focusFSRSQuestion();});
 $('focusSidebarToggle').addEventListener('click',()=>{
@@ -1115,8 +1115,8 @@ function renderCognitive(){
  const interventions=snapshot.events.filter(e=>['contrast','context'].includes(e.kind)&&fsrsDay(e.time)===today).length;
  $('cognitiveToday').textContent=reviewed+' '+(reviewed===1?'cartão revisado':'cartões revisados')+' hoje no FSRS · '+interventions+' '+(interventions===1?'intervenção':'intervenções')+' hoje';
  $('startReviewBtn').disabled=!fsrsReady;
- if(fsrsReady){const queue=fsrsQueue();$('reviewStartSummary').textContent='Nesta seleção: '+queue.due.length+' vencidos e '+queue.newCards.length+' novos para revisar.';}
- else $('reviewStartSummary').textContent=fsrsUnavailable?'Histórico indisponível. Você pode estudar em Foco.':'Carregando a fila de revisão…';
+ if(fsrsReady){const queue=fsrsQueue();$('reviewStartSummary').textContent='Nesta seleção: '+queue.due.length+' vencidos e '+queue.newCards.length+' novos para revisar.';setTodayQueue(queue.due.length,queue.newCards.length);}
+ else{setTodayQueue(null,null);$('reviewStartSummary').textContent=fsrsUnavailable?'Histórico indisponível. Você pode estudar em Foco.':'Carregando a fila de revisão…';}
  const eligible=getFiltered().filter(c=>!mark(c.id).hidden),due=eligible.filter(c=>fsrsRecords.has(c.id)&&new Date(fsrsRecords.get(c.id).card.dueAt)<=new Date()),pools=CMNCognitive.pools(due,fsrsRecords,cognitiveState),sessions=CMNCognitive.sessions(eligible,fsrsRecords,snapshot);
  $('cognitivePools').querySelector('[data-pool="A"]').textContent='A · Literal ('+pools.A.length+' vencidos)';
  $('cognitivePools').querySelector('[data-pool="B"]').textContent='B · Essência / transferência ('+pools.B.length+' vencidos)';
@@ -1233,3 +1233,12 @@ async function loadStudyLibrary(){
 }
 document.getElementById('retryLibrary').addEventListener('click',loadStudyLibrary);
 loadStudyLibrary();
+
+/* Mesa de estudo: fila de hoje, transições e robustez. */
+function setTodayQueue(due,fresh){const el=id=>document.getElementById(id);if(!el('todayTotal'))return;const fmt=n=>n==null?'—':Number(n).toLocaleString('pt-BR');
+ el('todayDue').textContent=fmt(due);el('todayNew').textContent=fmt(fresh);el('todayTotal').textContent=due==null?'—':fmt(due+fresh);
+ const q=el('todayTotal').closest('.today-queue');if(q){q.dataset.state=due==null?'loading':due>0?'due':due+fresh>0?'fresh':'clear';}}
+function withViewTransition(update){const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+ if(reduce||typeof document.startViewTransition!=='function'||document.hidden){update();return;}
+ try{document.startViewTransition(update);}catch(err){update();}}
+(function netStatus(){const el=document.getElementById('netStatus');if(!el)return;const sync=()=>{el.hidden=navigator.onLine!==false;};window.addEventListener('online',sync);window.addEventListener('offline',sync);sync();})();

@@ -1,5 +1,5 @@
 /* CM8: app shell offline. This path is scoped to /cm8resumos/ on GitHub Pages. */
-const CACHE_NAME='cm8resumos-shell-2026-11-17-favicon-v11';
+const CACHE_NAME='cm8resumos-shell-2026-11-18-mesa-v12';
 const PREFIX='cm8resumos-shell-';
 const SHELL=['./','./index.html','./estatisticas.html','./configuracoes.html','./assets/pages.css','./manifest.webmanifest','./assets/app.css','./assets/app.js','./assets/fsrs.js','./data/flashcards.json','./assets/progress-io.js','./assets/cognitive.js','./favicon.ico','./assets/favicon.svg','./assets/favicon-16.png','./assets/favicon-32.png','./assets/apple-touch-icon.png','./assets/icon-192.png','./assets/icon-512.png','./assets/icon-maskable-192.png','./assets/icon-maskable-512.png'];
 self.addEventListener('install',event=>{

@@ -1130,3 +1130,57 @@ mark.hit { background:color-mix(in srgb,var(--warning) 26%,transparent);color:in
 
 .brand-sub {font-family:var(--font);letter-spacing:normal;}
 .topbtn svg {flex:none;}
+
+/* ===== Mesa de estudo (bolder + overdrive + harden) ===== */
+.hero.today { display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"copy queue" "actions queue";align-items:end;column-gap:40px;row-gap:4px;padding:4px 0 28px;border-bottom:1px solid var(--stroke); }
+.today-copy { grid-area:copy;min-width:0; }
+.today-actions { grid-area:actions;min-width:0; }
+.hero.today h1 { font-size:clamp(34px,4.4vw,52px);line-height:1.02;letter-spacing:-.04em;font-weight:750;margin:0 0 8px; }
+.hero.today .today-copy>p:not(.net-status) { margin:0;color:var(--muted);font-size:15px; }
+.today-queue { grid-area:queue;display:grid;justify-items:end;gap:2px;min-width:168px;padding:16px 0 4px 28px;border-left:1px solid var(--stroke);font-variant-numeric:tabular-nums; }
+.today-label { font-size:12px;font-weight:600;color:var(--muted); }
+.today-num { font-size:clamp(48px,6vw,72px);line-height:.95;font-weight:750;letter-spacing:-.05em;color:var(--ink); }
+.today-queue[data-state="due"] .today-num { color:var(--warning); }
+.today-queue[data-state="clear"] .today-num { color:var(--success); }
+.today-queue[data-state="loading"] .today-num { color:var(--quiet); }
+.today-split { display:flex;gap:14px;font-size:12.5px;color:var(--muted);margin-top:6px;white-space:nowrap; }
+.today-split span { display:inline-flex;align-items:center;gap:6px; }
+.today-split b { color:var(--ink);font-weight:650; }
+.today-split i { width:8px;height:8px;border-radius:2px;display:inline-block; }
+.tq-due { background:var(--warning); } .tq-new { background:var(--blue); }
+.hero.today .study-start { margin:18px 0 6px; }
+.hero.today .study-start button { min-height:48px;padding:11px 20px;font-size:14.5px;border-radius:8px; }
+.hero.today .study-start button.study-secondary { background:var(--page);color:var(--ink);border-color:var(--stroke-strong); }
+.hero.today .study-start button.study-secondary:hover { background:var(--subtle); }
+:root[data-theme="dark"] .hero.today .study-start button.study-secondary { color:var(--ink); }
+#reviewStartSummary { margin:0;font-size:12.5px;color:var(--quiet); }
+.net-status { margin:10px 0 0;padding:8px 12px;border-radius:7px;background:var(--warning-bg);color:var(--warning);font-size:13px;font-weight:550;max-width:60ch; }
+/* Cards carry their state, not only a chip. */
+.study-card { transition:border-color .2s ease,box-shadow .2s ease; }
+.study-card.is-done { border-color:color-mix(in srgb,var(--success) 45%,var(--stroke-strong)); }
+.study-card.is-review { border-color:color-mix(in srgb,var(--warning) 50%,var(--stroke-strong)); }
+.study-card.is-done .study-card-head { box-shadow:inset 0 3px 0 var(--success); }
+.study-card.is-review .study-card-head { box-shadow:inset 0 3px 0 var(--warning); }
+.study-card .question { font-size:clamp(20px,2.3vw,25px);letter-spacing:-.022em; }
+/* Harden: long tokens, wide content and tiny screens. */
+.question,.answer-box,.case-vignette,.topic-name,.map-name,.list-title { overflow-wrap:anywhere; }
+.answer-box table,.answer-box pre { display:block;max-width:100%;overflow-x:auto; }
+.answer-box img { max-width:100%;height:auto; }
+/* Overdrive: same-document View Transitions between Lista / Foco / FSRS. */
+@view-transition { navigation:auto; }
+#cardsContainer { view-transition-name:study-cards; }
+.mode-switch { view-transition-name:mode-switch; }
+::view-transition-old(study-cards) { animation:vt-out .16s cubic-bezier(.4,0,1,1) both; }
+::view-transition-new(study-cards) { animation:vt-in .32s cubic-bezier(.16,1,.3,1) both; }
+@keyframes vt-out { to { opacity:0;transform:translateY(-6px) scale(.995);filter:blur(2px); } }
+@keyframes vt-in { from { opacity:0;transform:translateY(10px);filter:blur(3px); } }
+@media(prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important;} .study-card{transition:none;} }
+@media(max-width:850px){
+ .hero.today { grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "queue" "actions";row-gap:14px;padding-bottom:20px; }
+ .today-queue { justify-items:start;border-left:0;border-top:1px solid var(--stroke);padding:14px 0 0;grid-template-columns:auto 1fr;align-items:end;column-gap:16px; }
+ .today-label { grid-column:1/-1; }
+ .today-num { font-size:48px; }
+ .today-split { flex-direction:column;gap:2px;margin:0 0 4px; }
+ .hero.today .study-start { margin:0; }
+ .hero.today .study-start button { flex:1 1 140px; }
+}
