@@ -1,3 +1,4 @@
+import {settingsFor} from './page-navigation.mjs';
 import {test,expect} from '@playwright/test';
 
 async function rows(page){return page.evaluate(()=>new Promise((resolve,reject)=>{
@@ -16,7 +17,7 @@ async function seedDependents(page){
 }
 
 test('undo restores a new card, quota and independent manual/read progress, including an empty queue',async({page})=>{
- await start(page);await page.locator('#fsrsDaily').fill('1');await page.locator('#fsrsDaily').dispatchEvent('change');
+ await start(page);await (await settingsFor(page)).locator('#fsrsDaily').fill('1');await (await settingsFor(page)).locator('#fsrsDaily').dispatchEvent('change');
  await page.locator('[data-mode=focus]').click();await page.locator('[data-action=done]').first().click();await page.locator('[data-action=count-read]').first().click();
  await page.locator('[data-mode=fsrs]').click();await grade(page);await expect(page.locator('#fsrsSummary')).toContainText('0 novos');await expect(page.locator('.fsrs-empty')).toContainText('Limite diário');
  await page.locator('#fsrsUndoBtn').click();await expect(page.locator('#fsrsFeedbackText')).toContainText('Avaliação desfeita');await expect(page.locator('.meta-id')).toHaveText('1.1.1');await expect(page.locator('.answer-box')).toBeVisible();await expect(page.locator('#fsrsSummary')).toContainText('1 novos');
@@ -44,9 +45,9 @@ test('only the latest grade is undone and previous reviews persist',async({page}
 
 test('entry is compact, metadata and header targets readable, and dark reading counter meets AA',async({page})=>{
  await page.goto('./');await expect(page.locator('#contentMap')).not.toHaveAttribute('open','');
- const result=await page.evaluate(()=>({y:document.querySelector('.study-card').getBoundingClientRect().top,overflow:document.documentElement.scrollWidth>innerWidth,targets:[...document.querySelectorAll('.topbtn')].map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height}))}));
+ const result=await page.evaluate(()=>({y:document.querySelector('.study-card').getBoundingClientRect().top,overflow:document.documentElement.scrollWidth>innerWidth,targets:[...document.querySelectorAll('.app-navigation a')].map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height}))}));
  expect(result.y).toBeLessThan(1100);expect(result.overflow).toBeFalsy();for(const box of result.targets){expect(box.w).toBeGreaterThanOrEqual(44);expect(box.h).toBeGreaterThanOrEqual(44);}
- await page.locator('#themeBtn').click();await page.waitForTimeout(300);
+ await (await settingsFor(page)).locator('#themeBtn').click();await page.waitForTimeout(300);
  const contrast=await page.locator('.cmn-read-counter').first().evaluate(e=>{
   const rgb=s=>s.match(/[\d.]+/g).slice(0,3).map(Number),lum=rgb=>rgb.map(n=>{n/=255;return n<=.04045?n/12.92:((n+.055)/1.055)**2.4;}).reduce((v,n,i)=>v+n*[.2126,.7152,.0722][i],0);
   const a=lum(rgb(getComputedStyle(e).color)),b=lum(rgb(getComputedStyle(e.closest('.study-card')).backgroundColor));return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
@@ -54,7 +55,7 @@ test('entry is compact, metadata and header targets readable, and dark reading c
 });
 
 test('metric action explains experimental opt-in without enabling it silently',async({page})=>{
- await page.goto('./');await page.locator('#studyOverview summary').first().click();await page.locator('.cognitive-metrics summary').click();await page.locator('[data-metric-practice=gist]').click();await expect(page.locator('#cognitiveEnabled')).toBeFocused();await expect(page.locator('#cognitiveEnabled')).not.toBeChecked();await expect(page.locator('#cognitiveStateHint')).toContainText('desativada');
+ await page.goto('./estatisticas.html');await expect(page.locator('#workspace')).toHaveAttribute('aria-busy','false');await page.locator('[data-metric-practice=gist]').click();await expect(page.locator('#cognitiveEnabled')).toBeFocused();await expect(page.locator('#cognitiveEnabled')).not.toBeChecked();await expect(page.locator('#cognitiveStateHint')).toContainText('desativada');
 });
 
 test('undo restores an existing review with its complete previous log',async({page})=>{

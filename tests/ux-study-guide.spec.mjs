@@ -1,35 +1,16 @@
+import {settingsFor} from './page-navigation.mjs';
 import {test,expect} from '@playwright/test';
 
-test('manual counters and topic exploration remain visible before flashcards',async({page})=>{
- await page.goto('./');
- const guide=page.locator('#studyGuide'),explorer=page.locator('#studyOverview');
- await expect(guide.locator('summary')).toContainText('Estatísticas e guia');
- await expect(explorer.locator(':scope > summary')).toContainText('Mapa e práticas');
- const order=await page.evaluate(()=>{
-  const guide=document.querySelector('#studyGuide'),explorer=document.querySelector('#studyOverview'),filters=document.querySelector('.filters');
-  return [guide,explorer].every(node=>Boolean(node.compareDocumentPosition(filters)&Node.DOCUMENT_POSITION_FOLLOWING));
- });
- expect(order).toBe(true);
- await guide.locator('summary').click();
- await expect(guide).toHaveAttribute('open','');
- await expect(guide).toContainText('contador individual do cartão');
- await expect(guide).toContainText('Só essa avaliação agenda a próxima revisão');
- await explorer.locator(':scope > summary').click();
- await expect(explorer).toHaveAttribute('open','');
- await expect(explorer.locator('#contentMap>summary')).toBeVisible();
- await expect(explorer.locator('#cognitiveTools>summary')).toBeVisible();
- await expect(explorer.locator('.cognitive-metrics>summary')).toBeVisible();
- await explorer.locator('#contentMap>summary').click();
- await expect(page.locator('#mapGrid .map-cell').first()).toBeVisible();
- await expect(page.locator('#cardsContainer .study-card')).toHaveCount(22);
+test('statistics have a dedicated route while map and practices stay in study',async({page})=>{
+ await page.goto('./');await expect(page.locator('#workspace')).toHaveAttribute('aria-busy','false');
+ await expect(page.locator('#nReadTotal')).toBeHidden();
+ await page.locator('#studyOverview>summary').click();await page.locator('#contentMap>summary').click();await expect(page.locator('#mapGrid .map-cell').first()).toBeVisible();
+ await page.locator('[data-page-link=stats]').click();await expect(page.locator('#nReadTotal')).toBeVisible();await expect(page.locator('.guide-items')).toContainText('Só essa avaliação agenda');
 });
 
 test('disclosures retain keyboard access and start collapsed after reload',async({page})=>{
  await page.goto('./');
  const guide=page.locator('#studyGuide'),explorer=page.locator('#studyOverview');
- await guide.locator('summary').focus();
- await page.keyboard.press('Enter');
- await expect(guide).toHaveAttribute('open','');
  await explorer.locator(':scope > summary').focus();
  await page.keyboard.press('Enter');
  await expect(explorer).toHaveAttribute('open','');
@@ -96,15 +77,14 @@ test('load more takes keyboard focus to first newly loaded question',async({page
 test('dark mode keeps guide and functional controls legible with AA contrast',async({page,isMobile})=>{
  await page.goto('./');
  if(isMobile)await page.locator('#mobileFilters').click();
- await page.locator('#themeBtn').click();
+ await (await settingsFor(page)).locator('#themeBtn').click();
  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
- await page.locator('#studyGuide summary').click();
  await page.locator('#levelSelect').selectOption('1');
  const contrasts=await page.evaluate(()=>{
   const rgb=str=>{const m=str.match(/rgba?\(([^)]+)\)/);if(!m)return null;return m[1].split(/[\s,\/]+/).filter(Boolean).slice(0,3).map(Number);};
   const luminance=c=>c.map(v=>{const x=v/255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;}).reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
   const ratio=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
-  return ['#studyGuide summary','#studyGuide dd','#studyOverview>summary','#levelSelect','#searchBox','#activeFilters .filter-chip','#listTitle'].map(selector=>{
+  return ['#studyOverview>summary','#levelSelect','#searchBox','#activeFilters .filter-chip','#listTitle'].map(selector=>{
    const node=document.querySelector(selector);
    let ancestor=node,bg=null;
    while(ancestor&&!bg){
@@ -141,7 +121,7 @@ test('mobile status rail has working overflow controls and keeps active choice v
 test('polish preserves a compact first viewport and 44px disclosure targets',async({page,isMobile})=>{
  await page.goto('./');
  const measurement=async()=>page.evaluate(()=>{
-  const guide=document.querySelector('#studyGuide>summary');
+  const guide=document.querySelector('[data-page-link=stats]');
   const overview=document.querySelector('#studyOverview>summary');
   return {
    firstCardTop:document.querySelector('#cardsContainer .study-card').getBoundingClientRect().top,

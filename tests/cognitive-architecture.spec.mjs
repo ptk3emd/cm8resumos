@@ -1,3 +1,4 @@
+import {settingsFor} from './page-navigation.mjs';
 import {test,expect} from '@playwright/test';
 import fs from 'node:fs/promises';
 import {createServer} from 'node:http';
@@ -54,7 +55,7 @@ test('cognitive: contextual session leaves FSRS untouched and suppresses weekly 
 
 test('cognitive: contrast after four reviews has actual matching, separate accuracy and no FSRS mutation',async({page})=>{
  await open(page);await seed(page,['26.2.1']);await page.reload();await page.locator('[data-mode=fsrs]').click();await page.locator('[data-pool=C]').click();await expect(page.locator('[data-session-index]').filter({hasText:'Contraste'})).toHaveCount(1);
- await page.locator('[data-session-index]').filter({hasText:'Contraste'}).click();const before=await dump(page);await page.locator('#contrast-0').selectOption('26.2.1');await page.locator('#contrast-1').selectOption('26.2.2');await page.locator('#contrastForm button[type=submit]').click();await expect(page.locator('.intervention')).toContainText('2 de 2');expect(await dump(page)).toEqual(before);await page.locator('#studyOverview').evaluate(e=>e.open=true);await page.locator('.cognitive-metrics summary').click();await expect(page.locator('#cognitiveMetrics')).toContainText('100%');
+ await page.locator('[data-session-index]').filter({hasText:'Contraste'}).click();const before=await dump(page);await page.locator('#contrast-0').selectOption('26.2.1');await page.locator('#contrast-1').selectOption('26.2.2');await page.locator('#contrastForm button[type=submit]').click();await expect(page.locator('.intervention')).toContainText('2 de 2');expect(await dump(page)).toEqual(before);await page.goto('./estatisticas.html');await expect(page.locator('#workspace')).toHaveAttribute('aria-busy','false');await expect(page.locator('#cognitiveMetrics')).toContainText('100%');
 });
 
 test('cognitive: real anchor rating commits propagation to at least three mature dependents',async({page})=>{
@@ -76,23 +77,23 @@ test('cognitive: transfer cycles variants and records success on the scheduled c
 
 test('cognitive: latest FSRS backup in another tab and invalid import preserve history',async({page,context})=>{
  await open(page);const second=await context.newPage();await second.goto('./');await page.locator('[data-mode=fsrs]').click();await page.locator('[data-action=reveal]').first().click();await page.locator('[data-grade="3"]').click();await expect.poll(async()=> (await dump(page)).length).toBe(1);
- await second.locator('[data-mode=fsrs]').click();await second.locator('.fsrs-backup summary').click();const promise=second.waitForEvent('download');await second.locator('#fsrsExport').click();const data=JSON.parse(await fs.readFile(await (await promise).path(),'utf8'));expect(data.records).toHaveLength(1);
- delete data.records[0].card.lapses;await second.locator('#fsrsImport').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});await expect(second.locator('#toast')).toContainText(/lapses|inválido/);expect(await dump(second)).toHaveLength(1);
+ await second.locator('[data-mode=fsrs]').click();const promise=(await settingsFor(second)).waitForEvent('download');await (await settingsFor(second)).locator('#fsrsExport').click();const data=JSON.parse(await fs.readFile(await (await promise).path(),'utf8'));expect(data.records).toHaveLength(1);
+ delete data.records[0].card.lapses;await (await settingsFor(second)).locator('#fsrsImport').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});await expect((await settingsFor(second)).locator('#toast')).toContainText(/lapses|inválido/);expect(await dump(second)).toHaveLength(1);
 });
 
 test('cognitive: exported XML restores events and variants through the real import UI',async({page,context})=>{
  await open(page);await page.locator('#cognitiveTopic').selectOption('26');await page.locator('[data-practice=context]').click();await page.locator('[data-cognitive-action=reveal]').click();await page.locator('[data-cognitive-action=success]').click();await expect(page.locator('.intervention')).toContainText('Prática registrada');
- const d=page.waitForEvent('download');await page.locator('#exportBtn').click();const xml=await fs.readFile(await (await d).path());
- const fresh=await context.browser().newContext();try{const p=await fresh.newPage();await p.goto(page.url());await p.locator('#importFile').setInputFiles({name:'cognitive.xml',mimeType:'application/xml',buffer:xml});await expect(p.locator('#importReviewText')).toContainText('metadados cognitivos');await p.locator('#confirmImportBtn').click();await expect(p.locator('#cognitiveToday')).toContainText('1 intervenção');await p.reload();await p.locator('#studyOverview summary').first().click();await p.locator('#cognitiveTools summary').click();await expect(p.locator('#cognitiveEnabled')).toBeChecked();await p.locator('#cognitiveTopic').selectOption('26');await p.locator('[data-practice=transfer]').click();await expect(p.locator('.question')).toContainText('Após tratamento');}finally{await fresh.close();}
+ const d=(await settingsFor(page)).waitForEvent('download');await (await settingsFor(page)).locator('#exportBtn').click();const xml=await fs.readFile(await (await d).path());
+ const fresh=await context.browser().newContext();try{const p=await fresh.newPage();await p.goto(page.url());await (await settingsFor(p)).locator('#importFile').setInputFiles({name:'cognitive.xml',mimeType:'application/xml',buffer:xml});await expect((await settingsFor(p)).locator('#importReviewText')).toContainText('metadados cognitivos');await (await settingsFor(p)).locator('#confirmImportBtn').click();await expect(p.locator('#cognitiveToday')).toContainText('1 intervenção');await p.reload();await p.locator('#studyOverview summary').first().click();await p.locator('#cognitiveTools summary').click();await expect(p.locator('#cognitiveEnabled')).toBeChecked();await p.locator('#cognitiveTopic').selectOption('26');await p.locator('[data-practice=transfer]').click();await expect(p.locator('.question')).toContainText('Após tratamento');}finally{await fresh.close();}
 });
 
 test('cognitive: shared daily quota is enforced across two already revealed cards and zero persists',async({page,context})=>{
- await open(page);await page.locator('[data-mode=fsrs]').click();await page.locator('#fsrsDaily').fill('1');await page.locator('#fsrsDaily').dispatchEvent('change');
+ await open(page);await page.locator('[data-mode=fsrs]').click();await (await settingsFor(page)).locator('#fsrsDaily').fill('1');await (await settingsFor(page)).locator('#fsrsDaily').dispatchEvent('change');
  const other=await context.newPage();await other.goto('./');await other.locator('#searchBox').fill('2.1.1');await expect(other.locator('#searchStatus')).toContainText('encontrados');await other.locator('[data-mode=fsrs]').click();await other.locator('[data-action=reveal]').first().click();await page.locator('[data-action=reveal]').first().click();
  await page.locator('[data-grade="3"]').click();await expect.poll(async()=> (await dump(page)).length).toBe(1);
  // A stale open card may remain visible, but its write must respect the transaction quota.
  await other.locator('[data-grade="3"]').click();await expect(other.locator('#cardsContainer')).toContainText('Limite diário');expect(await dump(other)).toHaveLength(1);
- await other.locator('#fsrsDaily').fill('0');await other.locator('#fsrsDaily').dispatchEvent('change');await other.reload();await other.locator('[data-mode=fsrs]').click();await expect(other.locator('#fsrsDaily')).toHaveValue('0');await expect(other.locator('#fsrsSummary')).toContainText('0 novos');
+ await (await settingsFor(other)).locator('#fsrsDaily').fill('0');await (await settingsFor(other)).locator('#fsrsDaily').dispatchEvent('change');await other.reload();await other.locator('[data-mode=fsrs]').click();await expect((await settingsFor(other)).locator('#fsrsDaily')).toHaveValue('0');await expect(other.locator('#fsrsSummary')).toContainText('0 novos');
 });
 
 test('cognitive: next due refreshes without reload',async({page})=>{
