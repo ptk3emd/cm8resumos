@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..600&family=JetBrains+Mono:wght@500;600&display=swap');
 
 /* Flashcards · Figma × Notion study design
  * Visual language: calm warm neutrals, monochrome hierarchy, one blue interactive accent.
@@ -27,8 +28,8 @@
   --warning:#9a5b12;
   --warning-bg:#fcf3e7;
   --bookmark:#7a5d17;
-  --font:Inter,"NotionInter","SF Pro Text",-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Arial,sans-serif;
-  --mono:"SF Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --max:1392px;
   --read:840px;
   --radius:12px;
