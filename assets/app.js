@@ -1,5 +1,6 @@
 
 function startStudy(source){'use strict';
+const pageKind=document.body.dataset.page||'study';
 const CARDS=source.cards.slice().sort((a,b)=>Number(a.topic)-Number(b.topic)),TOPICS=source.themes.slice().sort((a,b)=>Number(a.id)-Number(b.id));
 const ALL_IDS=new Set(CARDS.map(c=>c.id));const TOTAL=CARDS.length,STORE_KEY='cmn-flashcards-v1',THEME_KEY='cmn-flashcards-theme-v1';
 const byId=new Map(CARDS.map(c=>[c.id,c]));const topicsById=new Map(TOPICS.map(t=>[t.id,t]));
@@ -26,15 +27,19 @@ function readNavigationState(){
  const params=new URL(location.href).searchParams,topic=params.get('topic'),mode=params.get('mode');
  ui.topic=topic&&TOPICS.some(t=>String(t.id)===topic)?topic:'all';
  ui.mode=NAV_MODES.has(mode)?mode:'list';
+ const status=params.get('status');ui.status=['all','done','review','todo','star','hidden'].includes(status)?status:'all';
  ui.limit=22;ui.focusId=null;ui.showAll=false;
 }
 function writeNavigationState(){
+ if(pageKind!=='study')return;
  const target=new URL(location.href);
  const topic=target.searchParams.get('topic')||'all',mode=target.searchParams.get('mode')||'list';
- if(topic===ui.topic&&mode===ui.mode)return;
- target.searchParams.delete('topic');target.searchParams.delete('mode');
+ const status=target.searchParams.get('status')||'all';
+ if(topic===ui.topic&&mode===ui.mode&&status===ui.status)return;
+ target.searchParams.delete('topic');target.searchParams.delete('mode');target.searchParams.delete('status');
  if(ui.topic!=='all')target.searchParams.set('topic',ui.topic);
  if(ui.mode!=='list')target.searchParams.set('mode',ui.mode);
+ if(ui.status!=='all')target.searchParams.set('status',ui.status);
  if(target.hash.startsWith('#answer-'))target.hash='';
  history.pushState({cm8Navigation:true},'',target.pathname+target.search+target.hash);
 }
@@ -357,17 +362,17 @@ function actions(ev){let b=ev.target.closest('[data-action]');if(!b)return;let a
  case'prev':jump(-1);break;case'next':jump(1);break;case'clearFilters':clearFilters();break;case'clearRefinements':clearRefinements();break;}
 }
 $('topicList').addEventListener('click',ev=>{const button=ev.target.closest('[data-topic]');if(button)selectTopic(button.dataset.topic);});
-function selectTopic(id){if(id!=='all'&&!TOPICS.some(t=>String(t.id)===String(id)))return;ui.topic=String(id);ui.limit=22;ui.focusId=null;ui.showAll=false;setMobileTopicsOpen(false);render();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
+function selectTopic(id){if(pageKind!=='study'){location.href='./index.html?topic='+encodeURIComponent(id);return;}if(id!=='all'&&!TOPICS.some(t=>String(t.id)===String(id)))return;ui.topic=String(id);ui.limit=22;ui.focusId=null;ui.showAll=false;setMobileTopicsOpen(false);render();$('listTitle').focus({preventScroll:true});$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}
 $('mapGrid').addEventListener('click',ev=>{const b=ev.target.closest('[data-topic]');if(b)selectTopic(b.dataset.topic);});
 // Supporting details start closed; legacy expansion preferences remain untouched.
 try{const v=localStorage.getItem('cm8.mapOpen');if(v==='1'){$('contentMap').open=true;}}catch(e){}
 $('contentMap').addEventListener('toggle',()=>{try{localStorage.setItem('cm8.mapOpen',$('contentMap').open?'1':'0');}catch(e){}});
 $('topicFilter').addEventListener('input',applyTopicFilter);
 $('topicFilter').addEventListener('keydown',e=>{if(e.key==='Enter'){const first=qsa('#topicList .topic-btn[data-name]').find(b=>!b.hidden);if(first){e.preventDefault();first.click();}}});
-qsa('[data-jump]').forEach(b=>b.addEventListener('click',()=>{if(ui.mode==='fsrs')ui.mode='list';ui.status=b.dataset.jump;ui.limit=22;ui.focusId=null;render();$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}));
+qsa('[data-jump]').forEach(b=>b.addEventListener('click',()=>{if(pageKind!=='study'){location.href='./index.html?status='+encodeURIComponent(b.dataset.jump);return;}if(ui.mode==='fsrs')ui.mode='list';ui.status=b.dataset.jump;ui.limit=22;ui.focusId=null;render();$('listTitle').scrollIntoView({behavior:prefersReduced()?'auto':'smooth',block:'start'});}));
 $('searchClear').addEventListener('click',()=>{clearTimeout(searchTimer);$('searchBox').value='';applySearch();$('searchBox').focus();});
 $('searchBox').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('searchBox').value){e.preventDefault();$('searchClear').click();}});
-document.addEventListener('keydown',e=>{if(e.key!=='/'||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t.closest?.('input,textarea,select,[contenteditable="true"],dialog[open]'))return;e.preventDefault();$('searchBox').focus();$('searchBox').select();});
+document.addEventListener('keydown',e=>{if(pageKind!=='study'||e.key!=='/'||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t.closest?.('input,textarea,select,[contenteditable="true"],dialog[open]'))return;e.preventDefault();$('searchBox').focus();$('searchBox').select();});
 $('activeFilters').addEventListener('click',ev=>{const b=ev.target.closest('[data-clear]');if(!b)return;const k=b.dataset.clear;
  if(k==='all'){clearFilters();$('searchBox').focus();return;}
  if(k==='topic')ui.topic='all';else if(k==='status')ui.status='all';else if(k==='level'){ui.level='all';$('levelSelect').value='all';}else if(k==='type'){ui.type='all';$('typeSelect').value='all';}else if(k==='audit'){ui.audit='all';$('auditSelect').value='all';}else if(k==='search'){clearTimeout(searchTimer);$('searchBox').value='';ui.search='';}
@@ -495,7 +500,9 @@ window.addEventListener('popstate',()=>{
  const requestedTopic=params.get('topic'),requestedMode=params.get('mode');
  const nextTopic=requestedTopic&&TOPICS.some(t=>String(t.id)===requestedTopic)?requestedTopic:'all';
  const nextMode=NAV_MODES.has(requestedMode)?requestedMode:'list';
- if(nextTopic===ui.topic&&nextMode===ui.mode)return;
+ const requestedStatus=params.get('status');
+ const nextStatus=['all','done','review','todo','star','hidden'].includes(requestedStatus)?requestedStatus:'all';
+ if(nextTopic===ui.topic&&nextMode===ui.mode&&nextStatus===ui.status)return;
  restoringNavigation=true;
  try{
   readNavigationState();
@@ -1129,6 +1136,7 @@ $('cognitiveLinks').addEventListener('click',event=>{const button=event.target.c
 $('cognitiveMetrics').addEventListener('click',event=>{
  const button=event.target.closest('[data-metric-practice]');if(!button)return;
  const kind=button.dataset.metricPractice;
+ if(pageKind!=='study'){location.href='./index.html?practice='+encodeURIComponent(kind);return;}
  if(kind!=='contrast'&&!cognitiveState.enabled){$('studyOverview').open=true;$('cognitiveTools').open=true;$('cognitiveEnabled').focus();$('cognitiveTools').scrollIntoView({block:'start'});notify('Ative as práticas experimentais e escolha um tema para registrar esta métrica.');return;}
  startPractice(kind);
 });
@@ -1197,7 +1205,7 @@ $('cardsContainer').addEventListener('click',event=>{
 window.addEventListener('storage',event=>{if(event.key!==STORE_KEY)return;try{const saved=JSON.parse(event.newValue||'{}').cognitive;if(saved){cognitiveState=CMNCognitive.validate(saved,ALL_IDS);cognitivePool='all';if(!cognitiveSession){openAnswers.clear();render();}else renderCognitive();}}catch{notify('Não foi possível atualizar as práticas de outra aba.');}});
 
 restoringNavigation=true;readNavigationState();render();restoringNavigation=false;storageNotice();
-initFSRS();
+initFSRS().then(()=>{const kind=new URL(location.href).searchParams.get('practice');if(pageKind==='study'&&['contrast','gist','transfer','context'].includes(kind)){if(kind!=='contrast'&&!cognitiveState.enabled){$('studyOverview').open=true;$('cognitiveTools').open=true;$('cognitiveEnabled').focus();}else startPractice(kind);}});
 }
 
 // Static JSON is the sole source of medical content. No build or backend is required.

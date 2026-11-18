@@ -1,3 +1,4 @@
+import {settingsFor} from './page-navigation.mjs';
 import {test,expect} from '@playwright/test';
 
 test('1206 cards and 31 topics, no horizontal document overflow',async({page},testInfo)=>{
@@ -62,21 +63,21 @@ test('studied/review, secondary menu, source disclosure and focus mode',async({p
 test('XML export/import and legacy JSON import preserve state',async({page})=>{
  await page.goto('./');await page.waitForFunction(()=>window.CM8Source);
  const legacy={format:'cmn-flashcards-progresso',version:1,cards:{'1.1.1':{status:'done',star:true}}};
- await page.locator('#importFile').setInputFiles({name:'progresso-antigo.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
- await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
- await page.locator('#confirmImportBtn').click();
+ await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'progresso-antigo.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Confirmar importação');
+ await (await settingsFor(page)).locator('#confirmImportBtn').click();
  await expect(page.locator('#nDone')).toHaveText('1');
- const downloadPromise=page.waitForEvent('download');
- await page.locator('#exportBtn').click();
+ const downloadPromise=(await settingsFor(page)).waitForEvent('download');
+ await (await settingsFor(page)).locator('#exportBtn').click();
  const download=await downloadPromise;
  expect(download.suggestedFilename()).toMatch(/\.xml$/);
  const fs=await import('node:fs/promises');
  const xml=await fs.readFile(await download.path(),'utf8');
  expect(xml).toContain('<cmn-progress');
  expect(xml).toContain('schema-version="1"');
- await page.locator('#importFile').setInputFiles({name:'progresso.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
- await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
- await page.locator('#confirmImportBtn').click();
+ await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'progresso.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Confirmar importação');
+ await (await settingsFor(page)).locator('#confirmImportBtn').click();
  await expect(page.locator('#nDone')).toHaveText('1');
 });
 
@@ -85,9 +86,9 @@ test('invalid XML is rejected before overwriting existing progress',async({page}
  await page.locator('.study-card [data-action="done"]').first().click();
  await expect(page.locator('#nDone')).toHaveText('1');
  const invalid='<?xml version="1.0" encoding="UTF-8"?><cmn-progress format="cmn-flashcards-progresso" schema-version="1" exported-at="2026-11-15T00:00:00.000Z" card-count="970"><card id="1.1.1" status="invalid"/></cmn-progress>';
- await page.locator('#importFile').setInputFiles({name:'invalido.xml',mimeType:'application/xml',buffer:Buffer.from(invalid)});
- await expect(page.locator('#importReviewTitle')).toHaveText('Não foi possível importar');
- await expect(page.locator('#confirmImportBtn')).toBeHidden();
+ await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'invalido.xml',mimeType:'application/xml',buffer:Buffer.from(invalid)});
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Não foi possível importar');
+ await expect((await settingsFor(page)).locator('#confirmImportBtn')).toBeHidden();
  await expect(page.locator('#nDone')).toHaveText('1');
 });
 

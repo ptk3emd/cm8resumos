@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Estudo interativo de Clínica Médica — 8º período. 1206 flashcards em 31 temas, com respostas ocultáveis e progresso local.">
+<title>Estatísticas · CM8 Resumos</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./assets/icon-192.png">
+<link rel="apple-touch-icon" href="./assets/icon-192.png">
+<meta name="theme-color" content="#102B3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CM8 Resumos">
+<link rel="stylesheet" href="./assets/app.css">
+<link rel="stylesheet" href="./assets/pages.css"></head>
+<body data-page="stats">
+<a class="skip-link" href="#pageTitle">Ir para o conteúdo</a>
+<header class="topbar"><div class="topbar-inner">
+ <div class="brand"><div class="brand-mark" aria-hidden="true">CM</div><div><div class="brand-sub">8º PERÍODO · CLÍNICA MÉDICA</div><div class="brand-title">Biblioteca de flashcards</div></div></div>
+
+<nav class="app-navigation" aria-label="Navegação principal"><a href="./index.html" data-page-link="study"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4V4m9 3a3 3 0 0 1 3-3h5v15h-4a4 4 0 0 0-4 2"></path></svg><span>Estudar</span></a><a href="./estatisticas.html" data-page-link="stats" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10h4v10m4 0V4h4v16m4 0v-7h3v7"></path></svg><span>Estatísticas</span></a><a href="./configuracoes.html" data-page-link="settings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6m6 4v6"></path></svg><span>Configurações</span></a></nav></div></header>
+<section class="library-load" id="libraryLoad" aria-label="Carregamento da biblioteca"><p id="libraryLoadStatus" role="status">Carregando os flashcards…</p><button type="button" id="retryLibrary" hidden="">Tentar novamente</button><noscript>Ative o JavaScript para estudar os flashcards.</noscript></section>
+<div class="main-shell single-page">
+
+<main class="workspace" id="workspace" inert="" aria-busy="true"><header class="page-intro"><h1 id="pageTitle" tabindex="-1">Estatísticas</h1><p>Seu estudo em números. Todos os temas, neste navegador.</p><a class="page-primary" href="./index.html">Continuar estudando</a></header><div class="storage-alert" id="storageAlert" role="alert" hidden="">O navegador não permitiu salvar o progresso. Suas marcações estão disponíveis nesta sessão, mas podem desaparecer quando a página for fechada. <button type="button" id="storageExportBtn">Exportar progresso agora</button></div><section class="import-review" id="importReview" hidden="" aria-labelledby="importReviewTitle" role="status"><h2 id="importReviewTitle" tabindex="-1">Backup selecionado</h2><p id="importReviewText"></p><div class="import-review-actions"><button type="button" class="subtle-btn import-apply" id="confirmImportBtn">Substituir progresso</button><button type="button" class="subtle-btn" id="cancelImportBtn">Cancelar</button></div></section><section class="stat-grid" aria-labelledby="statsTitle">
+ <div class="session-heading"><h2 id="statsTitle" class="">Atividade de estudo</h2><span>Total · todos os temas</span></div>
+ <dl class="session-ledger">
+  <div class="session-metric"><dt>Leituras registradas</dt><dd><span id="nReadTotal" class="session-number" aria-describedby="readActivityDefinition">0</span></dd></div>
+  <div class="session-metric" id="fsrsActivityMetric" aria-busy="true"><dt>Flashcards FSRS</dt><dd><span id="nFSRSCards" class="session-number" aria-describedby="fsrsActivityDefinition">—</span></dd></div>
+ </dl>
+
+ <p class="sr-only" id="sessionStatsStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+<p class="session-today"><span><strong id="nFSRSToday">—</strong> <span id="sessionTodayLabel">cartões FSRS hoje</span></span><span><strong id="nFSRSReviews">—</strong> <span id="sessionReviewsLabel">avaliações no total</span></span></p></section><section class="page-section"><h2>Marcações da biblioteca</h2><div class="hero-summary"><div class="hero-progress"><strong id="heroPct">0%</strong><span>marcado como estudado</span></div><div class="progress-track" role="progressbar" aria-label="Proporção de cartões marcados manualmente como estudados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heroProgressTrack"><div class="progress-fill" id="heroFill"></div></div><div class="hero-foot" id="heroDetail">0 de 1206 marcados como estudados</div></div><div class="stack-bar" aria-hidden="true"><i class="seg-done" id="segDone"></i><i class="seg-review" id="segReview"></i></div><div class="stat-row" aria-describedby="statHelp"><button type="button" class="stat" data-jump="all"><span class="number" id="nTotal">1206</span><span class="stat-label">Flashcards</span></button><button type="button" class="stat stat-done" data-jump="done"><span class="number" id="nDone">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Estudados</span></button><button type="button" class="stat stat-review" data-jump="review"><span class="number" id="nReview">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Para revisar</span></button><button type="button" class="stat stat-todo" data-jump="todo"><span class="number" id="nTodo">0</span><span class="stat-label"><i class="dot" aria-hidden="true"></i>Não estudados</span></button><button type="button" class="stat stat-star" data-jump="star"><span class="number" id="nStar">0</span><span class="stat-label">Favoritos</span></button></div></section><details class="page-section metric-definitions"><summary>Como os números são contados</summary><p class="session-definition" id="readActivityDefinition"><strong>Leituras:</strong> soma dos registros manuais de leitura.</p><dl class="guide-items">
+   <div class="guide-item"><dt>Estudado / Revisar</dt><dd>São marcações manuais para organizar os cartões. Não dão nota nem alteram o agendamento FSRS.</dd></div>
+   <div class="guide-item"><dt>Registrar leitura</dt><dd>Acrescenta uma leitura ao contador individual do cartão e ao total de leituras. É independente de “Estudado”, de “Revisar” e de revelar a resposta.</dd></div>
+   <div class="guide-item"><dt>Revisão FSRS</dt><dd>Revele a resposta, tente lembrar e avalie sua recordação. Só essa avaliação agenda a próxima revisão. O total de flashcards FSRS conta cada cartão uma vez; o total de avaliações inclui as repetições, com qualquer nota.</dd></div>
+   <div class="guide-item"><dt>Práticas cognitivas</dt><dd>Exercícios opcionais de contraste, essência e transferência têm resultados próprios, não somados às leituras ou marcações manuais.</dd></div>
+  </dl></details><section class="page-section"><h2>Práticas cognitivas</h2><details class="cognitive-metrics" open=""><summary>Ver indicadores das práticas</summary><p>Resultados das práticas de contraste, essência e transferência. Não medem as marcações manuais nem todas as revisões FSRS.</p><p id="cognitiveStateHint"></p><dl id="cognitiveMetrics"></dl><p id="cognitiveToday" role="status"></p></details></section></main></div>
+<dialog id="textEditor" aria-labelledby="editorTitle">
+ <div class="editor-heading"><h2 id="editorTitle">Editar cartão</h2><button type="button" id="closeEditor" aria-label="Fechar editor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg></button></div>
+ <p class="editor-note">Suas edições ficam neste navegador. O selo de revisão clínica se refere ao texto original.</p>
+ <div id="editorToolbar" role="group" aria-label="Formatação do texto"><div class="editor-toolset" role="group" aria-label="Ênfase">
+ <button type="button" data-command="bold" aria-label="Negrito"><strong>B</strong></button>
+ <button type="button" data-command="italic" aria-label="Itálico"><em>I</em></button>
+ <button type="button" data-command="underline" aria-label="Sublinhado"><u>U</u></button>
+ <button type="button" data-command="strikeThrough" aria-label="Tachado"><s>S</s></button>
+ </div><div class="editor-toolset" role="group" aria-label="Estrutura"><button type="button" data-command="insertUnorderedList" aria-label="Lista com marcadores">• Lista</button>
+ <button type="button" data-command="insertOrderedList" aria-label="Lista numerada">1. Lista</button>
+ <button type="button" data-command="formatBlock" data-value="h4">Título</button>
+ <button type="button" data-command="formatBlock" data-value="p">Parágrafo</button>
+ <button type="button" data-command="formatBlock" data-value="blockquote">Citação</button>
+ </div><div class="editor-toolset" role="group" aria-label="Revisão"><button type="button" data-command="removeFormat">Limpar formato</button>
+ <button type="button" data-command="undo">Desfazer</button>
+ <button type="button" data-command="redo">Refazer</button></div>
+ </div>
+ <div class="editor-context"><span id="editorSaveState" role="status">Sem alterações</span><span id="editorShortcut">Ctrl / ⌘ + S para salvar</span></div>
+ <div class="editor-fields">
+ <section id="editorScenario"><h3 id="editScenarioLabel">Caso clínico</h3><div id="edit-scenario" data-edit-field="" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="editScenarioLabel" spellcheck="true"></div></section>
+ <section><h3 id="editQuestionLabel">Pergunta</h3><div id="edit-question" data-edit-field="" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="editQuestionLabel" spellcheck="true"></div></section>
+ <section><h3 id="editAnswerLabel">Resposta</h3><div id="edit-answer" data-edit-field="" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="editAnswerLabel" spellcheck="true"></div></section>
+ </div>
+ <p id="editorError" role="alert"></p>
+ <div class="editor-actions"><button type="button" id="restoreText">Restaurar original</button><button type="button" id="cancelEditor">Cancelar</button><button type="button" class="action-primary" id="saveText">Salvar edição</button></div>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script defer="" src="./assets/cognitive.js"></script>
+<script defer="" src="./assets/progress-io.js"></script>
+<!-- ts-fsrs 6.0.0, MIT; bundle gerado de DefaultScheduler e Rating para uso offline. -->
+<script defer="" src="./assets/fsrs.js"></script>
+<script defer="" src="./assets/app.js" data-study-app=""></script>
+
+
+<div id="pageSupport" hidden=""><div class="top-actions">
+  <button class="topbtn" id="exportBtn" title="Exportar suas marcações em XML" aria-label="Exportar progresso em XML"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"></path></svg> <span class="optional">Exportar</span></button>
+  <label class="topbtn import-native-label" id="importBtn" title="Selecionar backup XML ou JSON anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v5h16v-5"></path></svg> <span class="optional">Importar</span><input type="file" id="importFile" class="import-native-input" accept=".xml,.json,text/xml,application/xml,application/json" aria-label="Selecionar arquivo XML ou JSON anterior para importar progresso"></label>
+  <button class="topbtn" id="themeBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z"></path></svg></button>
+ </div><div>
+ <section class="hero" aria-labelledby="heroTitle"><div><h1 id="heroTitle">Seu espaço de estudo</h1><p>1206 flashcards · 31 temas de Clínica Médica</p>
+<div class="study-start" id="studyStart"><button type="button" id="startReviewBtn" disabled="">Revisar agora</button><button type="button" id="startFocusBtn" class="study-secondary">Iniciar em Foco</button></div>
+<p id="reviewStartSummary" role="status">Carregando a fila de revisão…</p>
+</div></section>
+
+
+
+
+
+ <div class="study-tools"> <details class="stat-guide" id="studyGuide">
+ <summary id="statHelp"><span class="guide-head"><span class="guide-title">Estatísticas e guia</span><span class="guide-subtitle">Estudado, leituras, FSRS e práticas são registros diferentes.</span></span></summary>
+ <div class="guide-content">
+<p class="session-definition"><strong>Flashcards FSRS:</strong> <span id="fsrsActivityDefinition">Carregando histórico…</span></p>
+
+
+  <p class="guide-intro">Os filtros acima mostram as marcações manuais da biblioteca. Leituras e cartões FSRS são contados separadamente no painel de atividade.</p>
+
+ </div>
+</details><details id="studyOverview" class="study-overview">
+ <summary><span class="overview-heading"><span class="overview-title">Mapa e práticas</span><span class="overview-subtitle">Mapa dos 31 temas, atividades cognitivas e indicadores de aprendizagem</span></span></summary>
+ <div class="study-overview-body">
+  <details class="content-map" id="contentMap"><summary><span class="map-title">Mapa de conteúdos</span><span class="map-hint" id="mapHint">31 temas · toque para estudar</span><svg class="map-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="map-grid" id="mapGrid" role="list"></div><div class="map-legend" aria-hidden="true"><span><i class="lg lg-done"></i>Estudado</span><span><i class="lg lg-review"></i>Revisar</span><span><i class="lg lg-todo"></i>Não estudado</span></div></details>
+<details class="cognitive-tools" id="cognitiveTools"><summary>Práticas cognitivas <span class="tool-description">Exercícios experimentais de contraste, transferência e contexto</span></summary><label><input type="checkbox" id="cognitiveEnabled"> Ativar práticas cognitivas experimentais</label><p>Revisões literais, de essência e de transferência usam metas diferentes; relações entre cartões podem alterar seus intervalos. A eficácia desta camada não foi validada. Desative para voltar à política FSRS padrão nas próximas avaliações.</p><label>Tema da prática <select id="cognitiveTopic"></select></label><div class="cognitive-actions"><button type="button" class="subtle-btn" data-practice="contrast">Contraste deliberado</button><button type="button" class="subtle-btn" data-practice="transfer">Transferência</button><button type="button" class="subtle-btn" data-practice="context">Estudo contextual</button></div><div id="cognitiveLinks"></div></details>
+
+ </div>
+</details></div>
+ <section class="filters" aria-label="Filtros de estudo">
+   <div class="filter-first">
+    <button class="subtle-btn mobile-topic-btn" id="mobileTopics" aria-expanded="false" aria-controls="sidebar">Escolher tema</button>
+     <button class="subtle-btn mobile-filter-btn" id="mobileFilters" type="button" aria-expanded="false" aria-controls="advancedFilters">Mais filtros</button>
+    <label class="search-wrap"><span class="sr-only">Buscar perguntas, respostas ou assuntos</span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="searchBox" class="search-input" type="search" placeholder="Buscar pergunta, resposta, assunto ou ID" autocomplete="off" aria-keyshortcuts="/" aria-describedby="searchStatus"><kbd class="search-kbd" aria-hidden="true">/</kbd><button type="button" class="search-clear" id="searchClear" aria-label="Limpar busca" hidden=""><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></label>
+     <div class="advanced-filters" id="advancedFilters">
+     <label class="sr-only" for="levelSelect">Filtrar por nível</label><select id="levelSelect" class="field-select"><option value="all">Todos os níveis</option><option value="1">Nível 1</option><option value="2">Nível 2</option><option value="3">Nível 3</option><option value="4">Nível 4</option><option value="5">Nível 5</option><option value="0">Complementos</option></select>
+    <label class="sr-only" for="typeSelect">Filtrar por origem</label><select id="typeSelect" class="field-select"><option value="all">Todos os cartões</option><option value="original" data-label="Originais">Originais</option><option value="new" data-label="Complementos">Complementos</option></select>
+     <label class="sr-only" for="auditSelect">Filtrar por auditoria</label><select id="auditSelect" class="field-select"><option value="all">Auditoria: todos</option><option value="corrigido" data-label="Corrigidos">Corrigidos</option><option value="revisar" data-label="Conferir">Conferir</option><option value="triado" data-label="Triados">Triados</option></select>
+     </div>
+    </div>
+   <p class="search-status" id="searchStatus" role="status" aria-live="polite"></p><div class="active-filters" id="activeFilters" hidden="" aria-label="Filtros ativos"></div><div class="divider"></div>
+   <div class="filter-second"><div class="pill-scroller"><div class="filter-pills" id="statusFilters" role="group" aria-label="Filtrar situação" aria-describedby="filterSwipeHint"><button class="pill active" data-filter="all" aria-pressed="true">Todos</button><button class="pill" data-filter="todo" aria-pressed="false">Não estudados</button><button class="pill" data-filter="review" aria-pressed="false">Revisar manualmente</button><button class="pill" data-filter="done" aria-pressed="false">Estudados</button><button class="pill" data-filter="star" aria-pressed="false">★ Favoritos</button><button class="pill" data-filter="hidden" aria-pressed="false">Ocultos</button></div><button type="button" id="filterScrollPrev" class="filter-scroll-prev" aria-label="Mostrar filtros anteriores" title="Filtros anteriores" hidden="">←</button><button type="button" class="filter-scroll-cue" id="filterScrollCue" aria-label="Mostrar mais filtros" title="Mais filtros" hidden="">→</button></div><span class="sr-only" id="filterSwipeHint">No celular, deslize horizontalmente para acessar todos os estados, incluindo Favoritos e Ocultos.</span><div class="mode-switch" aria-label="Modo de visualização"><button class="mode-btn active" data-mode="list" aria-pressed="true">Lista</button><button class="mode-btn" data-mode="focus" aria-pressed="false">Foco</button><button class="mode-btn" data-mode="fsrs" aria-pressed="false">Revisão FSRS</button></div></div>
+ </section>
+ <section id="cognitivePools" class="cognitive-pools" hidden="" aria-label="Escolher fila diária"><button type="button" class="subtle-btn" data-pool="all">Todas as revisões</button><button type="button" class="subtle-btn" data-pool="A">A · Literal</button><button type="button" class="subtle-btn" data-pool="B">B · Essência e transferência</button><button type="button" class="subtle-btn" data-pool="C">C · Intervenções</button><p>Cartões novos compartilham a mesma cota diária. Intervenções não consomem notas FSRS.</p></section>
+ <section id="fsrsSettings" class="fsrs-settings" hidden="" aria-label="Configuração da revisão"><label>Novos por dia <input id="fsrsDaily" type="number" min="0" max="100" value="20"></label><span id="fsrsSummary" role="status"></span><details class="fsrs-backup"><summary class="subtle-btn">Backup FSRS</summary><div class="fsrs-backup-actions"><button type="button" id="fsrsExport" class="subtle-btn">Exportar histórico</button><button type="button" id="fsrsImportButton" class="subtle-btn">Importar histórico</button><input type="file" id="fsrsImport" accept=".json,application/json" hidden=""></div></details></section>
+ <div class="fsrs-feedback" id="fsrsFeedback" hidden=""><p id="fsrsFeedbackText" tabindex="-1" role="status" aria-live="polite"></p><button type="button" id="fsrsUndoBtn" class="subtle-btn">Desfazer</button></div>
+ <section aria-labelledby="listTitle"><div class="list-head"><div><h2 class="list-title" id="listTitle" tabindex="-1">Todos os flashcards</h2><div class="list-sub" id="listSub" aria-live="polite">1206 resultados</div></div><nav class="topic-pager" id="topicPager" aria-label="Navegar entre temas" hidden=""><button id="prevTopic" type="button" aria-label="Tema anterior" title="Tema anterior">←</button><span class="topic-position" id="topicPosition" role="status" aria-live="polite" aria-atomic="true"></span><button id="nextTopic" type="button" aria-label="Próximo tema" title="Próximo tema">→</button></nav><div class="list-actions"><button type="button" id="focusSidebarToggle" class="subtle-btn focus-sidebar-toggle" hidden="" aria-expanded="false" aria-controls="sidebar">Mostrar temas</button><button id="shuffleBtn" class="subtle-btn" aria-pressed="false" title="Embaralhar ordem">⇄ Aleatório</button><button id="revealAllBtn" class="subtle-btn" title="Mostrar ou ocultar respostas visíveis">◉ Mostrar todas</button></div></div><div id="cardsContainer" class="cards"></div><div id="focusNav" class="focus-nav" hidden=""></div><div class="more-wrap" id="moreWrap" hidden=""><button class="more-btn" id="moreBtn">Carregar mais</button></div></section>
+
+ <footer class="footer">Adaptado do PDF <strong>“Flashcards — 8º Período · CMN”</strong>. 92 cartões receberam revisão médica e reescrita direcionada; os demais passaram por triagem estrutural/pedagógica e ainda requerem validação clínica individual. O arquivo contém etiquetas de auditoria por cartão e mantém os IDs originais. Os 250 cartões adicionais são vinhetas didáticas sem referência de página no PDF. Os cartões originais mantêm suas marcações e avisos de auditoria.<div class="utility-row"><span>Offline depois da primeira visita online · sem cadastro</span><span id="offlineStatus" class="offline-status" role="status" aria-live="polite">Preparando uso offline…</span><span aria-hidden="true">·</span><button id="exportEdits">Exportar edições de texto</button><button id="importEditsButton">Importar edições de texto</button><input type="file" id="importEditsFile" accept=".json,application/json" hidden=""><button id="resetBtn">Apagar progresso salvo</button><button id="unhideBtn">Reexibir todos os cartões ocultos</button></div><div class="focus-tip">Atalhos no modo Foco (fora dos controles): <strong>←</strong> / <strong>→</strong> navegar, <strong>Espaço</strong> revelar, <strong>1</strong> estudar, <strong>2</strong> revisar, <strong>3</strong> favoritar.</div></footer>
+</div><aside class="sidebar" id="sidebar" aria-label="Navegação por temas"><div class="sidebar-head"><span class="sidebar-title">Temas</span><span class="sidebar-count" id="topicCount">31 temas</span></div><label class="topic-filter"><span class="sr-only">Filtrar lista de temas</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="topicFilter" type="search" placeholder="Filtrar temas" autocomplete="off"></label><label class="topic-jump" for="topicJump"><span>Ir diretamente para um tema</span><select id="topicJump" aria-label="Escolher tema"><option value="all">Todos os temas</option></select></label><p class="topic-filter-empty" id="topicFilterEmpty" hidden="">Nenhum tema com esse nome.</p><div class="mobile-topic-toolbar"><span>Deslize para explorar os temas</span><div class="mobile-topic-arrows"><button id="topicsPrev" type="button" aria-label="Mostrar temas anteriores">←</button><button id="topicsNext" type="button" aria-label="Mostrar próximos temas">→</button></div></div><nav class="topic-list" id="topicList" aria-label="Lista de temas; deslize horizontalmente no celular"></nav><div class="sidebar-foot">O progresso é salvo neste navegador. Exporte XML para fazer backup ou transferir as marcações entre dispositivos.</div></aside></div>
+</body></html>

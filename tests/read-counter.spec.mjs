@@ -1,3 +1,4 @@
+import {settingsFor} from './page-navigation.mjs';
 import {test,expect} from '@playwright/test';
 
 test('manual read counter stays independent of studied/review actions and persists',async({page})=>{
@@ -28,8 +29,8 @@ test('XML backup retains read totals and restores after import',async({page,isMo
  const first=page.locator('.study-card').first();
  await first.locator('[data-action="count-read"]').click();
  await first.locator('[data-action="count-read"]').click();
- const downloadPromise=page.waitForEvent('download');
- await page.locator('#exportBtn').click();
+ const downloadPromise=(await settingsFor(page)).waitForEvent('download');
+ await (await settingsFor(page)).locator('#exportBtn').click();
  const download=await downloadPromise;
  const fs=await import('node:fs/promises');
  const xml=await fs.readFile(await download.path(),'utf8');
@@ -37,11 +38,11 @@ test('XML backup retains read totals and restores after import',async({page,isMo
  await page.evaluate(()=>localStorage.removeItem('cmn-flashcards-read-counts-v1'));
  await page.reload();
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('0');
- await page.locator('#importFile').setInputFiles({name:'leituras.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
- await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
- const confirm=page.locator('#confirmImportBtn');
+ await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'leituras.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Confirmar importação');
+ const confirm=(await settingsFor(page)).locator('#confirmImportBtn');
  if(isMobile)await confirm.tap();else await confirm.click();
- await expect(page.locator('#importReview')).toBeHidden();
+ await expect((await settingsFor(page)).locator('#importReview')).toBeHidden();
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('2');
 });
 
@@ -49,8 +50,8 @@ test('read count XML rejects invalid values without mutating storage',async({pag
  await page.goto('./');
  await page.locator('.study-card [data-action="count-read"]').first().click();
  const bad='<?xml version="1.0" encoding="UTF-8"?><cmn-progress format="cmn-flashcards-progresso" schema-version="1" exported-at="2026-11-16T00:00:00.000Z" card-count="1206"><card id="1.1.1" read-count="-1"/></cmn-progress>';
- await page.locator('#importFile').setInputFiles({name:'invalid.xml',mimeType:'application/xml',buffer:Buffer.from(bad)});
- await expect(page.locator('#importReviewTitle')).toHaveText('Não foi possível importar');
+ await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'invalid.xml',mimeType:'application/xml',buffer:Buffer.from(bad)});
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Não foi possível importar');
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('1');
 });
 
@@ -59,16 +60,16 @@ test('XML readings wait for the effective confirmation after another tab changes
  await page.locator('.study-card [data-action="count-read"]').first().click();
  const xml=await page.evaluate(()=>CMNProgressIO.encodeXML({},1206));
  await page.locator('.study-card [data-action="count-read"]').first().click();
- await page.locator('#importFile').setInputFiles({name:'readings.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
- await expect(page.locator('#importReviewTitle')).toHaveText('Confirmar importação');
+ await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'readings.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Confirmar importação');
  await page.evaluate(()=>{
   const key='cmn-flashcards-v1',saved=JSON.parse(localStorage.getItem(key)||'{}');
   saved.cards={'1.1.1':{star:true}};
   localStorage.setItem(key,JSON.stringify(saved));
  });
- await page.locator('#confirmImportBtn').click();
- await expect(page.locator('#importReviewTitle')).toHaveText('Progresso alterado em outra aba');
+ await (await settingsFor(page)).locator('#confirmImportBtn').click();
+ await expect((await settingsFor(page)).locator('#importReviewTitle')).toHaveText('Progresso alterado em outra aba');
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('2');
- await page.locator('#confirmImportBtn').click();
+ await (await settingsFor(page)).locator('#confirmImportBtn').click();
  await expect(page.locator('.study-card .cmn-read-number').first()).toHaveText('1');
 });

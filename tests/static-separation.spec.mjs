@@ -11,7 +11,7 @@ test('static entry has external CSS, JavaScript and byte-identical medical JSON'
  await page.goto('./');await expect(page.locator('#workspace')).toHaveAttribute('aria-busy','false');
  await expect(page.locator('.study-card')).toHaveCount(22);
  expect(errors).toEqual([]);
- const cachePaths=await page.evaluate(async()=>{await navigator.serviceWorker.ready;const names=await caches.keys();const cache=await caches.open(names.find(n=>n.includes('separate-static-v8')));return (await cache.keys()).map(r=>new URL(r.url).pathname);});
+ const cachePaths=await page.evaluate(async()=>{await navigator.serviceWorker.ready;const names=await caches.keys();const cache=await caches.open(names.find(n=>n.includes('study-pages-v9')));return (await cache.keys()).map(r=>new URL(r.url).pathname);});
  for(const path of ['/assets/app.css','/assets/app.js','/assets/fsrs.js','/data/flashcards.json'])expect(cachePaths).toContain(path);
 });
 
@@ -37,5 +37,5 @@ test('returning users land on compact tools without losing data or keyboard acce
   const top=await page.locator('.study-card').first().evaluate(e=>e.getBoundingClientRect().top);
   expect(top).toBeLessThan(width===320?1000:900);
  }
- await page.locator('#studyGuide>summary').focus();await page.keyboard.press('Enter');await expect(page.locator('#nDone')).toBeVisible();
+ await page.locator('[data-page-link=stats]').focus();await page.keyboard.press('Enter');await expect(page.locator('#nDone')).toBeVisible();
 });

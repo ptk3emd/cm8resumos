@@ -1,7 +1,7 @@
 /* CM8: app shell offline. This path is scoped to /cm8resumos/ on GitHub Pages. */
-const CACHE_NAME='cm8resumos-shell-2026-11-17-separate-static-v8';
+const CACHE_NAME='cm8resumos-shell-2026-11-17-study-pages-v9';
 const PREFIX='cm8resumos-shell-';
-const SHELL=['./','./index.html','./manifest.webmanifest','./assets/app.css','./assets/app.js','./assets/fsrs.js','./data/flashcards.json','./assets/progress-io.js','./assets/cognitive.js','./assets/icon-192.png','./assets/icon-512.png'];
+const SHELL=['./','./index.html','./estatisticas.html','./configuracoes.html','./assets/pages.css','./manifest.webmanifest','./assets/app.css','./assets/app.js','./assets/fsrs.js','./data/flashcards.json','./assets/progress-io.js','./assets/cognitive.js','./assets/icon-192.png','./assets/icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil((async()=>{
   const cache=await caches.open(CACHE_NAME);
@@ -20,19 +20,21 @@ self.addEventListener('fetch',event=>{
  const request=event.request;
  if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
  if(request.mode==='navigate'){
+  const path=new URL(request.url).pathname;
+  const fallback=path.endsWith('/estatisticas.html')?'./estatisticas.html':path.endsWith('/configuracoes.html')?'./configuracoes.html':'./index.html';
   event.respondWith((async()=>{
    try{
     const response=await fetch(request);
     if(response.ok){
      const cache=await caches.open(CACHE_NAME);
      await cache.put(request,response.clone());
-     await cache.put('./index.html',response.clone());
+     await cache.put(fallback,response.clone());
     }
-    if(response.status>=500){const cached=await (await caches.open(CACHE_NAME)).match('./index.html');if(cached)return cached;}
+    if(response.status>=500){const cached=await (await caches.open(CACHE_NAME)).match(fallback);if(cached)return cached;}
     return response;
    }catch{
     const cache=await caches.open(CACHE_NAME);
-    return (await cache.match(request,{ignoreSearch:true}))||(await cache.match('./index.html'))||Response.error();
+    return (await cache.match(request,{ignoreSearch:true}))||(await cache.match(fallback))||Response.error();
    }
   })());
   return;

@@ -1,3 +1,4 @@
+import {settingsFor} from './page-navigation.mjs';
 import {test,expect} from '@playwright/test';
 
 async function ready(page){await page.goto('./');await expect(page.locator('#nFSRSCards')).toHaveText('0');}
@@ -35,7 +36,7 @@ test('readings and FSRS activity synchronize across tabs without reloading the d
 
 test('XML import updates reading totals through the actual confirmation flow',async({page})=>{
  await ready(page);const xml=await page.evaluate(()=>{CMNProgressIO.applyReadCounts({'1.1.1':7,'2.1.1':2});const text=CMNProgressIO.encodeXML({},1206);CMNProgressIO.applyReadCounts({});return text;});
- await expect(page.locator('#nReadTotal')).toHaveText('0');await page.locator('#importFile').setInputFiles({name:'leituras.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});await page.locator('#confirmImportBtn').click();await expect(page.locator('#nReadTotal')).toHaveText('9');await page.reload();await expect(page.locator('#nReadTotal')).toHaveText('9');
+ await expect(page.locator('#nReadTotal')).toHaveText('0');await (await settingsFor(page)).locator('#importFile').setInputFiles({name:'leituras.xml',mimeType:'application/xml',buffer:Buffer.from(xml)});await (await settingsFor(page)).locator('#confirmImportBtn').click();await expect(page.locator('#nReadTotal')).toHaveText('9');await page.reload();await expect(page.locator('#nReadTotal')).toHaveText('9');
 });
 
 test('unavailable FSRS storage is displayed as unavailable, never as zero',async({page})=>{
@@ -48,7 +49,7 @@ test('today resets at the local date boundary without resetting cumulative activ
 });
 
 test('large counts, dark theme and reduced motion remain usable at narrow widths',async({page})=>{
- await page.emulateMedia({reducedMotion:'reduce'});await ready(page);await page.evaluate(()=>CMNProgressIO.applyReadCounts({'1.1.1':10000000,'2.1.1':10000000}));await expect(page.locator('#nReadTotal')).toHaveText('20.000.000');await page.locator('#themeBtn').click();
+ await page.emulateMedia({reducedMotion:'reduce'});await ready(page);await page.evaluate(()=>CMNProgressIO.applyReadCounts({'1.1.1':10000000,'2.1.1':10000000}));await expect(page.locator('#nReadTotal')).toHaveText('20.000.000');await (await settingsFor(page)).locator('#themeBtn').click();
  for(const width of [320,768,1440]){await page.setViewportSize({width,height:900});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();}
  expect(await page.locator('#nReadTotal').evaluate(e=>e.getAnimations().length)).toBe(0);
  await page.waitForTimeout(200);
@@ -56,7 +57,7 @@ test('large counts, dark theme and reduced motion remain usable at narrow widths
   const rgb=s=>s.match(/[\d.]+/g).slice(0,3).map(Number),lum=c=>c.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
   return nodes.map(e=>{const foreground=lum(rgb(getComputedStyle(e).color)),background=lum(rgb(getComputedStyle(document.body).backgroundColor));return (Math.max(foreground,background)+.05)/(Math.min(foreground,background)+.05);});
  });expect(ratios.every(ratio=>ratio>=4.5)).toBeTruthy();
- await page.locator('#studyGuide summary').click();await expect(page.locator('[data-jump="done"]')).toBeVisible();await page.locator('[data-jump="done"]').click();await expect(page.locator('[data-filter="done"]')).toHaveAttribute('aria-pressed','true');await expect(page.locator('#nReadTotal')).toHaveText('20.000.000');
+ await page.goto('./estatisticas.html');await expect(page.locator('#workspace')).toHaveAttribute('aria-busy','false');await expect(page.locator('[data-jump="done"]')).toBeVisible();await page.locator('[data-jump="done"]').click();await expect(page.locator('[data-filter="done"]')).toHaveAttribute('aria-pressed','true');await expect(page.locator('#nReadTotal')).toHaveText('20.000.000');
 });
 
 
